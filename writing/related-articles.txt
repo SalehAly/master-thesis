@@ -1,0 +1,14 @@
+Setting up a wireless sensor network in a volcano
+http://svnet.u-strasbg.fr/svntrac/tutodep/export/4/docs/IEEEInternetComputing2006-volcano-WernerAG.pdf
+
+
+oppoutunistic networks
+https://www.researchgate.net/profile/Andrea_Passarella/publication/3199770_Abstract_Opportunistic_Networking_Data_Forwarding_in_Disconnected_Mobile_Ad_hoc_Networks/links/55dc2fc908aed6a199ac7d58.pdf
+
+article comparing time-series databases
+http://iopscience.iop.org/article/10.1088/1742-6596/664/4/042036/pdf
+
+
+iot network
+http://eee.guc.edu.eg/Pub-Sub_IoT.pdf
+https://www.researchgate.net/profile/Mehdi_Mohammadi16/publication/281896658_Toward_better_horizontal_integration_among_IoT_services/links/5617d4b808ae3253ad5d203b.pdf
