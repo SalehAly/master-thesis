@@ -16,6 +16,8 @@ iot network
 http://eee.guc.edu.eg/Pub-Sub_IoT.pdf
 https://www.researchgate.net/profile/Mehdi_Mohammadi16/publication/281896658_Toward_better_horizontal_integration_among_IoT_services/links/5617d4b808ae3253ad5d203b.pdf
 
+iot security and privacy
+https://pdfs.semanticscholar.org/e68f/870a297a04ee0b47fe7dea0555dbc42b55e7.pdf
 
 fog computing
 http://www.academia.edu/download/46135664/SIGCOMM-MMC-Fog.pdf
