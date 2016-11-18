@@ -1,0 +1,32 @@
+* Facial Recognition detecting faces through distributed networks 
+* Mining applications: detecting gas emitted from mining actions 
+* Smart Parking Monitoring of parking spaces availability in the city. 
+* Structural health Monitoring of vibrations and material conditions in buildings, bridges and historical monuments. 
+* Noise Urban Maps Sound monitoring in bar areas and centric zones in real time. 
+* Smartphone Detection Detect iPhone and Android devices and in general any device which works with WiFi or Bluetooth interfaces. 
+* Eletromagnetic Field Levels Measurement of the energy radiated by cell stations and and WiFi routers. 
+* Traffic Congestion Monitoring of vehicles and pedestrian levels to optimize driving and walking routes. 
+* Smart Lighting Intelligent and weather adaptive lighting in street lights. 
+* Waste Management Detection of rubbish levels in containers to optimize the trash collection routes. 
+* Smart Roads Intelligent Highways with warning messages and diversions according to climate conditions and unexpected events like accidents or traffic jams. 
+* Forest Fire Detection Monitoring of combustion gases and preemptive fire conditions to define alert zones. 
+* Air Pollution Control of CO2 emissions of factories, pollution emitted by cars and toxic gases generated in farms. 
+* Snow Level Monitoring Snow level measurement to know in real time the quality of ski tracks and allow security corps avalanche prevention. 
+* Landslide and Avalanche Prevention Monitoring of soil moisture, vibrations and earth density to detect dangerous patterns in land conditions. 
+* Earthquake Early Detection Distributed control in specific places of tremors. 
+* Potable water monitoring Monitor the quality of tap water in cities. 
+* Chemical leakage detection in rivers Detect leakages and wastes of factories in rivers. 
+* Swimming pool remote measurement Control remotely the swimming pool conditions. 
+* Pollution levels in the sea Control realtime leakages and wastes in the sea. 
+* Water Leakages Detection of liquid presence outside tanks and pressure variations along pipes. 
+* River Floods Monitoring of water level variations in rivers, dams and reservoirs. 		Perimeter Access Control Access control to restricted areas and detection of people in non-authorized areas. 
+* Liquid Presence Liquid detection in data centers, warehouses and sensitive building grounds to prevent break downs and corrosion. 
+* Radiation Levels Distributed measurement of radiation levels in nuclear power stations surroundings to generate leakage alerts. 
+* Explosive and Hazardous Gases Detection of gas levels and leakages in industrial environments, surroundings of chemical factories and inside mines. 
+* Supply Chain Control Monitoring of storage conditions along the supply chain and product tracking for traceability purposes.
+* Indoor Air Quality Monitoring of toxic gas and oxygen levels inside chemical plants to ensure workers and goods safety. 
+* Temperature Monitoring Control of temperature inside industrial and medical fridges with sensitive merchandise. 
+* Ozone Presence Monitoring of ozone levels during the drying meat process in food factories. 
+
+
+http://www.libelium.com/resources/top_50_iot_sensor_applications_ranking/
