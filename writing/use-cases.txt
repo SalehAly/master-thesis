@@ -4,7 +4,7 @@
 * Structural health Monitoring of vibrations and material conditions in buildings, bridges and historical monuments. 
 * Noise Urban Maps Sound monitoring in bar areas and centric zones in real time. 
 * Smartphone Detection Detect iPhone and Android devices and in general any device which works with WiFi or Bluetooth interfaces. 
-* Eletromagnetic Field Levels Measurement of the energy radiated by cell stations and and WiFi routers. 
+* Electromagnetic Field Levels Measurement of the energy radiated by cell stations and and WiFi routers. 
 * Traffic Congestion Monitoring of vehicles and pedestrian levels to optimize driving and walking routes. 
 * Smart Lighting Intelligent and weather adaptive lighting in street lights. 
 * Waste Management Detection of rubbish levels in containers to optimize the trash collection routes. 
@@ -19,11 +19,14 @@
 * Swimming pool remote measurement Control remotely the swimming pool conditions. 
 * Pollution levels in the sea Control realtime leakages and wastes in the sea. 
 * Water Leakages Detection of liquid presence outside tanks and pressure variations along pipes. 
-* River Floods Monitoring of water level variations in rivers, dams and reservoirs. 		Perimeter Access Control Access control to restricted areas and detection of people in non-authorized areas. 
+* River Floods Monitoring of water level variations in rivers, dams and reservoirs. 
+*Perimeter Access Control Access control to restricted areas and detection of people in non-authorized areas. 
 * Liquid Presence Liquid detection in data centers, warehouses and sensitive building grounds to prevent break downs and corrosion. 
 * Radiation Levels Distributed measurement of radiation levels in nuclear power stations surroundings to generate leakage alerts. 
 * Explosive and Hazardous Gases Detection of gas levels and leakages in industrial environments, surroundings of chemical factories and inside mines. 
-* Supply Chain Control Monitoring of storage conditions along the supply chain and product tracking for traceability purposes.
+* Supply Chain Control
+Monitoring of storage conditions along the supply chain and product tracking for traceability purposes.
+
 * Indoor Air Quality Monitoring of toxic gas and oxygen levels inside chemical plants to ensure workers and goods safety. 
 * Temperature Monitoring Control of temperature inside industrial and medical fridges with sensitive merchandise. 
 * Ozone Presence Monitoring of ozone levels during the drying meat process in food factories. 
