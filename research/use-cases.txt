@@ -1,4 +1,3 @@
-* Smart Lighting:  this service can optimize the street lampintensity according to the time of the day, the weather condition,and the presence of people
 * Facial Recognition detecting faces through distributed networks 
 * Mining applications: detecting gas emitted from mining actions 
 * Smart Parking Monitoring of parking spaces availability in the city. 
