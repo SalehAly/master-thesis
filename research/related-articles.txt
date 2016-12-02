@@ -22,3 +22,7 @@ https://pdfs.semanticscholar.org/e68f/870a297a04ee0b47fe7dea0555dbc42b55e7.pdf
 fog computing
 http://www.academia.edu/download/46135664/SIGCOMM-MMC-Fog.pdf
 https://www.researchgate.net/profile/Rodolfo_Milito/publication/260753114_Fog_Computing_A_Platform_for_Internet_of_Things_and_Analytics_Flavio_Bonomi_Rodolfo_Milito_Preethi_Natarajan_and_Jiang_Zhu_N_Bessis_and_C_Dobre_eds_Big_Data_and_Internet_of_Things_169_A_Roadmap_for_Sm/links/549342990cf286fe31268d0b.pdf
+http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6740844
+
+pervasive computing
+http://s3.amazonaws.com/academia.edu.documents/30801088/2011_Situation_identification_techniques_in_pervasive_computing-_A_review_Dobson.pdf?AWSAccessKeyId=AKIAJ56TQJRTWSMTNPEA&Expires=1480416251&Signature=YQ0Khv6hQdIBd74WNujP8OgVFqM%3D&response-content-disposition=inline%3B%20filename%3DPervasive_and_Mobile_Computing.pdf
