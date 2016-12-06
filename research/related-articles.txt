@@ -26,3 +26,6 @@ http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6740844
 
 pervasive computing
 http://s3.amazonaws.com/academia.edu.documents/30801088/2011_Situation_identification_techniques_in_pervasive_computing-_A_review_Dobson.pdf?AWSAccessKeyId=AKIAJ56TQJRTWSMTNPEA&Expires=1480416251&Signature=YQ0Khv6hQdIBd74WNujP8OgVFqM%3D&response-content-disposition=inline%3B%20filename%3DPervasive_and_Mobile_Computing.pdf
+
+dependencies in Iot
+https://www.intercom.virginia.edu/~stankovic/psfiles/IOT.pdf
