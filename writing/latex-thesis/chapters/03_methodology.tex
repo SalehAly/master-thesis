@@ -2,8 +2,72 @@
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
 \chapter{Approach}\label{chapter:Approach}
-\section{System Model }
-Explain the overall architecture 
+In this chapter, the proposed solution to tackling pervasive computing and data distribution of context-aware input sensor data is unfolded. At the beginning, a broad perspective of the architecture is demonstrated, followed by, the explanation of modeling input sensor data. Then, two sections describing pervasive computing and data distribution models and architectures. Finally, a description of the communication model is disclosed.
+\section{System Design }
+A System Design can be broadly described as an architecture of the system, which includes an explanation of each and every hardware component of the system, the connection between these components if there is any, and the data flowing between these components. Moreover, it provides a wide glimpse of the whole system but not its exact functionality, hence, giving a simple understanding of the architecture without jumping into much detail.\\
+Initially, the components of the System Design is introduced, then, the connection between these components is shown, and eventually, the flow of the data is pointed out.
+
+\subsection{Components}
+\label{sub:components}
+Below, each component of the proposed system design is explained.
+
+\subsubsection{Node}
+\label{subsub:node}
+%The first set of components to explain are the sensors, they refer to objects that detect certain change in the environment and converts these changes into digital data and 
+%which refer to objects that can detect certain changes in the environment and converts them to digital data, 
+A Node is one of the core components of this design, it is a small computer device of low storage and computation capacity compared to nowadays portable computers, commonly a \textit{Raspberry Pi} but could be any other device. It is connected to several sensors which typically detect certain changes in the environment and converts it into digital data, for instance, Gas sensor, Temperature sensor or a Camera. Then, the device either stores the data into a local database, performs a computation locally, does both or even asks other nodes to do computation instead, however, an assumption about which sensors does a specific node  possess can not be made, meaning, each node may or may not have the exact number or types of sensors. Thus, each node has a configuration file specifying its capabilities. A typical node is shown in figure \ref{fig:node}
+
+\begin{figure}[H]
+\centering
+ \includegraphics[scale=0.4]{images/node.png}
+ \caption{"A typical node in the system"}
+ \label{fig:node}
+\end{figure}
+
+\subsubsection{Graphics Processing Unit }
+
+A Graphics Processing Unit \textit{GPU} is a device with massively parallel architecture designed to handle multiple tasks at the same time, thus observed to be much faster and more efficient than a Central Processing Unit \textit{CPU}, and in turn, has higher computation capabilities than the CPUs in the proposed system nodes in \ref{subsub:node}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{images/gpu.png}
+	\label{fig:gpu}
+\end{figure}
+
+\subsubsection{Network}
+\label{subsub:network}
+A Network in this design is a set of connected components which are capable of communicating and therefore allowing data sharing between them.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{images/network.png}
+	\caption{"A network consisting of three connected nodes and a GPU"}
+	\label{fig:network}
+\end{figure}
+
+\subsubsection{Mobile Device}
+A Mobile Device in this context is any device that can connect to the network containing the nodes and is allowed to  carry data from one network to another, hence, allowing a form of data sharing between networks or nodes which are not connected.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{images/mobile.png}
+	\label{fig:mobile}
+\end{figure}
+
+
+
+\subsection{Connectivity and Data Flow}
+A Network described in \ref{subsub:network}, is a simple form of connectivity between components, however, components and specifically nodes are not necessarily connected, sometimes they are just a standalone component that cannot share any information via direct connectivity, also, networks could be disconnected as well, meaning, a network may or may not be connected to the whole system, thus, is a standalone network. In these cases, a mobile device could help in carrying information and data between these disconnected nodes or networks. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/system.png}
+	\label{fig:system}
+	\caption{Two networks connected with a GPU and one standalone network}
+\end{figure}
+
+
+
+
 
 
 \section{Modeling of Input Sensor Data}
