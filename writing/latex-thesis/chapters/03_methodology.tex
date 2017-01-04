@@ -92,7 +92,8 @@ A Network described in \ref{subsub:network}, is a simple form of connectivity be
 Since the goal is to push computations to the available nodes which have the capability to do so, there are three main aspects that must be addressed to achieve this goal.
 \begin{itemize}
 	
-\item First, is to be able to express the computational requirements and resources that the computation is going to use while running on a specific node, which is also called \textbf{"Compuation Meta-data"}. Since we cannot make assumptions that a certain node has specific resources or specification as explained in \ref{subsub:node}, these requirements has to be pushed along with the computation. It includes, for instance, the amount of processing power and random access memory the computation is going to need, also, the resources required to perform such a computation, moreover, the way that the input data used while doing this computation will be provided, whether it gets the input data from a local database or is it going to be included along with the computational data. The computation meta-data is expressed a a \textit{JSON} formatted object.
+\item First, is to be able to express the computational requirements and resources that the computation is going to use while running on a specific node, which is also called \textbf{"Compuation Meta-data"}. Since we cannot make assumptions that a certain node has specific resources or specification as explained in \ref{subsub:node}, these requirements has to be pushed along with the computation. It includes, for instance, the amount of processing power and random access memory the computation is going to need, also, the resources required to perform such a computation.
+The meta-data is expressed as a \textit{JSON} formatted object.
 
 \textbf{include example}
 
@@ -110,6 +111,7 @@ Since the goal is to push computations to the available nodes which have the cap
 
 \subsubsection{Input Meta-data}
 is it local, provided or collected data.
+% moreover, the way that the input data used while doing this computation will be provided, whether it gets the input data from a local database or is it going to be included along with the computational data. 
 
 \section{Networking}
 \subsection{SCAMPI }
