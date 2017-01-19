@@ -39,6 +39,7 @@ public class ScampiHelloWorld {
                 .appTag( "Hello" )
                 .build();
         message.putString( "text", text );
+
         return message;
     }
 
