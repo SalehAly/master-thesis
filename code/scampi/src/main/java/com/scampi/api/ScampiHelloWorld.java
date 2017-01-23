@@ -1,5 +1,6 @@
 package com.scampi.api;
 
+import com.scampi.domain.MessageHandler;
 import fi.tkk.netlab.dtn.scampi.applib.*;
 
 /**
@@ -80,6 +81,7 @@ public class ScampiHelloWorld {
 
                     );
                 }
+                MessageHandler.handleMessage(message);
             } finally {
                 message.close();
             }
