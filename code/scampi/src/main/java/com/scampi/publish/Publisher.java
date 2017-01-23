@@ -29,7 +29,7 @@ public class Publisher {
         JsonArray flowArray = new JsonParser().parse(flow).getAsJsonArray();
 
         json.add("flow",flowArray);
-        message.putString( "text", json.toString() );
+        message.putString( "json", json.toString() );
 
         try {
             ScampiHelloWorld.publish(message);
