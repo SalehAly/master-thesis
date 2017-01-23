@@ -17,7 +17,7 @@ public class RESTHandler {
             ClientResponse response = webResource.type("application/json")
                     .post(ClientResponse.class,data);
 
-            if (response.getStatus() != 200) {
+            if (response.getStatus() != 200 && response.getStatus()!=204 ) {
                 System.out.println(response.toString());
                 throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
             }
