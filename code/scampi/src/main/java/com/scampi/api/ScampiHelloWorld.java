@@ -14,19 +14,19 @@ import fi.tkk.netlab.dtn.scampi.applib.*;
 public class ScampiHelloWorld {
     static private final AppLib APP_LIB = AppLib.builder().build();
 
-    public static void main( String[] args )
+    public static void main(String[] args)
             throws InterruptedException {
         // Setup
         APP_LIB.start();
-        APP_LIB.addLifecycleListener( new LifeCyclePrinter() );
+        APP_LIB.addLifecycleListener(new LifeCyclePrinter());
         APP_LIB.connect();
 
         // Subscribe to a service
-        APP_LIB.addMessageReceivedCallback( new MessagePrinter() );
-        APP_LIB.subscribe( "Hello Service" );
+        APP_LIB.addMessageReceivedCallback(new MessagePrinter());
+        APP_LIB.subscribe("Hello Service");
 
         // Publish a message
-        APP_LIB.publish( getMessage( "Hello World!" ), "Hello Service" );
+        APP_LIB.publish(getMessage("Hello World!"), "Hello Service");
 
         APP_LIB.addHostDiscoveryCallback(new HostDiscoveryCallback() {
             public void hostDiscovered(AppLib appLib, String s, int i, long l, double v, double v1, double v2) {
@@ -35,11 +35,11 @@ public class ScampiHelloWorld {
         });
     }
 
-    private static SCAMPIMessage getMessage(String text ) {
+    private static SCAMPIMessage getMessage(String text) {
         SCAMPIMessage message = SCAMPIMessage.builder()
-                .appTag( "Hello" )
+                .appTag("Hello")
                 .build();
-        message.putString( "text", text );
+        message.putString("text", text);
 
         return message;
     }
@@ -48,23 +48,23 @@ public class ScampiHelloWorld {
             implements AppLibLifecycleListener {
 
 
-        public void onConnected( String scampiId ) {
-            System.out.println( "> onConnected: " + scampiId );
+        public void onConnected(String scampiId) {
+            System.out.println("> onConnected: " + scampiId);
         }
 
 
         public void onDisconnected() {
-            System.out.println( "> onDisconnected" );
+            System.out.println("> onDisconnected");
         }
 
 
         public void onConnectFailed() {
-            System.out.println( "> onConnectFailed" );
+            System.out.println("> onConnectFailed");
         }
 
 
         public void onStopped() {
-            System.out.println( "> onStopped" );
+            System.out.println("> onStopped");
         }
     }
 
@@ -72,16 +72,12 @@ public class ScampiHelloWorld {
             implements MessageReceivedCallback {
 
 
-        public void messageReceived( SCAMPIMessage message,
-                                     String service ) {
+        public void messageReceived(SCAMPIMessage message,
+                                    String service) {
             try {
-                if ( message.hasString( "text" ) ) {
-                    System.out.println( "> messageReceived: "
-                            + message.getString( "text" )
-
-                    );
-                }
                 MessageHandler.handleMessage(message);
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 message.close();
             }
