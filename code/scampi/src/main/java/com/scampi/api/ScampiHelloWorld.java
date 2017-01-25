@@ -16,6 +16,10 @@ public class ScampiHelloWorld {
 
     public static void main(String[] args)
             throws InterruptedException {
+
+        // initalize Scampi API
+        init();
+
         // Setup
         APP_LIB.start();
         APP_LIB.addLifecycleListener(new LifeCyclePrinter());
@@ -24,17 +28,21 @@ public class ScampiHelloWorld {
         // Subscribe to a service
         APP_LIB.addMessageReceivedCallback(new MessagePrinter());
         APP_LIB.subscribe("Hello Service");
-
-        // Publish a message
-        APP_LIB.publish(getMessage("Hello World!"), "Hello Service");
-
-        APP_LIB.addHostDiscoveryCallback(new HostDiscoveryCallback() {
-            public void hostDiscovered(AppLib appLib, String s, int i, long l, double v, double v1, double v2) {
-                System.out.println(s);
-            }
-        });
     }
 
+    public static void publish(SCAMPIMessage message) throws InterruptedException {
+        APP_LIB.publish(message , "Hello Service" );
+    }
+    public static void init(){
+        // Setup
+        APP_LIB.start();
+        APP_LIB.addLifecycleListener( new LifeCyclePrinter() );
+        APP_LIB.connect();
+
+        // Subscribe message receiver handler
+        APP_LIB.addMessageReceivedCallback( new MessagePrinter() );
+
+    }
     private static SCAMPIMessage getMessage(String text) {
         SCAMPIMessage message = SCAMPIMessage.builder()
                 .appTag("Hello")
@@ -72,8 +80,7 @@ public class ScampiHelloWorld {
             implements MessageReceivedCallback {
 
 
-        public void messageReceived(SCAMPIMessage message,
-                                    String service) {
+        public void messageReceived(SCAMPIMessage message, String service) {
             try {
                 MessageHandler.handleMessage(message);
             } catch (Exception e) {
