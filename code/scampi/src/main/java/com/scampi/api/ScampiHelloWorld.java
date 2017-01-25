@@ -16,6 +16,7 @@ public class ScampiHelloWorld {
     public static void main( String[] args )
             throws InterruptedException {
 
+        // initalize Scampi API
         init();
 
         APP_LIB.subscribe( "Hello Service" );
@@ -39,7 +40,7 @@ public class ScampiHelloWorld {
         APP_LIB.addLifecycleListener( new LifeCyclePrinter() );
         APP_LIB.connect();
 
-        // Subscribe to a service
+        // Subscribe message receiver handler
         APP_LIB.addMessageReceivedCallback( new MessagePrinter() );
 
     }
