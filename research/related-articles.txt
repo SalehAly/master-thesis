@@ -29,3 +29,6 @@ http://s3.amazonaws.com/academia.edu.documents/30801088/2011_Situation_identific
 
 dependencies in Iot
 https://www.intercom.virginia.edu/~stankovic/psfiles/IOT.pdf
+
+Data Modeling
+https://espace.library.uq.edu.au/data/UQ_10713/Pervasive2002_fi.pdf?Expires=1486037477&Signature=hAvYtlBG4uuqxSPuPqjiKS8Uf~fMV5OAlXSg1xGJiXaJjexNIRYodLPv1kyi673-7FDtTtFRSFmBj-oj73Af5OrgJYoip48NZ22LQSBbaDHZ19MoFZ~z4lrLLi7gi16BBoY-h4h82fxl72205j-~fcg2p6GRGpiB3C-ELSHeI9dJoKfBjMAdvUqg~5qpxfX~BjY~XJrgVdn8cBHpvMRVtxh0JQNZY5HiOfAN1LMV3zq1q3dMZCtcLJlR49kw8Hb3nbncNiCFSM82in7GWse46UGoyeihXjl4wYCNlp9lr~AKTrR7X~oMdHDZye6CTILZTyyl4EcpL0AoKJrFQB9pNA__&Key-Pair-Id=APKAJKNBJ4MJBJNC6NLQ
