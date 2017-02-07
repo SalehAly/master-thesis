@@ -46,9 +46,11 @@
                             <mainClass>com.scampi.api.ScampiHelloWorld</mainClass>
                         </manifest>
                     </archive>
+                    <outputDirectory>${project.basedir}/src/main/resources</outputDirectory>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
         </plugins>

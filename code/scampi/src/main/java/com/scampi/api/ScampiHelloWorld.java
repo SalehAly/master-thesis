@@ -19,14 +19,6 @@ public class ScampiHelloWorld {
 
         // initalize Scampi API
         init();
-
-        // Setup
-        APP_LIB.start();
-        APP_LIB.addLifecycleListener(new LifeCyclePrinter());
-        APP_LIB.connect();
-
-        // Subscribe to a service
-        APP_LIB.addMessageReceivedCallback(new MessagePrinter());
         APP_LIB.subscribe("Hello Service");
     }
 
