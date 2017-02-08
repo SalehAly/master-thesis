@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Publisher</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"
+            async="true">
+    </script>
+
+</head>
+<body>
+<div class="container">
+
+    <h3>Computation Meta-data</h3>
+
+    <form id="push" action="localhost:1880/push" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="well">
+                <div class="form-horizontal ">
+                    <!--<div class="col-md-6">-->
+                    <div class="form-group">
+                        <p class="lead"> The amount of computation power needed to execute the flow</p>
+                        <label for="power" class="col-sm-2 control-label">Computation Power</label>
+                        <div class="col-sm-6">
+                            <select required="required" id="power" class="form-control input-sm">
+                                <option value="1">Low</option>
+                                <option value="2">Medium</option>
+                                <option value="3">High</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="lead"> The amount of free ram needed to execute the flow</p>
+                        <label for="ram" class="col-sm-2 control-label">Free ram</label>
+                        <div class="col-sm-6">
+                            <select required="required" id="ram" class="form-control input-sm">
+                                <option value="1"><500 MB</option>
+                                <option value="2">500~1000 MB</option>
+                                <option value="3">>1000 MB</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--</div>-->
+                </div>
+            </div>
+
+
+            </div>
+            <div class="col-md-6">
+            <div class="well">
+
+
+
+                        <h4> Resource Requirements</h4>
+
+                        <div class="checkbox"><label> <input id="camera" type="checkbox" >
+                            Camera </label></div>
+                        <div class="checkbox"><label> <input id="temp" type="checkbox" >
+                            Temperature Sensor</label></div>
+                        <div class="checkbox"><label> <input id="gas" type="checkbox" >
+                            Gas Sensor </label></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+<h3>Flow </h3>
+<div class="well">
+    <textarea rows="8" required="required" id="flow" class="form-control" rows="3"></textarea>
+    <!--<pre>&lt;p&gt;Sample text here...&lt;/p&gt;</pre>-->
+    Push flow to network
+    <button type="submit" class="btn btn-default">PUSH</button>
+</div>
+<!-- /#page-wrapper -->
+
+
+</form>
+</div>
+
+<!-- /#wrapper -->
+
+
+</body>
+<script>
+    $(document).ready(function () {
+        $("#push").submit(function (event) {
+            var resources = {camera: $('#camera').is(':checked'), gas: $('#gas').is(':checked'), temp: $('#temp').is(':checked')}
+            var metadata = { power:  $('#power').val() , ram: $('#ram').val(), resources: resources }
+            var json = { 'meta-data' : metadata,
+                    flow:  $('#flow').val()} ;
+            var model = {json:json};
+
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:1880/push',
+                data: model,
+                success: function (data) {
+                    //success message mybe...
+                    console.log("sent");
+                    console.log(data);
+
+                }
+
+            })
+        });
+
+
+    });
+</script>
+</html>
