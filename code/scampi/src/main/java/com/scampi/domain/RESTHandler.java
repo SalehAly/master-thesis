@@ -1,6 +1,7 @@
 package com.scampi.domain;
 
 
+import com.google.gson.JsonObject;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -31,5 +32,17 @@ public class RESTHandler {
         }
 
      return null;
+    }
+
+    public static JsonObject getResponse(String status, String message, String stacktrace){
+        JsonObject response = getResponse(status,message);
+        response.addProperty("stacktrace",stacktrace);
+        return response;
+    }
+    public static JsonObject getResponse(String status, String message){
+        JsonObject json = new JsonObject();
+        json.addProperty("status", status);
+        json.addProperty("message", message);
+        return  json;
     }
 }

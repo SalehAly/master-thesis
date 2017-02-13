@@ -11,4 +11,6 @@ public class Constants {
     public static final String NODE_RED_REST = "http://localhost:1880/";
     public static final String FLOW_TARGET = "flows";
     public static final String RAM_CMD = "free -m";
+    public static final String STATUS_FAIL = "fail";
+    public static final String STATUS_SUCCESS = "success";
 }

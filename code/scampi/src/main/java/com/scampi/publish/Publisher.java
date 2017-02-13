@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.scampi.api.ScampiHelloWorld;
+import com.scampi.constants.Constants;
+import com.scampi.domain.RESTHandler;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
 import java.util.Arrays;
@@ -12,30 +14,43 @@ import java.util.Arrays;
  * Created by Aly on 1/23/17.
  */
 public class Publisher {
+
     public static void main(String[] args) {
         String flow = null;
+
         try {
             flow = args[0];
         } catch (Exception e) {
-            System.out.println("Please include a flow");
-            // e.printStackTrace();
-            return;
+            System.out.println(RESTHandler.getResponse(
+                    Constants.STATUS_FAIL
+                    ,"Please include a flow", e.getCause().toString())
+                    .toString());
+            System.exit(1);
         }
-        System.out.println(flow);
 
+        System.out.println("flow= "+ flow);
         try {
             ScampiHelloWorld.init();
             SCAMPIMessage message = SCAMPIMessage.builder().build();
-            JsonObject json = new JsonObject();
-            JsonArray flowArray = new JsonParser().parse(flow).getAsJsonArray();
-            json.add("flow", flowArray);
+            System.out.println(flow);
+
+            JsonObject json = new JsonParser().parse(flow).getAsJsonObject();
             message.putString("json", json.toString());
             ScampiHelloWorld.publish(message);
 
         } catch (Exception e) {
-            System.out.println("Error publishing the message");
-            e.printStackTrace();
+            System.out.println(RESTHandler.getResponse(
+                    Constants.STATUS_FAIL
+                    ,"Error publishing the message", e.getCause().toString())
+                    .toString());
+            System.exit(1);
         }
+
+        System.out.println(RESTHandler.getResponse(
+                Constants.STATUS_SUCCESS, "Message Published"));
         System.exit(0);
+
     }
+
+
 }
