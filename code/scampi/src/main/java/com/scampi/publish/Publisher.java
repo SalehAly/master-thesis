@@ -28,14 +28,13 @@ public class Publisher {
             System.exit(1);
         }
 
-        System.out.println("flow= "+ flow);
         try {
             ScampiHelloWorld.init();
             SCAMPIMessage message = SCAMPIMessage.builder().build();
             System.out.println(flow);
 
             JsonObject json = new JsonParser().parse(flow).getAsJsonObject();
-            message.putString("json", json.toString());
+            message.putString(Constants.JSON, json.toString());
             ScampiHelloWorld.publish(message);
 
         } catch (Exception e) {
