@@ -11,27 +11,49 @@ import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
  */
 public class MessageHandler {
 
-    public static void handleMessage(SCAMPIMessage message) {
-        JsonObject jsonObject;
+
+    public static void handleMessage(SCAMPIMessage message, String topic){
+
+        System.out.println(topic);
+        if(topic.equals(Constants.TOPIC_MAIN)){
+            handleMainTopic(message);
+        }else{
+            handleSpecialTopic(message, topic);
+        }
+    }
+
+    /**
+     * @param message
+     * This method is for handling the main computation models coming from node-red of a different machine
+     * then posting the computation model to the node-red instance on this machine
+     */
+    public static void handleMainTopic(SCAMPIMessage message) {
+
         String jsonMessage;
         // get the json object out of the Scmapi message
         try {
-
             if (message.hasString(Constants.JSON)) {
-                 jsonMessage = message.getString(Constants.JSON);
+                jsonMessage = message.getString(Constants.JSON);
                 System.out.println(jsonMessage);
-                jsonObject = new JsonParser().parse(jsonMessage).getAsJsonObject();
             } else {
+                System.out.println("No computation Models included");
                 return;
             }
 
-            String flow = jsonObject.get(Constants.FLOW).toString();
-
-           // JsonArray flowArray = new JsonParser().parse(flow).getAsJsonArray();
+           // Model the computation from json into java models
             Computation computation = new GsonBuilder().create().fromJson(jsonMessage,Computation.class);
+
+            // Get the flow itself from the mode
+            String flow = computation.getFlow().toString();
+
+            for (String source: computation.getSources()) {
+              //  System.out.print(message.getBinary(source));
+
+            }
+
             // run node-red on rest and add flow
-            System.out.println(computation.toString());
-            RESTHandler.post(Constants.NODE_RED_REST, Constants.FLOW_TARGET, computation.getFlow().toString());
+            RESTHandler.post(Constants.NODE_RED_REST, Constants.FLOW_TARGET, flow);
+
 
             System.out.println("Message Received");
 
@@ -39,6 +61,22 @@ public class MessageHandler {
             e.printStackTrace();
             System.out.println("Message Failed");
         }
+
+    }
+
+    /**
+     * @param message
+     * The method is for handling special computational models that need to send data via pub/sub messaging
+     * the method ensures composabilty even between flows on different machines
+     * It takes the the data received and send it via REST to the supposedly listening receiving flow
+     */
+
+    public static void handleSpecialTopic(SCAMPIMessage message, String topic){
+
+            // run node-red on rest and add flow
+            RESTHandler.post(Constants.NODE_RED_REST, topic, message.getString(Constants.DATA));
+            System.out.println("Message Received");
+
 
     }
 

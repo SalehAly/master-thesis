@@ -13,13 +13,16 @@ public class RESTHandler {
 
     public static ClientResponse post(String resource, String target, String data) {
         try {
+            System.out.println(data);
             Client client = Client.create();
             WebResource webResource = client.resource(resource + target);
-            ClientResponse response = webResource.type("application/json")
-                    .post(ClientResponse.class,data);
+
+            ClientResponse response = webResource.type("application/json").accept("application/json")
+                    .post(ClientResponse.class, data.toString());
 
             if (response.getStatus() != 200 && response.getStatus()!=204 ) {
                 System.out.println(response.toString());
+                System.out.println(response.getEntity(String.class));
                 throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
             }
 

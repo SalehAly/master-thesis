@@ -1,5 +1,6 @@
 package com.scampi.api;
 
+import com.scampi.constants.Constants;
 import com.scampi.domain.MessageHandler;
 import fi.tkk.netlab.dtn.scampi.applib.*;
 
@@ -16,14 +17,14 @@ public class ScampiHelloWorld {
 
     public static void main(String[] args)
             throws InterruptedException {
-
         // initalize Scampi API
         init();
-        APP_LIB.subscribe("Hello Service");
+        APP_LIB.subscribe(Constants.TOPIC_MAIN);
+
     }
 
-    public static void publish(SCAMPIMessage message) throws InterruptedException {
-        APP_LIB.publish(message , "Hello Service" );
+    public static void publish(SCAMPIMessage message, String topic) throws InterruptedException {
+        APP_LIB.publish(message , topic);
     }
     public static void init(){
         // Setup
@@ -34,14 +35,6 @@ public class ScampiHelloWorld {
         // Subscribe message receiver handler
         APP_LIB.addMessageReceivedCallback( new MessagePrinter() );
 
-    }
-    private static SCAMPIMessage getMessage(String text) {
-        SCAMPIMessage message = SCAMPIMessage.builder()
-                .appTag("Hello")
-                .build();
-        message.putString("text", text);
-
-        return message;
     }
 
     private static final class LifeCyclePrinter
@@ -72,9 +65,10 @@ public class ScampiHelloWorld {
             implements MessageReceivedCallback {
 
 
-        public void messageReceived(SCAMPIMessage message, String service) {
+        public void messageReceived(SCAMPIMessage message, String topic) {
             try {
-                MessageHandler.handleMessage(message);
+
+                MessageHandler.handleMessage(message,topic);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
