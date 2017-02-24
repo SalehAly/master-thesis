@@ -68,7 +68,7 @@ public class ScampiHelloWorld {
         public void messageReceived(SCAMPIMessage message, String topic) {
             try {
 
-                MessageHandler.handleMessage(message,topic);
+                MessageHandler.handleMessage(message,topic, APP_LIB);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

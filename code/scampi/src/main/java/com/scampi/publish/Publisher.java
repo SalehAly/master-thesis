@@ -1,8 +1,6 @@
 package com.scampi.publish;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.scampi.api.ScampiHelloWorld;
 import com.scampi.constants.Constants;
 import com.scampi.domain.RESTHandler;
@@ -16,6 +14,7 @@ import java.nio.file.Paths;
 /**
  * Created by Aly on 1/23/17.
  */
+
 public class Publisher {
 
     public static void main(String[] args) {
@@ -36,19 +35,26 @@ public class Publisher {
                 System.exit(1);
         }
 
+
+
+        // init SCAMPI
+        ScampiHelloWorld.init();
+
         if(topic == null){
             publishMainTopic(data);
         }else{
             publishSpecialTopic(topic, data);
         }
 
+        System.out.println(RESTHandler.getResponse(
+                Constants.STATUS_SUCCESS, "Message Published"));
+        System.exit(0);
     }
 
     public static void publishMainTopic(String data){
 
         try {
-            // init SCAMPI
-            ScampiHelloWorld.init();
+            System.out.println("Publishing to Main Topic");
             // build a new message
             SCAMPIMessage message = SCAMPIMessage.builder().build();
 
@@ -75,14 +81,28 @@ public class Publisher {
                     .toString());
             System.exit(1);
         }
-        System.out.println(RESTHandler.getResponse(
-                Constants.STATUS_SUCCESS, "Message Published"));
-        System.exit(0);
+
 
     }
 
 
     public static void publishSpecialTopic(String topic, String data){
+
+        // build a new message
+        System.out.println("Publishing to SPECIAL Topic:" + topic);
+        SCAMPIMessage message = SCAMPIMessage.builder().build();
+        message.putString(Constants.JSON, data);
+       try{
+             ScampiHelloWorld.publish(message, Constants.DATA );
+
+        } catch (Exception e) {
+            System.out.println(RESTHandler.getResponse(
+                    Constants.STATUS_FAIL
+                    ,"Error publishing the message", e.getCause().toString())
+                    .toString());
+            System.exit(1);
+       }
+
         System.out.println("Special Data Topic " +topic);
     }
 

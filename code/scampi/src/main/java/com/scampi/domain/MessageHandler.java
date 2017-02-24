@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.scampi.constants.Constants;
 import com.scampi.model.Computation;
 import com.sun.jersey.core.util.Base64;
+import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
 /**
@@ -12,11 +13,11 @@ import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 public class MessageHandler {
 
 
-    public static void handleMessage(SCAMPIMessage message, String topic){
+    public static void handleMessage(SCAMPIMessage message, String topic, AppLib appLib){
 
         System.out.println(topic);
         if(topic.equals(Constants.TOPIC_MAIN)){
-            handleMainTopic(message);
+            handleMainTopic(message, appLib);
         }else{
             handleSpecialTopic(message, topic);
         }
@@ -27,7 +28,7 @@ public class MessageHandler {
      * This method is for handling the main computation models coming from node-red of a different machine
      * then posting the computation model to the node-red instance on this machine
      */
-    public static void handleMainTopic(SCAMPIMessage message) {
+    public static void handleMainTopic(SCAMPIMessage message, AppLib applib) {
 
         String jsonMessage;
         // get the json object out of the Scmapi message
@@ -50,6 +51,16 @@ public class MessageHandler {
               //  System.out.print(message.getBinary(source));
 
             }
+            String inputDataTopic = null;
+            if(computation.getIoSpec().getInput()!= null && computation.getIoSpec().getInput().has("topic")){
+                 inputDataTopic = computation.getIoSpec().getInput().get("topic").getAsString();
+            }
+
+            if(inputDataTopic != null){
+                System.out.println("Subscribing to " + inputDataTopic );
+                applib.subscribe(inputDataTopic);
+            }
+
 
             // run node-red on rest and add flow
             RESTHandler.post(Constants.NODE_RED_REST, Constants.FLOW_TARGET, flow);
@@ -74,7 +85,7 @@ public class MessageHandler {
     public static void handleSpecialTopic(SCAMPIMessage message, String topic){
 
             // run node-red on rest and add flow
-            RESTHandler.post(Constants.NODE_RED_REST, topic, message.getString(Constants.DATA));
+            RESTHandler.post(Constants.NODE_RED_REST, topic, new JsonParser().parse(message.getString(Constants.JSON)).toString());
             System.out.println("Message Received");
 
 
