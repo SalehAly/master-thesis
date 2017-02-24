@@ -7,6 +7,10 @@ import com.sun.jersey.core.util.Base64;
 import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * Created by Aly on 1/19/17.
  */
@@ -48,9 +52,9 @@ public class MessageHandler {
             String flow = computation.getFlow().toString();
 
             for (String source: computation.getSources()) {
-              //  System.out.print(message.getBinary(source));
-
+                Files.copy(message.getBinary(source), Paths.get(source));
             }
+
             String inputDataTopic = null;
             if(computation.getIoSpec().getInput()!= null && computation.getIoSpec().getInput().has("topic")){
                  inputDataTopic = computation.getIoSpec().getInput().get("topic").getAsString();
