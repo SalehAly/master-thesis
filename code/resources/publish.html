@@ -221,9 +221,9 @@
             }
 
             var json = {
-                'meta-data': metadata,
+                'metadata': metadata,
                 flow: $('#flow').val(),
-                'io-spec': ioSpec,
+                'ioSpec': ioSpec,
                 sources: names
             };
 
@@ -239,7 +239,7 @@
                     console.log("sent");
                     console.log(data);
                     if(data == 0){
-                        $("#sucess").show();
+                        $("#success").show();
                     }else{
                         $("#fail").show();
                     }
