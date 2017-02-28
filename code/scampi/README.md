@@ -16,12 +16,12 @@
 
 ## To Run Listener
 --------------------------------
-``java -jar src/main/resources/interface-1.0-SNAPSHOT.jar``
+``java -jar interface-1.0-SNAPSHOT.jar``
 
 
 ## To Run Publisher
 --------------------------------
-``java -cp src/main/resources/interface-1.0-SNAPSHOT.jar com.scampi.publish.Publisher``
+``java -cp interface-1.0-SNAPSHOT.jar com.scampi.publish.Publisher``
 
 
 
