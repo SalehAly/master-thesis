@@ -1,15 +1,15 @@
 package com.scampi.domain;
 
 import com.google.gson.*;
+import com.scampi.api.ScampiHelloWorld;
 import com.scampi.constants.Constants;
 import com.scampi.model.Computation;
-import com.sun.jersey.core.util.Base64;
-import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
-import java.io.File;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Created by Aly on 1/19/17.
@@ -17,22 +17,21 @@ import java.nio.file.Paths;
 public class MessageHandler {
 
 
-    public static void handleMessage(SCAMPIMessage message, String topic, AppLib appLib){
+    public static void handleMessage(SCAMPIMessage message, String topic) {
 
         System.out.println(topic);
-        if(topic.equals(Constants.TOPIC_MAIN)){
-            handleMainTopic(message, appLib);
-        }else{
+        if (topic.equals(Constants.TOPIC_MAIN)) {
+            handleMainTopic(message);
+        } else {
             handleSpecialTopic(message, topic);
         }
     }
 
     /**
-     * @param message
-     * This method is for handling the main computation models coming from node-red of a different machine
-     * then posting the computation model to the node-red instance on this machine
+     * @param message This method is for handling the main computation models coming from node-red of a different machine
+     *                then posting the computation model to the node-red instance on this machine
      */
-    public static void handleMainTopic(SCAMPIMessage message, AppLib applib) {
+    public static void handleMainTopic(SCAMPIMessage message) {
 
         String jsonMessage;
         // get the json object out of the Scmapi message
@@ -45,24 +44,23 @@ public class MessageHandler {
                 return;
             }
 
-           // Model the computation from json into java models
-            Computation computation = new GsonBuilder().create().fromJson(jsonMessage,Computation.class);
+            // Model the computation from json into java models
+            Computation computation = new GsonBuilder().create().fromJson(jsonMessage, Computation.class);
 
             // Get the flow itself from the mode
             String flow = computation.getFlow().toString();
 
-            for (String source: computation.getSources()) {
-                Files.copy(message.getBinary(source), Paths.get(source));
+            for (String source : computation.getSources()) {
+                Files.copy(message.getBinary(source), Paths.get(source), StandardCopyOption.REPLACE_EXISTING );
             }
-
             String inputDataTopic = null;
-            if(computation.getIoSpec().getInput()!= null && computation.getIoSpec().getInput().has("topic")){
-                 inputDataTopic = computation.getIoSpec().getInput().get("topic").getAsString();
+            if (computation.getIoSpec().getInput() != null && computation.getIoSpec().getInput().has("topic")) {
+                inputDataTopic = computation.getIoSpec().getInput().get("topic").getAsString();
             }
 
-            if(inputDataTopic != null){
-                System.out.println("Subscribing to " + inputDataTopic );
-                applib.subscribe(inputDataTopic);
+            if (inputDataTopic != null) {
+                System.out.println("Subscribing to " + inputDataTopic);
+                ScampiHelloWorld.getAppLib().subscribe(inputDataTopic);
             }
 
 
@@ -80,17 +78,17 @@ public class MessageHandler {
     }
 
     /**
-     * @param message
-     * The method is for handling special computational models that need to send data via pub/sub messaging
-     * the method ensures composabilty even between flows on different machines
-     * It takes the the data received and send it via REST to the supposedly listening receiving flow
+     * @param message The method is for handling special computational models that need to send data via pub/sub messaging
+     *                the method ensures composabilty even between flows on different machines
+     *                It takes the the data received and send it via REST to the supposedly listening receiving flow
      */
 
-    public static void handleSpecialTopic(SCAMPIMessage message, String topic){
+    public static void handleSpecialTopic(SCAMPIMessage message, String topic) {
 
-            // run node-red on rest and add flow
-            RESTHandler.post(Constants.NODE_RED_REST, topic, new JsonParser().parse(message.getString(Constants.JSON)).toString());
-            System.out.println("Message Received");
+        // run node-red on rest and add flow
+        RESTHandler.post(Constants.NODE_RED_REST, topic, new JsonParser().parse(
+                message.getString(Constants.JSON)).toString());
+        System.out.println("Message Received");
 
 
     }

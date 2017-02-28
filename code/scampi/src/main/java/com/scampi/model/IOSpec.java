@@ -8,6 +8,6 @@ import lombok.Data;
  */
 @Data
 public class IOSpec {
-JsonObject input;
-JsonObject output;
+    private JsonObject input;
+    private JsonObject output;
 }
