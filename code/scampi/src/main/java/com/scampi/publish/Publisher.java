@@ -93,7 +93,7 @@ public class Publisher {
         SCAMPIMessage message = SCAMPIMessage.builder().build();
         message.putString(Constants.JSON, data);
        try{
-             ScampiHelloWorld.publish(message, Constants.DATA );
+             ScampiHelloWorld.publish(message, topic );
 
         } catch (Exception e) {
             System.out.println(RESTHandler.getResponse(
