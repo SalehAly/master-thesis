@@ -8,16 +8,36 @@
 \section{Use Cases}
 \section{Modeling of Input Sensor Data}
 \subsection{Show how the different sensors have data been modeled to fit our requirements for further use in computations}
+
+
+
+\section{Computation Model}
+\newpage
+\subsection{Dealing with Dependencies}
+Before proceeding to examine the computation itself and explain how it is designed, we must first show what are the dependencies that the computation would need to execute. There are different types of dependencies; first are the software frameworks that the whole design relies on and must exist on each Node. These are the common libraries and systems that most of the computations would need to execute. That's why, these dependencies are shipped and configured in each Node in our design, examples of these dependencies include the operating system, data store, node-red and any other standard or custom libraries that is needed to guarantee a successful execution. In addition to, SCAMPI which must be included to allow communication between Nodes. These dependencies need only to be shipped once while initializing the Node.
+
+ Second, are the dependencies that are specific to each computation such as additional scripts, data files or libraries. In this case, they cannot be shipped at Node initialization since we cannot know what are the custom dependencies any computation would need beforehand. Therefore, the design of the computation model allows a way to configure additional dependencies, which are sent accordingly to any Node that is going to execute this computation.
+  This creates a bit of ambiguity because what if the dependency that is being shipped  already is on the receiving Node, also what makes it more complicated, is that the Node does not know if it is an older version of the dependency or a newer one. Furthermore, what if there is a computation on the Node that uses an older version of the same library while the maintainer is sending a new computation with a newer version of the same library that is not backward compatible. However, there are multiple proposed solutions to remove the ambiguity and make the custom dependency shipping more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the Node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
+ 
+\newpage
 \subsection{Dealing with Resources}
-\subsubsection{We cant make assumptions about resources}
-\subsubsection{Resource capability description }
-\textbf{What are the options that we have in order to describe, infer or discover our resources}
-ex " Resource Configuration File", linux commands, service discovery  , code  .. etc.
-\subsubsection{Decoupling Resources}
+Resources are a different type of dependencies which are also necessary for computations to run. However, they might differ or not exist at all on each Node, if one of the needed resources to carry out the computation is missing then it could be either dismissed or queued and that depends greatly on the type of resource. Moreover, the maintainers cannot make any assumptions about them, meaning, an assumption stating that each Node has a camera is not necessarily true. Since the resources cannot be standardized, each computation must specify the resources it is going to need, then a Node can check against its capabilities and decide whether it could carry out this computation or not. This kind of information is also known as computation meta-data. Resources may be classified into two main types explained below.
+
+\subsubsection{Hardware Resources}
+
+  Hardware resources  are attached to a Node such as cameras, temperature and gas sensors.  Also, executing a computation on a Node missing this type of resource should have a lower possibility of being queued, since its highly unlikely that this hardware resource would be attached soon. The computation model suggests several ways to describe a Node resource capabilities; first by using a specification file that expresses the resources in a certain Node. Of course this approach has its drawbacks since if we attach a new hardware resource we must also edit the specification file correspondingly and that increases the manual work. Secondly, by using operating system commands to discover the attached resources each time a computation needs to be deployed on a system. 
+  
+  Moving on to consider the risk of computations acquiring the same hardware resource at the same time, for instance, two computations that want to take a photo at the same time. This is problematic because whichever computation acquires the lock on the camera first will succeed while the other will fail. Therefore as a resolution, the design proposes resource decoupling; instead of having the computation ask a specific resource directly for information, the resource will always push its data to a database. Afterwards, the different computations could query the data from the database.
+  
+
+\subsubsection{Computational Resources }
+The second type of resources is related to the Node performance, its power and memory capabilities. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a Node which is already loaded. Considering that each computation model has meta-data describing its resource consumption, then it rather easy to decide if it is going to be deployed on a specific Node or not. Additionally, if it is not going to be deployed then it should be decided whether the computations is going to be queued or dismissed according to the possibility of acquiring the resource.
 
 
 
-\section{Computation Modeling}
+
+\newpage
+
 
 \subsection{Execution Model}
 - Which nodes should execute the data, is it all, some  or a specific nodes. Also, how is the model specified in the computation meta data.
@@ -39,7 +59,6 @@ Since the goal is to push computations to the available nodes which have the cap
 	\textbf{include example}
 \end{itemize}
 
-\subsubsection{Dealing with Dependencies ( Shipping, Configuring)}
 \subsection{Input Output Modeling \& Flow Composability}
 - Controlled vs Discovery (uncontrolled) nodes 
 - Dealing with intermediate data
