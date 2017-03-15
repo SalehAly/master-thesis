@@ -14,7 +14,7 @@
 \section{Computation Model}
 \newpage
 \subsection{Dealing with Dependencies}
-Before proceeding to examine the computation itself and explain how it is designed, we must first show what are the dependencies that the computation would need to execute. There are different types of dependencies; first are the software frameworks that the whole design relies on and must exist on each Node. These are the common libraries and systems that most of the computations would need to execute. That's why, these dependencies are shipped and configured in each Node in our design, examples of these dependencies include the operating system, data store, node-red and any other standard or custom libraries that is needed to guarantee a successful execution. In addition to, SCAMPI which must be included to allow communication between Nodes. These dependencies need only to be shipped once while initializing the Node.
+Before proceeding to examine the computation itself and explain how it is designed, we must first show what are the dependencies that the computation would need to execute. There are different types of dependencies; first are the software frameworks that the whole design relies on and must exist on each Node. These are the common libraries and systems that most of the computations would need to execute. That's why, these dependencies are shipped to each Node in our design, examples of these dependencies include the operating system, data store, node-red and any other standard or custom libraries that is needed to guarantee a successful execution. In addition to, SCAMPI which must be included to allow communication between Nodes. These dependencies need only to be shipped once while initializing the Node.
 
  Second, are the dependencies that are specific to each computation such as additional scripts, data files or libraries. In this case, they cannot be shipped at Node initialization since we cannot know what are the custom dependencies any computation would need beforehand. Therefore, the design of the computation model allows a way to configure additional dependencies, which are sent accordingly to any Node that is going to execute this computation.
   This creates a bit of ambiguity because what if the dependency that is being shipped  already is on the receiving Node, also what makes it more complicated, is that the Node does not know if it is an older version of the dependency or a newer one. Furthermore, what if there is a computation on the Node that uses an older version of the same library while the maintainer is sending a new computation with a newer version of the same library that is not backward compatible. However, there are multiple proposed solutions to remove the ambiguity and make the custom dependency shipping more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the Node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
@@ -27,7 +27,7 @@ Resources are a different type of dependencies which are also necessary for comp
 
   Hardware resources  are attached to a Node such as cameras, temperature and gas sensors.  Also, executing a computation on a Node missing this type of resource should have a lower possibility of being queued, since its highly unlikely that this hardware resource would be attached soon. The computation model suggests several ways to describe a Node resource capabilities; first by using a specification file that expresses the resources in a certain Node. Of course this approach has its drawbacks since if we attach a new hardware resource we must also edit the specification file correspondingly and that increases the manual work. Secondly, by using operating system commands to discover the attached resources each time a computation needs to be deployed on a system. 
   
-  Moving on to consider the risk of computations acquiring the same hardware resource at the same time, for instance, two computations that want to take a photo at the same time. This is problematic because whichever computation acquires the lock on the camera first will succeed while the other will fail. Therefore as a resolution, the design proposes resource decoupling; instead of having the computation ask a specific resource directly for information, the resource will always push its data to a database. Afterwards, the different computations could query the data from the database.
+  Moving on to consider the risk of computations acquiring the same hardware resource at the same time, for instance, two computations that want to take a photo at the same time. This is problematic because whichever computation acquires the lock on the camera first will succeed while the other will fail. Therefore as a resolution, the design proposes resource decoupling; instead of having the computation to ask a specific resource directly for information, the resource will always push its data to a database. Afterwards, the different computations could query the data from the database.
   
 
 \subsubsection{Computational Resources }
@@ -36,10 +36,7 @@ The second type of resources is related to the Node performance, its power and m
 
 
 
-\newpage
-
-
-\subsection{Execution Model}
+\iffalse \subsection{Execution Model}
 - Which nodes should execute the data, is it all, some  or a specific nodes. Also, how is the model specified in the computation meta data.
 - How do we know if a Computational Instance has been executed or not.
 
@@ -58,12 +55,52 @@ Since the goal is to push computations to the available nodes which have the cap
 	\item Last aspect in the meta-model is the output or results of the computation run. Since the node does not know what kind of data does the computation produce, therefore the maintainer must specify the way the output data is used or stored. In this case, nodes can understand whether the data needs to be sent back to the original node or just stored in a local database for further use. \\
 	\textbf{include example}
 \end{itemize}
-
+\fi
 \subsection{Input Output Modeling \& Flow Composability}
-- Controlled vs Discovery (uncontrolled) nodes 
-- Dealing with intermediate data
+It is believed that development of smart pervasive computing devices that uses sensors and actuators are mainly grouped into smaller disconnected architectures and thus hard to create a composite framework in which all devices can communicate and integrate\cite{5470524}. In order to tackle this problem and to ensure that our computational model design is dynamic and flexible enough, we must ensure that our model is composable. By Composability we mean that computational models should be able to communicate, send and receive input and output data. Also, the models should be able to either communicate directly to each other via global referencing or through discovery in which they share the same interest. Moreover, input and output data structure should be modular to allow dynamic sending and receiving of data. Below we explain how the computational model design overcomes these challenges. 
+
+\subsubsection{Controlled Vs Uncontrolled Communication}
+Controlled communication in our context basically means that we have one or more computation on more than one node, these nodes know each others global reference and wishes to exchange their input or output data. On the other hand, the uncontrolled communication suggests that there are several interested nodes in one or more computations and might not know each others global reference.
+To allow both types to communicate, our model proposes to use SCAMPI to transfer the message between them. In the case of controlled communication, then we add an attribute to the message with the receiving node global reference, hence, ensuring that only the node with the exact same global reference is allowed to pick up the message. In the other case of controlled communication, the global reference attribute is disregarded completely allowing all interested nodes to collect the message.
+
+\newpage
+\subsubsection{IO Specification}
+Turning now to consider the modularity of the input and output specification, as discussed above, we need the IO to have a specific structure that all nodes can understand regardless of the content. There are multiple ways in our design to specify how the IO data communicates which is explained below. But, the key idea however is that every type of IO communication can be described as a form of node-red flow in one way or another.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/IO.png}
+	\caption{All IO types could be expressed as a flow}
+	\label{fig:io}
+\end{figure}
+
+\begin{itemize}
+\item The first way allows data communication between computations of the same node through a database. One computation  writes interesting data into a specific table with locally unique name in a database. Then, any other local computation which needs to use this is data is allowed to fetch it from this table. Since node-red allows database configuration from inside the computation flow there is no extra effort in writing an additional script to write data into a database. The example in \ref{fig:db} shows a flow that takes an image and then store it in the database, while the other pulls the data from the database upon receiving a request on a specific URL. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/db-out.png}
+	\includegraphics[scale=0.5]{images/db-in.png}
+	\caption{Two separate computational flows describing the IO through a database }
+	\label{fig:db}
+\end{figure}
+
+\item Another way is to use SCAMPI publish-subscribe messaging pattern to communicate, this way computations  does not have to be on the same node, in fact, they do not have to be connected at all. The reason for that, is because SCAMPI can connect to mobile devices passing by, hence allowing them to make the data transfer  to another nodes. The node which generates the data publishes its resulting data to a generally unique topic, therefore any node interested in the data could simply subscribe to that topic and process the data accordingly. The figure \ref{fig:scampi} shows two flows as an example of this method, the first flow generates a timestamp and publishes it to SCAMPI. Then, on any node, if we have the second flow available SCAMPI could get the data and then any computation could be done with the data on node-red. 
+\end{itemize}	
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{images/SCAMPI-pub.png}
+	\includegraphics[scale=0.6]{images/SCAMPI-sub.png}
+	\caption{ }
+	\label{fig:scampi}
+\end{figure}
+
+\newpage
+
 - I/O spec design for databases for two composable flows
-- Compostability has the orthogonal issue of matching input/output "Controlled" IOSPec
+ - Composability has the orthogonal issue of matching input/output "Controlled" IOSPec
 
 
 \section{Moving Data}
