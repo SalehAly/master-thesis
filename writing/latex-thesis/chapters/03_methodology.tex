@@ -11,27 +11,65 @@
 
 
 
-\section{Computation Model}
-\newpage
-\subsection{Dealing with Dependencies}
-Before proceeding to examine the computation itself and explain how it is designed, we must first show what are the dependencies that the computation would need to execute. There are different types of dependencies; first are the software frameworks that the whole design relies on and must exist on each Node. These are the common libraries and systems that most of the computations would need to execute. That's why, these dependencies are shipped to each Node in our design, examples of these dependencies include the operating system, data store, node-red and any other standard or custom libraries that is needed to guarantee a successful execution. In addition to, SCAMPI which must be included to allow communication between Nodes. These dependencies need only to be shipped once while initializing the Node.
 
- Second, are the dependencies that are specific to each computation such as additional scripts, data files or libraries. In this case, they cannot be shipped at Node initialization since we cannot know what are the custom dependencies any computation would need beforehand. Therefore, the design of the computation model allows a way to configure additional dependencies, which are sent accordingly to any Node that is going to execute this computation.
-  This creates a bit of ambiguity because what if the dependency that is being shipped  already is on the receiving Node, also what makes it more complicated, is that the Node does not know if it is an older version of the dependency or a newer one. Furthermore, what if there is a computation on the Node that uses an older version of the same library while the maintainer is sending a new computation with a newer version of the same library that is not backward compatible. However, there are multiple proposed solutions to remove the ambiguity and make the custom dependency shipping more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the Node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
+\newpage
+
+\section{Framework}
+\subsection{Foundation}
+	The fundamental and core element of the having a framework for context-aware pervasive computing is the computational unit or \textit{flow}. A flow is a purposeful unit of computation used to describe a use case in the context of pervasive computing as number of sequentially meaningful instructions. 
+	It can be pushed to any number of nodes and normally has dependencies and needs some resources to ensure a successful run. Also, it could be either standalone self-contained computation or need to interact with other flows for data gathering, sharing and processing. Flows are distributed, as a result they are not necessarily on the same node and could be distributed on several nodes, hence, they need a way to communicate. Furthermore, since the flows exist on nodes which might be disconnected, we must guarantee that there exist an approach in which data could be transfered between the disconnected nodes. Figure \ref{fig:flow} shows a flow that represents a  use case in which the flow snaps an image every time interval then store it in a database.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/db-out.png} 
+	\caption{An example of a computation expressed as a node-red flow.}
+	\label{fig:flow}
+\end{figure}
+
+ A flow should be modular having a specific functionality with defined interfaces that helps in reducing the complexity and allowing re-use and re-assembly. Moreover, since flows need to interact and exchange data, they should be composable. Think of composability as LEGO parts that need to be assembled in their correct positions in order to create a figure, however in contrast to individual LEGO parts which do not have a meaning on their own, individual flows could serve a specific purpose besides their global one. To establish flow composability in our context, we need to be able to match the output data of one flow to the input data of another, no matter whether the flows are on the same node or distributed, connected or disconnected. For instance, if we have a flow \(f\) takes \(A\) as input and gives \(B\) as an output
+\[ f : A  -> B  \]
+we should be able to compose flow \(f_2\) that takes the output of \(f\) and produce a new result and so on. 
+\[ f_2 : B  -> C  \]
+
+\subsection{Computational Model}
+
+Below we present the computational model as an abstraction to the framework design, it explains the components, challenges and enlists the possible solutions that could be implemented to overcome the challenges. 	
+
+\subsubsection{Distributed Nodes}
+In order to start with the framework explanation we must understand the idea behind pervasiveness, pervasive computing relies on the idea of edge computations thus it is fundamentally distributed.  A system is distributed if its components "nodes" are on networked computers which communicate only by sending and receiving of messages \cite{DSYS}. 
+
+- Logical constraints, execute in one place, everywhere or n-instances.
+
+
+\subsubsection{Pub-Sub Messaging Queues}
+end-point centrinc does not work - dynamic enviroment - cannot know information/context/ data centric -> we do now data
+\newpage
+
+
+\subsubsection{Dependencies}
+
+Before proceeding to examine the computation itself and explain how it is designed, we must first introduce the dependencies that the computation would need to execute. There are different types of dependencies; first are the software frameworks that the whole design relies on and must exist on each node. These are the common libraries and systems that most of the computations would need to execute. That's why, these dependencies are shipped to each node in our design, examples of these dependencies include the operating system, data store, node-red and any other standard or custom libraries that is needed to guarantee a successful execution. In addition to, a messaging system which must be included to allow communication between nodes. These dependencies need only to be shipped once while initializing the node.
+
+ Second, are the dependencies that are specific to each computation such as additional scripts, data files or libraries. In this case, they cannot be shipped at node initialization since we cannot know what are the custom dependencies any computation would need beforehand. Therefore, the design of the computation model allows a way to configure additional dependencies, which are sent accordingly to any node that is going to execute this computation.
+  This creates a bit of ambiguity because what if the dependency that is being shipped  already is on the receiving node, also what makes it more complicated, is that the node does not know if it is an older version of the dependency or a newer one. Furthermore, what if there is a computation on the node that uses an older version of the same library while the maintainer is sending a new computation with a newer version of the same library that is not backward compatible. However, there are multiple proposed solutions to remove the ambiguity and make the custom dependency shipping more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
  
-\newpage
-\subsection{Dealing with Resources}
-Resources are a different type of dependencies which are also necessary for computations to run. However, they might differ or not exist at all on each Node, if one of the needed resources to carry out the computation is missing then it could be either dismissed or queued and that depends greatly on the type of resource. Moreover, the maintainers cannot make any assumptions about them, meaning, an assumption stating that each Node has a camera is not necessarily true. Since the resources cannot be standardized, each computation must specify the resources it is going to need, then a Node can check against its capabilities and decide whether it could carry out this computation or not. This kind of information is also known as computation meta-data. Resources may be classified into two main types explained below.
+%\newpage
+\subsubsection {Resources}
 
-\subsubsection{Hardware Resources}
 
-  Hardware resources  are attached to a Node such as cameras, temperature and gas sensors.  Also, executing a computation on a Node missing this type of resource should have a lower possibility of being queued, since its highly unlikely that this hardware resource would be attached soon. The computation model suggests several ways to describe a Node resource capabilities; first by using a specification file that expresses the resources in a certain Node. Of course this approach has its drawbacks since if we attach a new hardware resource we must also edit the specification file correspondingly and that increases the manual work. Secondly, by using operating system commands to discover the attached resources each time a computation needs to be deployed on a system. 
+
+Resources are a different type of dependencies which are also necessary for computations to run. However, they might differ or not exist at all on each node, if one of the needed resources to carry out the computation is missing then it could be either dismissed or queued and that depends greatly on the type of resource. Moreover, the maintainers cannot make any assumptions about them, meaning, an assumption stating that each node has a camera is not necessarily true. Since the resources cannot be standardized, each computation must specify the resources it is going to need, then a node can check against its capabilities and decide whether it could carry out this computation or not. This kind of information is also known as computation meta-data. Resources may be classified into two main types explained below.
+
+\paragraph{Hardware Resources}\mbox{}\\
+
+  Hardware resources  are attached to a node such as cameras, temperature and gas sensors.  Also, executing a computation on a node missing this type of resource should have a lower possibility of being queued, since its highly unlikely that this hardware resource would be attached soon. The computation model suggests several ways to describe a node resource capabilities; first by using a specification file that expresses the resources in a certain node. Of course this approach has its drawbacks since if we attach a new hardware resource we must also edit the specification file correspondingly and that increases the manual work. Secondly, by using operating system commands to discover the attached resources each time a computation needs to be deployed on a system. 
   
   Moving on to consider the risk of computations acquiring the same hardware resource at the same time, for instance, two computations that want to take a photo at the same time. This is problematic because whichever computation acquires the lock on the camera first will succeed while the other will fail. Therefore as a resolution, the design proposes resource decoupling; instead of having the computation to ask a specific resource directly for information, the resource will always push its data to a database. Afterwards, the different computations could query the data from the database.
   
 
-\subsubsection{Computational Resources }
-The second type of resources is related to the Node performance, its power and memory capabilities. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a Node which is already loaded. Considering that each computation model has meta-data describing its resource consumption, then it rather easy to decide if it is going to be deployed on a specific Node or not. Additionally, if it is not going to be deployed then it should be decided whether the computations is going to be queued or dismissed according to the possibility of acquiring the resource.
+\paragraph{Computational Resources }\mbox{}\\
+
+The second type of resources is related to the node performance, its power and memory capabilities. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a node which is already loaded. Considering that each computation model has meta-data describing its resource consumption, then it rather easy to decide if it is going to be deployed on a specific node or not. Additionally, if it is not going to be deployed then it should be decided whether the computations is going to be queued or dismissed according to the possibility of acquiring the resource.
 
 
 
@@ -55,7 +93,7 @@ Since the goal is to push computations to the available nodes which have the cap
 	\item Last aspect in the meta-model is the output or results of the computation run. Since the node does not know what kind of data does the computation produce, therefore the maintainer must specify the way the output data is used or stored. In this case, nodes can understand whether the data needs to be sent back to the original node or just stored in a local database for further use. \\
 	\textbf{include example}
 \end{itemize}
-\fi
+
 \subsection{Input Output Modeling \& Flow Composability}
 It is believed that development of smart pervasive computing devices that uses sensors and actuators are mainly grouped into smaller disconnected architectures and thus hard to create a composite framework in which all devices can communicate and integrate\cite{5470524}. In order to tackle this problem and to ensure that our computational model design is dynamic and flexible enough, we must ensure that our model is composable. By Composability we mean that computational models should be able to communicate, send and receive input and output data. Also, the models should be able to either communicate directly to each other via global referencing or through discovery in which they share the same interest. Moreover, input and output data structure should be modular to allow dynamic sending and receiving of data. Below we explain how the computational model design overcomes these challenges. 
 
@@ -85,9 +123,7 @@ Turning now to consider the modularity of the input and output specification, as
 	\label{fig:db}
 \end{figure}
 
-\item Another way is to use SCAMPI publish-subscribe messaging pattern to communicate, this way computations  does not have to be on the same node, in fact, they do not have to be connected at all. The reason for that, is because SCAMPI can connect to mobile devices passing by, hence allowing them to make the data transfer  to another nodes. The node which generates the data publishes its resulting data to a generally unique topic, therefore any node interested in the data could simply subscribe to that topic and process the data accordingly. The figure \ref{fig:scampi} shows two flows as an example of this method, the first flow generates a timestamp and publishes it to SCAMPI. Then, on any node, if we have the second flow available SCAMPI could get the data and then any computation could be done with the data on node-red. 
-\end{itemize}	
-
+\item Another way is to use SCAMPI publish-subscribe messaging pattern to communicate, this way computations  does not have to be on the same node, in fact, they do not have to be connected at all. The reason for that, is because SCAMPI can connect to mobile devices passing by, hence allowing them to make the data transfer  to another nodes. The node which generates the data publishes its resulting data to a generally unique topic, therefore any node interested in the data could simply subscribe to that topic and process the data accordingly. The figure \ref{fig:scampi} shows two flows as an example of this method, the first flow generates data and publishes it to SCAMPI. Then, on any node, the data could be received via subscribing to the same topic and any computation could be carried out with the data on the flow. 
 
 \begin{figure}[H]
 	\centering
@@ -97,26 +133,29 @@ Turning now to consider the modularity of the input and output specification, as
 	\label{fig:scampi}
 \end{figure}
 
+\item Streaming
+\end{itemize}	
+
+\fi
+
+
 \newpage
 
-- I/O spec design for databases for two composable flows
- - Composability has the orthogonal issue of matching input/output "Controlled" IOSPec
 
 
-\section{Moving Data}
+\section{Data Model}
 
-\subsection{Data Streaming}
-we can ask the hight performance units to stream from cameras no low devices. but how to do it ?
+\subsection{Data Types}
+%we can ask the high performance units to stream from cameras no low devices. but how to do it ?
 
-\subsection{Explain data distribution among several nodes to apply pervasive computing}
+%\subsection{Explain data distribution among several nodes to apply pervasive computing}
 
-\subsubsection{Input Meta-data}
-is it local, provided or collected data.
+\subsection{Moving Data}
+
 % moreover, the way that the input data used while doing this computation will be provided, whether it gets the input data from a local database or is it going to be included along with the computational data. 
+\subsection{IO Specification}
+- I/O spec design for databases for two composable flows
 
-\section{Networking}
-
-\subsection{SCAMPI }
 
 \section{System Design }
 A System Design can be broadly described as an architecture of the system, which includes an explanation of each and every hardware component of the system, the connection between these components if there is any, and the data flowing between these components. Moreover, it provides a wide glimpse of the whole system but not its exact functionality, hence, giving a simple understanding of the architecture without jumping into much detail.\\
