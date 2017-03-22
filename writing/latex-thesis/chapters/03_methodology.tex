@@ -33,16 +33,28 @@ we should be able to compose flow \(f_2\) that takes the output of \(f\) and pro
 
 \subsection{Computational Model}
 
-Below we present the computational model as an abstraction to the framework design, it explains the components, challenges and enlists the possible solutions that could be implemented to overcome the challenges. 	
+Below we present the computational model as an abstraction to the framework design, it explains the components, challenges and enlists the possible solutions that could be implemented to overcome these challenges. 	
 
-\subsubsection{Distributed Nodes}
-In order to start with the framework explanation we must understand the idea behind pervasiveness, pervasive computing relies on the idea of edge computations thus it is fundamentally distributed.  A system is distributed if its components "nodes" are on networked computers which communicate only by sending and receiving of messages \cite{DSYS}. 
+\subsubsection{Distributed Nodes \& Flows}
+In order to start with the framework explanation we must understand the idea behind pervasiveness, pervasive computing relies on the idea of pushing flows to the edges "nodes" and thus it is fundamentally distributed. A system is distributed if its components  are on networked computers which communicate only by sending and receiving of messages \cite{DSYS} which is exaclty the case. Now in our model, each node should be capabale of executing flows and producing results as long as it  has the required dependencies and resources. Moreover, to ensure that flows are composable, nodes should be able to communicate seamlessly even though nodes hosting this flows might be disconnected.
 
-- Logical constraints, execute in one place, everywhere or n-instances.
 
+% Thus to have distributed nodes, we need to make sure of the following: \textit{(i)} dependecies and resources are available on the node, \textit{(ii)} there is a way to communicate between nodes,  \textit{(iii)} we can overcome sending and recieving data between disconnected nodes.  \\
+
+Turning to flows, in essense every challenge related to making the nodes distributed also apply to flows because nodes host flows. However, there are more to flows, applying the concept of distributed system to flows could have different meanings and approaches. It could be distributed in multiple ways depending on the use cases explained as follows: (i) the general and most intuitive approach in regards to pervasive computing, in which flows are pushed to all the available nodes either the connected or disconnected ones, (ii) pushing flows to \textit{n} number of nodes whether they are selected or picked at random, (iii) choosing only one node to execute a specific flow. Therefore, the communications model is the one of the most cruical parts to gurantee a distributed system, it should have the felxiblity to provide these approaches and overcome the hurdle of disconnected nodes.
+
+Another main challenge would be to actually find the connected nodes. Distributed and pervasive enviroments are dynamic, their components are not known to be live or dead at compile-time. Thus the framework should be able to run service discovery at run-time in order to find the connected nodes or it should be able to broadcast its message to all the other nodes and recieve them aswell. Otherwise, the approach would not qualify to be a distributed system.
+
+
+\newpage
 
 \subsubsection{Pub-Sub Messaging Queues}
-end-point centrinc does not work - dynamic enviroment - cannot know information/context/ data centric -> we do now data
+
+As previously stated, a smart communication system is essential to our computational model, it solves some of the biggest challenges in our approach which are mainly nodes service discovery, sending and recieving messages of distributed, connected and disconnected nodes. Also, considering that service discovery is dynamic, the communications model is not end-point centric since we cannot target the actual nodes as end points. The reason for that is, we do not know their repsective addresses or either they are connected or not. Rather our communication model is data-centric meaning it knows that there are some parties interested in sending data and others willing to revieve the same data given the same context regardless their network location.
+
+
+
+
 \newpage
 
 
@@ -53,7 +65,7 @@ Before proceeding to examine the computation itself and explain how it is design
  Second, are the dependencies that are specific to each computation such as additional scripts, data files or libraries. In this case, they cannot be shipped at node initialization since we cannot know what are the custom dependencies any computation would need beforehand. Therefore, the design of the computation model allows a way to configure additional dependencies, which are sent accordingly to any node that is going to execute this computation.
   This creates a bit of ambiguity because what if the dependency that is being shipped  already is on the receiving node, also what makes it more complicated, is that the node does not know if it is an older version of the dependency or a newer one. Furthermore, what if there is a computation on the node that uses an older version of the same library while the maintainer is sending a new computation with a newer version of the same library that is not backward compatible. However, there are multiple proposed solutions to remove the ambiguity and make the custom dependency shipping more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
  
-%\newpage
+\newpage
 \subsubsection {Resources}
 
 
@@ -95,7 +107,9 @@ Since the goal is to push computations to the available nodes which have the cap
 \end{itemize}
 
 \subsection{Input Output Modeling \& Flow Composability}
-It is believed that development of smart pervasive computing devices that uses sensors and actuators are mainly grouped into smaller disconnected architectures and thus hard to create a composite framework in which all devices can communicate and integrate\cite{5470524}. In order to tackle this problem and to ensure that our computational model design is dynamic and flexible enough, we must ensure that our model is composable. By Composability we mean that computational models should be able to communicate, send and receive input and output data. Also, the models should be able to either communicate directly to each other via global referencing or through discovery in which they share the same interest. Moreover, input and output data structure should be modular to allow dynamic sending and receiving of data. Below we explain how the computational model design overcomes these challenges. 
+It is believed that development of smart pervasive computing devices that uses sensors and actuators are mainly grouped into smaller disconnected architectures and thus hard to create a composite framework in which all devices can communicate and integrate\cite{5470524}. In order to tackle this problem and to ensure that our computational model design is dynamic and flexible enough, we must ensure that our model is composable. By Composability we mean that computational models should be able to communicate, send and receive input and output data. 
+
+Also, the models should be able to either communicate directly to each other via global referencing or through discovery in which they share the same interest. Moreover, input and output data structure should be modular to allow dynamic sending and receiving of data. Below we explain how the computational model design overcomes these challenges. 
 
 \subsubsection{Controlled Vs Uncontrolled Communication}
 Controlled communication in our context basically means that we have one or more computation on more than one node, these nodes know each others global reference and wishes to exchange their input or output data. On the other hand, the uncontrolled communication suggests that there are several interested nodes in one or more computations and might not know each others global reference.
