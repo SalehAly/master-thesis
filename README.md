@@ -1,4 +1,6 @@
-# Master-Thesis
+# Master-Thesis: 
+![alt text](https://travis-ci.org/SalehAly/master-thesis.svg?branch=develop)
+
 M.Sc. Topic: Context-Sensitive Pervasive Computing for Smart Cities
 
 Introduction to IoT
