@@ -52,7 +52,7 @@
                             <mainClass>com.scampi.api.ScampiHelloWorld</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>${project.basedir}/src/main/resources</outputDirectory>
+                    <outputDirectory>${project.basedir}</outputDirectory>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>

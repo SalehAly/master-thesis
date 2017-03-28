@@ -1,0 +1,6 @@
+language: java
+before_install: cd code/scampi/
+jdk:
+- oraclejdk8
+install: mvn install
+

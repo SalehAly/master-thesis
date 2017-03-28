@@ -10,9 +10,9 @@ import java.util.List;
  */
 @Data
 public class Computation {
-private Metadata metadata;
-private JsonObject flow;
-private IOSpec ioSpec;
-private List<String> sources;
+    private Metadata metadata;
+    private JsonObject flow;
+    private IOSpec ioSpec;
+    private List<String> sources;
 }
 
