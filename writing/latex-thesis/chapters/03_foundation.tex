@@ -1,21 +1,9 @@
-% !TeX root = ../main.tex
-% Add the above to each chapter to make compiling the PDF easier in some editors.
 
-\chapter{Approach}\label{chapter:Approach}
-%In this chapter, the proposed solution to tackling pervasive computing and data distribution of context-aware input sensor data is unfolded. At the beginning, a broad perspective of the architecture is demonstrated, followed by, the explanation of modeling input sensor data. Then, two sections describing pervasive computing and data distribution models and architectures. Finally, a description of the communication model is disclosed.
-
-\section{Requirements}
-\section{Use Cases}
-\section{Modeling of Input Sensor Data}
-\subsection{Show how the different sensors have data been modeled to fit our requirements for further use in computations}
+\chapter{Framework in Theory}\label{chapter:Foundation}
+In this chapter we explain the framework model in theory, the key concepts behind it, challenges facing the design and their possible solutions.
 
 
-
-
-\newpage
-
-\section{Framework}
-\subsection{Foundation}
+\section{Foundation}
 	The fundamental core element of this framework is the computational unit, which is responsible for describing the use case. One possible abstraction of the computational unit is the \textit{flow}, which is a purposeful unit of computation that contains sequentially meaningful instructions. Also, it can be either standalone self-contained computation or interactive in which they collaborate with other flows for data gathering, sharing and processing. Moreover, the flow is composed of elements which could have a significant meaning such as snapping a photo or could act as an intermediary to harmonize data as shown in figure \ref{fig:flow}. 
 	
 \begin{figure}[H]
@@ -39,9 +27,9 @@ Now assuming that we can send flows to the nodes, make them communicate and care
 then we have another flow \(f_2\) that takes \(B\) as an input and gives a new output \(C\)
 % the output of \(f_1\) and produce a new result and so on. 
 \[ f_2 : B  \to C  \]
-we should be able to compose a new flow taking \(f_1\)'s input and giving \(f_2\)'s output, resulting in final flow \(f_3\) which is a composite of both.
+we should be able to compose a new flow taking \(f_1\)'s input and giving \(f_2\)'s output, resulting in flow \(f_3\) which is a composite of both.
 \[f_3: A \to C = f_2 \circ f_1\]
-As mentioned before, composability should also be valid in a local or distributed environment. In the case of locally composing flows within the same node, there should be a way to connect the output of a flow to the input of another as shown in \ref{fig:compose}. On the other hand if it is distributed composability, the messaging system should connect the dots and serve as a broker to deliver the data.
+Since composability should also be valid in a local or distributed environment. Thus, in the first case of local flow composability, there should be a way to connect the output of a flow to the input of another as shown in \ref{fig:compose}. On the other hand if it is distributed composability, the messaging system should connect the dots and serve as a broker to deliver the data.
 
 \[a \in A, \, b \in B, \, c \in C\]
 \begin{figure}[H]
@@ -58,24 +46,29 @@ As mentioned before, composability should also be valid in a local or distribute
 \end{figure}
 
 
-\subsection{Computational Model}
+\section{Computational Model}
 
-Below we present the computational model as an abstraction to the framework design, it explains the components, challenges and enlists the possible solutions that could be implemented to overcome these challenges. 	
+Below we present the computational model as an abstraction for the framework design, it explains the components, challenges and the possible solutions that could be implemented to overcome these challenges. 	
 
-\subsubsection{Distributed Nodes \& Flows}
-In order to start with the framework explanation we must understand the idea behind pervasiveness, pervasive computing relies on the idea of pushing flows to the edges "nodes" and thus it is fundamentally distributed. A system is distributed if its components  are on networked computers which communicate only by sending and receiving of messages \cite{DSYS} which is exactly the case. Now in our model, each node should be capable of executing flows and producing results as long as it  has the required dependencies and resources. Moreover, to ensure that flows are composable., nodes should be able to communicate seamlessly even though nodes hosting this flows might be disconnected.
+\subsection{Distributed Nodes \& Flows}
+In order to start with the framework explanation we must understand the idea behind pervasiveness. Pervasive computing relies on the idea of pushing flows to the edges "nodes" and thus it is fundamentally distributed. A system is distributed if its components  are on networked computers which communicate only by sending and receiving of messages \cite{DSYS} which is exactly the case. Now in our model, each node should be capable of executing flows and producing results as long as it  has the required dependencies and resources. Moreover, to ensure that flows are composable, nodes should be able to communicate seamlessly even though nodes hosting this flows might be disconnected.
 
 
 % Thus to have distributed nodes, we need to make sure of the following: \textit{(i)} dependencies and resources are available on the node, \textit{(ii)} there is a way to communicate between nodes,  \textit{(iii)} we can overcome sending and receiving data between disconnected nodes.  \\
 
-Turning to flows, in essence every challenge related to making the nodes distributed also apply to flows because nodes host flows. However, there are more to flows, applying the concept of distributed system to flows could have different meanings and approaches. It could be distributed in multiple ways depending on the use cases explained as follows: (i) the general and most intuitive approach in regards to pervasive computing, in which flows are pushed to all the available nodes either the connected or disconnected ones, (ii) pushing flows to \textit{n} number of nodes whether they are selected or picked at random, (iii) choosing only one node to execute a specific flow. Therefore, the communications model is the one of the most crucial parts to grantee a distributed system, it should have the flexibility to provide these approaches and overcome the hurdle of disconnected nodes.
+Turning to flows, in essence every challenge related to making the nodes distributed also apply to flows because nodes host flows. However, there are more to flows, distributing them across nodes could have different semantics and approaches depending on the use case.
+ Lets us first consider the two different semantics, a flow could be sent on random basis to the nodes, and at the contrary, it could also be sent to specific nodes. This provides flexibility in applying the use case without wasting resources, in addition, it magnifies the effect of locational context in case we want to send a computation to a specific place.
+ Moving on to approaches, a flow could be distributed across the nodes in a multiple ways explained as follows: (i) flows are pushed to all the available nodes even if they are disconnected (ii) flows are sent to \textit{n} number of nodes whether they are selected or picked at random, (iii) choosing only one node to execute a specific flow. As a result, the communication model is one of the most crucial parts to guarantee a distributed system, it should have the flexibility to provide these approaches and overcome the hurdle of disconnected nodes.
+ 
 
-Another main challenge would be to actually find the connected nodes. Distributed and pervasive environments are dynamic, their components are not known to be live or dead at compile-time. Thus the framework should be able to run service discovery at run-time in order to find the connected nodes or it should be able to broadcast its message to all the other nodes and receive them as well Otherwise, the approach would not qualify to be a distributed system.
+Another main challenge is to actually find the connected nodes. Distributed and pervasive environments are dynamic, their components are not known to be live or dead at compile-time. Thus the framework should be able to run service discovery at run-time in order to find the connected nodes or it should be able to broadcast its message to all the other nodes and receive them as well. Otherwise, the approach would not qualify to be a distributed system. 
+
+
 
 
 \newpage
 
-\subsubsection{Pub-Sub Messaging Queues}
+\subsection{Pub-Sub Messaging Queues}
 
 As previously stated, a smart communication system is essential to our computational model, it solves some of the biggest challenges in our approach which are mainly nodes service discovery, sending and receiving messages of distributed, connected and disconnected nodes. Also, considering that service discovery is dynamic, the communications model is not end-point centric since we cannot target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric meaning it knows that there are some parties interested in sending data and others willing to revive the same data given the same context regardless their network location.
 For all the stated facts, publish-subscribe messaging queues would best fit our needs. It implements service discovery, hence, it can discover all the other nodes who has the 
@@ -85,7 +78,7 @@ For all the stated facts, publish-subscribe messaging queues would best fit our 
 \newpage
 
 
-\subsubsection{Dependencies}
+\subsection{Dependencies}
 
 Before proceeding to examine the computation itself and explain how it is designed, we must first introduce the dependencies that the computation would need to execute. There are different types of dependencies; first are the software frameworks that the whole design relies on and must exist on each node. These are the common libraries and systems that most of the computations would need to execute. That's why, these dependencies are shipped to each node in our design, examples of these dependencies include the operating system, data store, node-red and any other standard or custom libraries that is needed to guarantee a successful execution. In addition to, a messaging system which must be included to allow communication between nodes. These dependencies need only to be shipped once while initializing the node.
 
@@ -93,94 +86,23 @@ Before proceeding to examine the computation itself and explain how it is design
   This creates a bit of ambiguity because what if the dependency that is being shipped  already is on the receiving node, also what makes it more complicated, is that the node does not know if it is an older version of the dependency or a newer one. Furthermore, what if there is a computation on the node that uses an older version of the same library while the maintainer is sending a new computation with a newer version of the same library that is not backward compatible. However, there are multiple proposed solutions to remove the ambiguity and make the custom dependency shipping more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
  
 \newpage
-\subsubsection {Resources}
+\subsection {Resources}
 
 
 
 Resources are a different type of dependencies which are also necessary for computations to run. However, they might differ or not exist at all on each node, if one of the needed resources to carry out the computation is missing then it could be either dismissed or queued and that depends greatly on the type of resource. Moreover, the maintainers cannot make any assumptions about them, meaning, an assumption stating that each node has a camera is not necessarily true. Since the resources cannot be standardized, each computation must specify the resources it is going to need, then a node can check against its capabilities and decide whether it could carry out this computation or not. This kind of information is also known as computation meta-data. Resources may be classified into two main types explained below.
 
-\paragraph{Hardware Resources}\mbox{}\\
+\subsubsection{Hardware Resources}
 
   Hardware resources  are attached to a node such as cameras, temperature and gas sensors.  Also, executing a computation on a node missing this type of resource should have a lower possibility of being queued, since its highly unlikely that this hardware resource would be attached soon. The computation model suggests several ways to describe a node resource capabilities; first by using a specification file that expresses the resources in a certain node. Of course this approach has its drawbacks since if we attach a new hardware resource we must also edit the specification file correspondingly and that increases the manual work. Secondly, by using operating system commands to discover the attached resources each time a computation needs to be deployed on a system. 
   
   Moving on to consider the risk of computations acquiring the same hardware resource at the same time, for instance, two computations that want to take a photo at the same time. This is problematic because whichever computation acquires the lock on the camera first will succeed while the other will fail. Therefore as a resolution, the design proposes resource decoupling; instead of having the computation to ask a specific resource directly for information, the resource will always push its data to a database. Afterwards, the different computations could query the data from the database.
   
 
-\paragraph{Computational Resources }\mbox{}\\
+\subsubsection{Computational Resources }\mbox{}\\
 
 The second type of resources is related to the node performance, its power and memory capabilities. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a node which is already loaded. Considering that each computation model has meta-data describing its resource consumption, then it rather easy to decide if it is going to be deployed on a specific node or not. Additionally, if it is not going to be deployed then it should be decided whether the computations is going to be queued or dismissed according to the possibility of acquiring the resource.
 
-
-
-
-\iffalse \subsection{Execution Model}
-- Which nodes should execute the data, is it all, some  or a specific nodes. Also, how is the model specified in the computation meta data.
-- How do we know if a Computational Instance has been executed or not.
-
-%\subsubsection{Computation Meta-Model}
-Since the goal is to push computations to the available nodes which have the capability to do so, there are three main aspects that must be addressed to achieve this goal.
-\begin{itemize}
-	
-	\item First, is to be able to express the computational requirements and resources that the computation is going to use while running on a specific node, which is also called \textbf{Computation Meta-data"}. Since we cannot make assumptions that a certain node has specific resources or specification as explained in \ref{subsub:node}, these requirements has to be pushed along with the computation. It includes, for instance, the amount of processing power and random access memory the computation is going to need, also, the resources required to perform such a computation.
-	The meta-data is expressed as a \textit{JSON} formatted object.
-	
-	\textbf{include example}
-	
-	\item Second, is the core of the meta-model, which is a model expressing the computation itself, and since node-red is the chosen platform to execute our computation on, then naturally, it is modeled into a \textit{flow}, which is a model used by node-red to describe the capabilities and actions of a computation in JSON format. This simplifies the whole idea of making the computation meta-model travel through the network, because with node-red, the maintainer could develop a computation using the user interface of node-red, then export this computation as a flow, include the meta-data and publish it to the network. Afterwards, a node can read the meta-data and analyze if it could run this computation according to its resources, then import the flow into its node-red instance and deploy it for running.
-	\textbf{include example}
-	
-	\item Last aspect in the meta-model is the output or results of the computation run. Since the node does not know what kind of data does the computation produce, therefore the maintainer must specify the way the output data is used or stored. In this case, nodes can understand whether the data needs to be sent back to the original node or just stored in a local database for further use. \\
-	\textbf{include example}
-\end{itemize}
-
-\subsection{Input Output Modeling \& Flow Composability}
-It is believed that development of smart pervasive computing devices that uses sensors and actuators are mainly grouped into smaller disconnected architectures and thus hard to create a composite framework in which all devices can communicate and integrate\cite{5470524}. In order to tackle this problem and to ensure that our computational model design is dynamic and flexible enough, we must ensure that our model is composable. By Composability we mean that computational models should be able to communicate, send and receive input and output data. 
-
-Also, the models should be able to either communicate directly to each other via global referencing or through discovery in which they share the same interest. Moreover, input and output data structure should be modular to allow dynamic sending and receiving of data. Below we explain how the computational model design overcomes these challenges. 
-
-\subsubsection{Controlled Vs Uncontrolled Communication}
-Controlled communication in our context basically means that we have one or more computation on more than one node, these nodes know each others global reference and wishes to exchange their input or output data. On the other hand, the uncontrolled communication suggests that there are several interested nodes in one or more computations and might not know each others global reference.
-To allow both types to communicate, our model proposes to use SCAMPI to transfer the message between them. In the case of controlled communication, then we add an attribute to the message with the receiving node global reference, hence, ensuring that only the node with the exact same global reference is allowed to pick up the message. In the other case of controlled communication, the global reference attribute is disregarded completely allowing all interested nodes to collect the message.
-
-\newpage
-\subsubsection{IO Specification}
-Turning now to consider the modularity of the input and output specification, as discussed above, we need the IO to have a specific structure that all nodes can understand regardless of the content. There are multiple ways in our design to specify how the IO data communicates which is explained below. But, the key idea however is that every type of IO communication can be described as a form of node-red flow in one way or another.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{images/IO.png}
-	\caption{All IO types could be expressed as a flow}
-	\label{fig:io}
-\end{figure}
-
-\begin{itemize}
-\item The first way allows data communication between computations of the same node through a database. One computation  writes interesting data into a specific table with locally unique name in a database. Then, any other local computation which needs to use this is data is allowed to fetch it from this table. Since node-red allows database configuration from inside the computation flow there is no extra effort in writing an additional script to write data into a database. The example in \ref{fig:db} shows a flow that takes an image and then store it in the database, while the other pulls the data from the database upon receiving a request on a specific URL. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{images/db-out.png}
-	\includegraphics[scale=0.5]{images/db-in.png}
-	\caption{Two separate computational flows describing the IO through a database }
-	\label{fig:db}
-\end{figure}
-
-\item Another way is to use SCAMPI publish-subscribe messaging pattern to communicate, this way computations  does not have to be on the same node, in fact, they do not have to be connected at all. The reason for that, is because SCAMPI can connect to mobile devices passing by, hence allowing them to make the data transfer  to another nodes. The node which generates the data publishes its resulting data to a generally unique topic, therefore any node interested in the data could simply subscribe to that topic and process the data accordingly. The figure \ref{fig:scampi} shows two flows as an example of this method, the first flow generates data and publishes it to SCAMPI. Then, on any node, the data could be received via subscribing to the same topic and any computation could be carried out with the data on the flow. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{images/SCAMPI-pub.png}
-	\includegraphics[scale=0.6]{images/SCAMPI-sub.png}
-	\caption{ }
-	\label{fig:scampi}
-\end{figure}
-
-\item Streaming
-\end{itemize}	
-
-\fi
-
-
-\newpage
 
 
 
