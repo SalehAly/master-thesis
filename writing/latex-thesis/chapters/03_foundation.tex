@@ -80,7 +80,7 @@ For all the stated facts, publish-subscribe messaging queues would best fit our 
 
 \subsection{Dependencies}
 
-Dependencies are one of the main requirements of computation execution, we need to deal with them and make sure they do not introduce any impediments during execution. There are two types of dependencies; the static software frameworks that the whole design relies on and must exist on each node, and the dynamic dependencies that are specific to each computation.
+Dependencies are one of the main requirements of computation execution, dropping one or more dependency would definitely stop the execution from proceeding. Thus, we need to deal with them and make sure they do not introduce any impediments during execution.  There are two types of dependencies; the static software frameworks that the whole design relies on and must exist on each node, and the dynamic dependencies that are specific to each computation.
 
 First, are the static dependencies are mainly the common libraries and software that most of the computations would require, they represent the base of framework. That is why these dependencies are installed to each node in our design, examples of these dependencies include the operating system, data store and any other standard or custom libraries that are mandatory for the computation to run. In addition to, the messaging system which implements the communication model allowing interaction between nodes. 
 
@@ -91,23 +91,31 @@ First, are the static dependencies are mainly the common libraries and software 
   
    Nevertheless, there are multiple possible solutions to remove the ambiguity and make the custom dependency shipping more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
  
-\newpage
+
 \subsection {Resources}
 
 
+Resources are a different type of dependency which are also necessary for computations to run. However, they might differ or not exist at all on each node. If one of the needed resources is missing then the computation could be either dismissed or queued depending on the type of resource. Moreover, the maintainers cannot make any assumptions about the resources, meaning, an assumption stating that each node has a camera is not necessarily true. Since the resources cannot be standardized across all nodes, each computation must provide meta data expressing the resources it is going to require, also, the node must realize its available resources. Then a node can check against its capabilities and decide whether it could carry out the execution or not. There are two types of resources; sensors and actuators which are used throughout a computation, and the hardware resources which influences the performance requirements of a specific computation.
 
-Resources are a different type of dependencies which are also necessary for computations to run. However, they might differ or not exist at all on each node, if one of the needed resources to carry out the computation is missing then it could be either dismissed or queued and that depends greatly on the type of resource. Moreover, the maintainers cannot make any assumptions about them, meaning, an assumption stating that each node has a camera is not necessarily true. Since the resources cannot be standardized, each computation must specify the resources it is going to need, then a node can check against its capabilities and decide whether it could carry out this computation or not. This kind of information is also known as computation meta-data. Resources may be classified into two main types explained below.
 
-\subsubsection{Hardware Resources}
+\subsubsection{Sensors and Actuators}
 
-  Hardware resources  are attached to a node such as cameras, temperature and gas sensors.  Also, executing a computation on a node missing this type of resource should have a lower possibility of being queued, since its highly unlikely that this hardware resource would be attached soon. The computation model suggests several ways to describe a node resource capabilities; first by using a specification file that expresses the resources in a certain node. Of course this approach has its drawbacks since if we attach a new hardware resource we must also edit the specification file correspondingly and that increases the manual work. Secondly, by using operating system commands to discover the attached resources each time a computation needs to be deployed on a system. 
+  Sensors and actuators are resources attached to a node such as cameras, temperature and gas sensors. Executing a computation missing this type of resource on a node should have a lower possibility of being queued, since its highly unlikely that this hardware resource would be attached soon. A node should be aware of its available resources, otherwise, it would not be able to compare the requirements of incoming computations against its capabilities. Hence one possible solution, is for each node to have a specification file as a static dependency stating its available resources.
   
-  Moving on to consider the risk of computations acquiring the same hardware resource at the same time, for instance, two computations that want to take a photo at the same time. This is problematic because whichever computation acquires the lock on the camera first will succeed while the other will fail. Therefore as a resolution, the design proposes resource decoupling; instead of having the computation to ask a specific resource directly for information, the resource will always push its data to a database. Afterwards, the different computations could query the data from the database.
+  However sensors and actuators are dynamic, they can be added or removed on demand, therefore, having them in a specification file as a static dependency which is only set at initialization time will be troublesome. Of course, we can always edit the specification file once we change the state of any of these resources, but this solution is not very efficient nor scalable, as it increases the manual work. It would be much easier if the node could run resource discovery to find its attached resources each time it receives a computation.
+  
+  Moving on to consider computations acquiring the same resource at the same time, for instance, two computations that want to take a photo at the same time. This is problematic because whichever computation acquires a lock on the camera first will succeed while the other will fail. Therefore as a resolution, we could use resource decoupling; instead of having the computation ask a specific resource directly for information, the  data will be pushed into a database. Afterwards, the different computations could query the data from a database.
+  
   
 
-\subsubsection{Computational Resources }\mbox{}\\
+\subsubsection{Hardware Resources }
 
-The second type of resources is related to the node performance, its power and memory capabilities. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a node which is already loaded. Considering that each computation model has meta-data describing its resource consumption, then it rather easy to decide if it is going to be deployed on a specific node or not. Additionally, if it is not going to be deployed then it should be decided whether the computations is going to be queued or dismissed according to the possibility of acquiring the resource.
+The second type of resources is related to the node performance, its power and memory capabilities, it is heavily biased by the processor of the node and its random access memory type and size. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a node which is already loaded. 
+
+Considering that each computation model has meta-data describing its resource consumption, then it is possible to decide if it is going to be deployed on a specific node or not. Additionally, if it is not going to be deployed then it should be decided whether the computation is going to be queued or dismissed according to the possibility of acquiring the resource.
+
+The idea of queuing computations however develops a scheduling problem. Since we have a queue of computations inside each node, we will have a race condition on which computation should be deployed first according to available resources. Furthermore, since some computations might be dismissed, a rather bigger scheduling problem will come up when we try to fit the all computations across nodes in the whole system framework 
+\newpage
 
 
 
