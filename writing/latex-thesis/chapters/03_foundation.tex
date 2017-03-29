@@ -66,13 +66,6 @@ Another main challenge is to actually find the connected nodes. Distributed and 
 
 
 
-\newpage
-
-\subsection{Pub-Sub Messaging Queues}
-
-As previously stated, a smart communication system is essential to our computational model, it solves some of the biggest challenges in our approach which are mainly nodes service discovery, sending and receiving messages of distributed, connected and disconnected nodes. Also, considering that service discovery is dynamic, the communications model is not end-point centric since we cannot target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric meaning it knows that there are some parties interested in sending data and others willing to revive the same data given the same context regardless their network location.
-For all the stated facts, publish-subscribe messaging queues would best fit our needs. It implements service discovery, hence, it can discover all the other nodes who has the 
-
 
 
 \newpage
@@ -120,6 +113,15 @@ The idea of queuing computations however develops a scheduling problem. Since we
 
 
 
+\subsection{Pub-Sub Messaging Queues}
+
+The communication model is an essential part of this framework, it should solve some of the biggest challenges in this framework, which are in a nutshell,  service discovery, carrying dependencies, sending and receiving messages, computations of connected and disconnected nodes. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since we are unable to target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric meaning it knows that there are some parties interested in sending data and others willing to receive the same data given the same context and regardless their network location. Another aspect is that the communication model has to be machine-to-machine which means that messages have to be direct between devices without having and intermediary server. \\
+
+A possible solution to the framework demands and challenges is to use a machine-to-machine publish-subscribe message queues. The pub-sub pattern is data centric messaging architecture in which senders also know as \textit{publishers} do not send messages directly to receivers, rather send to specific topics. Then, \textit{subscribers} receive messages which is relevant to them by subscribing to these topics.
+
+Now addressing the first challenge of nodes service discovery, messaging queues are able to send broadcast messages in order to discover all the nodes connected to the messaging system through any kind of network.  They are also dynamic in the sense that they are sensitive to addition or removal of new nodes to the system.
+
+ 
 \section{Data Model}
 
 \subsection{Data Types}
