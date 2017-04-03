@@ -54,7 +54,6 @@ Below we present the computational model as an abstraction for the framework des
 In order to start with the framework explanation we must understand the idea behind pervasiveness. Pervasive computing relies on the idea of pushing flows to the edges "nodes" and thus it is fundamentally distributed. A system is distributed if its components  are on networked computers which communicate only by sending and receiving of messages \cite{DSYS} which is exactly the case. Now in our model, each node should be capable of executing flows and producing results as long as it  has the required dependencies and resources. Moreover, to ensure that flows are composable, nodes should be able to communicate seamlessly even though nodes hosting this flows might be disconnected.
 
 
-% Thus to have distributed nodes, we need to make sure of the following: \textit{(i)} dependencies and resources are available on the node, \textit{(ii)} there is a way to communicate between nodes,  \textit{(iii)} we can overcome sending and receiving data between disconnected nodes.  \\
 
 Turning to flows, in essence every challenge related to making the nodes distributed also apply to flows because nodes host flows. However, there are more to flows, distributing them across nodes could have different semantics and approaches depending on the use case.
  Lets us first consider the two different semantics, a flow could be sent on random basis to the nodes, and at the contrary, it could also be sent to specific nodes. This provides flexibility in applying the use case without wasting resources, in addition, it magnifies the effect of locational context in case we want to send a computation to a specific place.
@@ -115,13 +114,21 @@ The idea of queuing computations however develops a scheduling problem. Since we
 
 \subsection{Pub-Sub Messaging Queues}
 
-The communication model is an essential part of this framework, it should solve some of the biggest challenges in this framework, which are in a nutshell,  service discovery, carrying dependencies, sending and receiving messages, computations of connected and disconnected nodes. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since we are unable to target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric meaning it knows that there are some parties interested in sending data and others willing to receive the same data given the same context and regardless their network location. Another aspect is that the communication model has to be machine-to-machine which means that messages have to be direct between devices without having and intermediary server. \\
+The communication model is an essential part of this framework, it solves some of the biggest challenges, which are in a nutshell, service discovery, carrying dependencies, sending and receiving of data or computations whether nodes were  connected or not. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since we are unable to target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric meaning it knows that there are some parties interested in sending data and others willing to receive the same data given the same context and regardless their network location. Another aspect is that the communication model has to be machine-to-machine which means that messages have to be direct between devices without having an intermediary server. \\
 
-A possible solution to the framework demands and challenges is to use a machine-to-machine publish-subscribe message queues. The pub-sub pattern is data centric messaging architecture in which senders also know as \textit{publishers} do not send messages directly to receivers, rather send to specific topics. Then, \textit{subscribers} receive messages which is relevant to them by subscribing to these topics.
+A possible solution to the framework demands and challenges is to use a machine-to-machine publish-subscribe message queues. The pub-sub pattern is data centric messaging architecture in which senders also known as \textit{publishers} do not send messages directly to receivers, rather send to specific topics. Then, \textit{subscribers} receive messages which are relevant to them by subscribing to these topics. 
 
-Now addressing the first challenge of nodes service discovery, messaging queues are able to send broadcast messages in order to discover all the nodes connected to the messaging system through any kind of network.  They are also dynamic in the sense that they are sensitive to addition or removal of new nodes to the system.
+Now addressing the challenge of nodes service discovery, messaging queues are able to send broadcast messages in order to discover all the nodes connected to the messaging system through any kind of network.  They are also dynamic in the sense that they are sensitive to the addition or removal of new nodes to or from the system. 
 
- 
+Having solved the problem of service discovery, nodes can now send and recieve messages. But since we also care to send computations as well, we must differentiate between data  and coputations messages. Thus, a possible solution is to reserve a unique topic only for exchanging computations between nodes.
+\\
+- write about sending to random against well-known nodes.
+\\
+Last but not least, pub-sub messageing queues allow carrying binary data inside the message body. Therefore, computation dependencies can be converted into binaries and added to the message body of their respective computations. Thus solving the obstacle of carrying dependencies mentioned earlier.
+\\
+
+ - write something about disconneted nodes
+\\
 \section{Data Model}
 
 \subsection{Data Types}
