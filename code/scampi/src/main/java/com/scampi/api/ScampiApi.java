@@ -23,7 +23,9 @@ Logger log = Logger.getLogger(ScampiApi.class);
     @ResponseBody
     String publish(@RequestParam("data") String data, @RequestParam(value="topic", required=false) String topic ) {
         if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
-            return RESTHandler.getResponse(Constants.STATUS_FAIL,"Scampi not connected").toString();
+            return RESTHandler.getResponse(Constants.STATUS_FAIL,"Scampi not connected")
+                    .toString();
+
         return Publisher.publish(topic,data);
     }
 
@@ -31,8 +33,10 @@ Logger log = Logger.getLogger(ScampiApi.class);
     @ResponseBody
     String subscribe(@RequestParam(value="topic") String topic ) {
        if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
-           return RESTHandler.getResponse(Constants.STATUS_FAIL,"Scampi not connected").toString();
-        try{
+          return RESTHandler.getResponse(Constants.STATUS_FAIL,"Scampi not connected")
+                  .toString();
+
+       try{
             ScampiService.getAppLib().subscribe(topic);
         }catch (InterruptedException e){
             log.fatal("Could not Subscribe", e);

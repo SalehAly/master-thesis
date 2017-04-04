@@ -76,22 +76,36 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <version>1.5.2.RELEASE</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.scampi.api.ScampiService</mainClass>
-                        </manifest>
-                    </archive>
+                    <mainClass>com.scampi.api.ScampiApi</mainClass>
                     <outputDirectory>${project.basedir}</outputDirectory>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+
+            <!--<plugin>-->
+                <!--<artifactId>maven-assembly-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<archive>-->
+                        <!--<manifest>-->
+                            <!--<mainClass>com.scampi.api.ScampiApi</mainClass>-->
+                        <!--</manifest>-->
+                    <!--</archive>-->
+                    <!--<outputDirectory>${project.basedir}</outputDirectory>-->
+                    <!--<descriptorRefs>-->
+                        <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                    <!--</descriptorRefs>-->
+                    <!--<appendAssemblyId>false</appendAssemblyId>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
