@@ -3,7 +3,10 @@ package com.scampi.api;
 import com.scampi.constants.Constants;
 import com.scampi.domain.MessageHandler;
 import com.scampi.model.Metadata;
-import fi.tkk.netlab.dtn.scampi.applib.*;
+import fi.tkk.netlab.dtn.scampi.applib.AppLib;
+import fi.tkk.netlab.dtn.scampi.applib.AppLibLifecycleListener;
+import fi.tkk.netlab.dtn.scampi.applib.MessageReceivedCallback;
+import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 import lombok.Data;
 
 /**
@@ -14,34 +17,35 @@ import lombok.Data;
  */
 
 @Data
-public class ScampiHelloWorld {
+public class ScampiService {
     static private final AppLib APP_LIB = AppLib.builder().build();
     static private Metadata machineSpec = new Metadata();
 
-    public static void main(String[] args)
-            throws InterruptedException {
+
+    public static void init() throws InterruptedException {
         // initalize Scampi API
-        init();
+        initService();
         initMachineSpec();
         APP_LIB.subscribe(Constants.TOPIC_MAIN);
 
     }
 
     public static void publish(SCAMPIMessage message, String topic) throws InterruptedException {
-        APP_LIB.publish(message , topic);
+        APP_LIB.publish(message, topic);
     }
 
-    public static void initMachineSpec(){
+    public static void initMachineSpec() {
         //TODO: initialize machine specification from json file
     }
-    public static void init(){
+
+    public static void initService() {
         // Setup
         APP_LIB.start();
-        APP_LIB.addLifecycleListener( new LifeCyclePrinter() );
+        APP_LIB.addLifecycleListener(new LifeCyclePrinter());
         APP_LIB.connect();
 
         // Subscribe message receiver handler
-        APP_LIB.addMessageReceivedCallback( new MessagePrinter() );
+        APP_LIB.addMessageReceivedCallback(new MessagePrinter());
 
     }
 
@@ -76,7 +80,7 @@ public class ScampiHelloWorld {
         public void messageReceived(SCAMPIMessage message, String topic) {
             try {
 
-                MessageHandler.handleMessage(message,topic);
+                MessageHandler.handleMessage(message, topic);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -84,7 +88,8 @@ public class ScampiHelloWorld {
             }
         }
     }
-    public static AppLib getAppLib(){
+
+    public static AppLib getAppLib() {
         return APP_LIB;
     }
 }

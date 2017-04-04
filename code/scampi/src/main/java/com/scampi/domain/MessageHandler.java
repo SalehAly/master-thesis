@@ -1,9 +1,9 @@
 package com.scampi.domain;
 
 import com.google.gson.*;
-import com.scampi.api.ScampiHelloWorld;
 import com.scampi.constants.Constants;
 import com.scampi.model.Computation;
+import com.scampi.api.ScampiService;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
 
@@ -60,7 +60,7 @@ public class MessageHandler {
 
             if (inputDataTopic != null) {
                 System.out.println("Subscribing to " + inputDataTopic);
-                ScampiHelloWorld.getAppLib().subscribe(inputDataTopic);
+                ScampiService.getAppLib().subscribe(inputDataTopic);
             }
 
 
