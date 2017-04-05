@@ -16,32 +16,33 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @SpringBootApplication
 public class ScampiApi {
-Logger log = Logger.getLogger(ScampiApi.class);
-    @RequestMapping(value = "/publish", method = RequestMethod.POST, produces="application/json", consumes="application/json")
+    Logger log = Logger.getLogger(ScampiApi.class);
+
+    @RequestMapping(value = "/publish", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
     String publish(@RequestBody Payload payload) {
         if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
-            return RESTHandler.getResponse(Constants.STATUS_FAIL,"Scampi not connected")
+            return RESTHandler.getResponse(Constants.STATUS_FAIL, "Scampi not connected")
                     .toString();
 
         return Publisher.publish(payload.getTopic(), payload.getData().toString());
     }
 
-    @RequestMapping(value = "/subscribe", method = RequestMethod.POST, produces="application/json", consumes="application/json")
+    @RequestMapping(value = "/subscribe", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
-    String subscribe(@RequestParam(value="topic") String topic ) {
-       if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
-          return RESTHandler.getResponse(Constants.STATUS_FAIL,"Scampi not connected")
-                  .toString();
+    String subscribe(@RequestBody Payload payload) {
+        if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
+            return RESTHandler.getResponse(Constants.STATUS_FAIL, "Scampi not connected")
+                    .toString();
 
-       try{
-            ScampiService.getAppLib().subscribe(topic);
-        }catch (InterruptedException e){
+        try {
+            ScampiService.getAppLib().subscribe(payload.getTopic());
+        } catch (InterruptedException e) {
             log.fatal("Could not Subscribe", e);
-            return  e.getMessage();
+            return e.getMessage();
         }
-
-        return RESTHandler.getResponse(Constants.STATUS_SUCCESS,"subsribed to "+ topic).toString();
+        log.info("subscribed to" + payload.getTopic());
+        return RESTHandler.getResponse(Constants.STATUS_SUCCESS, "subsribed to " + payload.getTopic()).toString();
     }
 
     public static void main(String[] args) throws Exception {

@@ -79,7 +79,6 @@ public class ScampiService {
 
         public void messageReceived(SCAMPIMessage message, String topic) {
             try {
-
                 MessageHandler.handleMessage(message, topic);
             } catch (Exception e) {
                 e.printStackTrace();

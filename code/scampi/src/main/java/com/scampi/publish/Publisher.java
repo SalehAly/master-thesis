@@ -28,13 +28,15 @@ public class Publisher {
                 publishSpecialTopic(topic, data);
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+
+            log.error(e.getMessage(), e);
             return RESTHandler.getResponse(
                     Constants.STATUS_FAIL
                     , e.getMessage())
                     .toString();
         }
 
+        log.info("Message Published");
         return RESTHandler.getResponse(Constants.STATUS_SUCCESS, "Message Published")
                 .toString();
     }
