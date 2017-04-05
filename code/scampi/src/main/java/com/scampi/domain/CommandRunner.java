@@ -14,7 +14,7 @@ public class CommandRunner {
     public static String run(String cmd) {
         try {
             String s;
-            StringBuffer sb  = new StringBuffer();
+            StringBuffer sb = new StringBuffer();
             Process p = Runtime.getRuntime().exec(cmd);
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(p.getInputStream()));
@@ -23,14 +23,14 @@ public class CommandRunner {
             p.waitFor();
             System.out.println("exit: " + p.exitValue());
             p.destroy();
-            return  sb.toString();
+            return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static String getFreeRam(){
-         return run(Constants.RAM_CMD);
+    public static String getFreeRam() {
+        return run(Constants.RAM_CMD);
     }
 }
