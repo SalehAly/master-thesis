@@ -1,16 +1,14 @@
 package com.scampi.api;
 
 import com.scampi.constants.Constants;
+import com.scampi.model.Payload;
 import com.scampi.domain.RESTHandler;
 import com.scampi.publish.Publisher;
 import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by aly on 04.04.17.
@@ -19,17 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class ScampiApi {
 Logger log = Logger.getLogger(ScampiApi.class);
-    @RequestMapping("/publish")
+    @RequestMapping(value = "/publish", method = RequestMethod.POST, produces="application/json", consumes="application/json")
     @ResponseBody
-    String publish(@RequestParam("data") String data, @RequestParam(value="topic", required=false) String topic ) {
+    String publish(@RequestBody Payload payload) {
         if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
             return RESTHandler.getResponse(Constants.STATUS_FAIL,"Scampi not connected")
                     .toString();
 
-        return Publisher.publish(topic,data);
+        return Publisher.publish(payload.getTopic(), payload.getData().toString());
     }
 
-    @RequestMapping("/subscribe")
+    @RequestMapping(value = "/subscribe", method = RequestMethod.POST, produces="application/json", consumes="application/json")
     @ResponseBody
     String subscribe(@RequestParam(value="topic") String topic ) {
        if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
