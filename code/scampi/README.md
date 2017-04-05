@@ -5,7 +5,7 @@
 
 ### To create an executable jar
 --------------------------------
-``mvn clean compile assembly:single``
+``mvn clean package``
 
 
 ## To compile
@@ -18,10 +18,6 @@
 --------------------------------
 ``java -jar interface-1.0-SNAPSHOT.jar``
 
-
-## To Run Publisher
---------------------------------
-``java -cp interface-1.0-SNAPSHOT.jar com.scampi.publish.Publisher``
 
 
 

@@ -20,7 +20,7 @@ public class RESTHandler {
             ClientResponse response = webResource.type("application/json").accept("application/json")
                     .post(ClientResponse.class, data.toString());
 
-            if (response.getStatus() != 200 && response.getStatus()!=204 ) {
+            if (response.getStatus() != 200 && response.getStatus() != 204) {
                 System.out.println(response.toString());
                 System.out.println(response.getEntity(String.class));
                 throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
@@ -29,23 +29,24 @@ public class RESTHandler {
             String output = response.getEntity(String.class);
             System.out.println("============getCtoFResponse============");
             System.out.println(output);
-            return  response;
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-     return null;
+        return null;
     }
 
-    public static JsonObject getResponse(String status, String message, String stacktrace){
-        JsonObject response = getResponse(status,message);
-        response.addProperty("stacktrace",stacktrace);
+    public static JsonObject getResponse(String status, String message, String stacktrace) {
+        JsonObject response = getResponse(status, message);
+        response.addProperty("stacktrace", stacktrace);
         return response;
     }
-    public static JsonObject getResponse(String status, String message){
+
+    public static JsonObject getResponse(String status, String message) {
         JsonObject json = new JsonObject();
         json.addProperty("status", status);
         json.addProperty("message", message);
-        return  json;
+        return json;
     }
 }

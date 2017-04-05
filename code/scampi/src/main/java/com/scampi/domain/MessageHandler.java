@@ -1,11 +1,11 @@
 package com.scampi.domain;
 
-import com.google.gson.*;
-import com.scampi.api.ScampiHelloWorld;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.scampi.api.ScampiService;
 import com.scampi.constants.Constants;
 import com.scampi.model.Computation;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
-
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -51,7 +51,7 @@ public class MessageHandler {
             String flow = computation.getFlow().toString();
 
             for (String source : computation.getSources()) {
-                Files.copy(message.getBinary(source), Paths.get(source), StandardCopyOption.REPLACE_EXISTING );
+                Files.copy(message.getBinary(source), Paths.get(source), StandardCopyOption.REPLACE_EXISTING);
             }
             String inputDataTopic = null;
             if (computation.getIoSpec().getInput() != null && computation.getIoSpec().getInput().has("topic")) {
@@ -60,7 +60,7 @@ public class MessageHandler {
 
             if (inputDataTopic != null) {
                 System.out.println("Subscribing to " + inputDataTopic);
-                ScampiHelloWorld.getAppLib().subscribe(inputDataTopic);
+                ScampiService.getAppLib().subscribe(inputDataTopic);
             }
 
 
