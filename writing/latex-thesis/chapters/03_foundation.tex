@@ -4,7 +4,8 @@ In this chapter we explain the framework model in theory, the key concepts behin
 
 
 \section{Foundation}
-	The fundamental core element of this framework is the computational unit, which is responsible for describing the use case. One possible abstraction of the computational unit is the \textit{flow}, which is a purposeful unit of computation that contains sequentially meaningful instructions. Also, it can be either standalone self-contained computation or interactive in which they collaborate with other flows for data gathering, sharing and processing. Moreover, the flow is composed of elements which could have a significant meaning such as snapping a photo or could act as an intermediary to harmonize data as shown in figure \ref{fig:flow}. 
+	The fundamental core element of this framework is the computational unit derived from the use case. One possible abstraction of the computational unit is the \textit{flow}, which is a purposeful unit of computation that contains groups of sequential instructions "\textit{elements}" whose input/output are connected together. These elements could have a significant meaning on their own such as snapping a photo or making simple data transformation as shown in figure \ref{fig:flow}. Also, A flow can not only be a standalone self-contained computation, but can interact with other flows in which they collaborate for data gathering, sharing and processing as well.
+	
 	
 \begin{figure}[H]
 	\centering
@@ -13,28 +14,29 @@ In this chapter we explain the framework model in theory, the key concepts behin
 	\label{fig:flow}
 \end{figure}
 
-After having defined flows, it is important to give an idea on how they end up being executed. To begin with, we must address the challenge that flows are distributed in the sense that each flow could reside on different node. In addition, as previously mentioned, flows may be interactive, therefore, they need a way to communicate through distributed systems. Moreover, since nodes might be disconnected,  the communication mechanism must guarantee that there  exit  a way  in which data could be transfered between these disconnected nodes. Furthermore, it  should handle sending the computations themselves from one node to another, at the end we would like to be pervasive and manage sending computations everywhere.
+After having defined flows, the next step is ti execute them. To begin with, we must address the challenge that flows are distributed in the sense that each flow could reside on a different node. In addition, as previously mentioned, flows may interact, therefore, they need a way to communicate. Moreover, since nodes might be disconnected,  the communication mechanism must not require end-to-end paths. Furthermore, it  should handle sending the computations themselves from one node to another, at the end we are designing a pervasive framework that should manage sending computations everywhere.
 
- Another challenge that faces the flows execution, is the dependencies and resources which could be demanded in order to carry on the execution. They vary from one use case to another, thus needs to be orchestrated across nodes through messaging system.
+ Another challenge that faces the execution of  flows, are the dependencies and resources needed to carry out the execution.
+ They might vary from one use case to another, thus need to be orchestrated across nodes though the messaging system by  ensuring the delivery of relevant dependencies along with their respective computations.
+ 
+Now assuming that we can send flows to the nodes, make them communicate and satisfy their dependencies and provide their resources, one aspect remains, which is triggering the execution of flows. There are multiple ways to start an execution, one simple example is a time interval trigger. Other ways include starting the execution when new data has been received or other events have been triggered e.g. via physical sensors.
 
-Now assuming that we can send flows to the nodes, make them communicate and care for their dependencies and resources, one aspect remains, which is triggering the execution of flows. There are multiple ways to start carrying on an execution, one simple example is a time interval trigger as shown in \ref{fig:flow}. Other ways include, starting computation execution when new incoming data has been received or other events have been triggered.\\
 
-
-
-
- A flow should be modular having a specific functionality with defined interfaces that helps in reducing the complexity, allowing re-use and re-assembly. Moreover, since flows need to interact and exchange data, they should be composable. Think of composability as LEGO parts that need to be assembled in their correct positions in order to create a figure, however in contrast to individual LEGO parts which do not have a meaning on their own, individual flow elements could serve a specific purpose besides their global one. To establish flow composability in our context, we need to be able to match the output data of one flow to the input data of another, no matter whether the flows are on the same node or distributed, connected or disconnected. For instance in general terms, if we have a flow \(f_1\) that takes \(A\) as input and gives \(B\) as an output
+ A flow should be modular having a specific functionality with defined interfaces that reduce the complexity, allowing re-use and re-assembly. Moreover, since flows should be composable, they need to interact and exchange data. Think of composability as LEGO parts that need to be assembled in their correct positions in order to create a figure, however in contrast to individual LEGO parts which do not have a meaning on their own, individual flow elements could serve a specific purpose besides their global one. 
+ 
+ To establish flow composability in our context, we need to be able to match the output data of one flow to the input data of another, no matter whether the flows are on the same node or distributed; connected or disconnected. For instance in general terms, if we have a flow \(f_1\) that takes \(A\) as input and gives \(B\) as an output
 \[ f_1 : A  \to B  \]
-then we have another flow \(f_2\) that takes \(B\) as an input and gives a new output \(C\)
+and another flow \(f_2\) that takes \(B\) as an input and gives a new output \(C\)
 % the output of \(f_1\) and produce a new result and so on. 
 \[ f_2 : B  \to C  \]
-we should be able to compose a new flow taking \(f_1\)'s input and giving \(f_2\)'s output, resulting in flow \(f_3\) which is a composite of both.
-\[f_3: A \to C = f_2 \circ f_1\]
-Since composability should also be valid in a local or distributed environment. Thus, in the first case of local flow composability, there should be a way to connect the output of a flow to the input of another as shown in \ref{fig:compose}. On the other hand if it is distributed composability, the messaging system should connect the dots and serve as a broker to deliver the data.
+we should be able to compose a new flow by taking \(f_1\)'s output and giving \(f_2\)'s input, resulting in flow \(f_3\) which is a composite of both:
+\[f_3: A \to C = f_2 \circ f_1 .\]
 
-\[a \in A, \, b \in B, \, c \in C\]
+Composability ensures that regardless the use case, logic or implementation of a flow, it still can be composable if it matched the input/output of another flow. Composability should be valid in both local and distributed environments. Thus, in the case of local flow composability, there should be a way to connect the output of a flow to the input of another locally as shown in \ref{fig:compose}. In the case of distributed composability, the messaging system should connect the flows and serve as a broker to deliver the data as shown in \ref{fig:compose2}. 
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.3]{images/local-compose.png} 
+	\includegraphics[scale=0.4]{images/local-compose.png} 
  	\caption{A node containing two composable flows}
 	\label{fig:compose}
 \end{figure}
@@ -45,10 +47,11 @@ Since composability should also be valid in a local or distributed environment. 
 	\label{fig:compose2}
 \end{figure}
 
+To sum up, flows are distributed and modular units of computation derived from a use case which require dependencies and resources. They communicate with each other and can be composed both locally and in a distributed manner. By achieving  modularity and composability, flows can be assembled in different combinations, thus allowing re-use and extensibility.
 
 \section{Computational Model}
 
-Below we present the computational model as an abstraction for the framework design, it explains the components, challenges and the possible solutions that could be implemented to overcome these challenges. 	
+Below we present the computational model as an abstraction for the framework design. It explains the components, challenges and the possible solutions that could be implemented to overcome these challenges. 	
 
 \subsection{Distributed Nodes \& Flows}
 In order to start with the framework explanation we must understand the idea behind pervasiveness. Pervasive computing relies on the idea of pushing flows to the edges "nodes" and thus it is fundamentally distributed. A system is distributed if its components  are on networked computers which communicate only by sending and receiving of messages \cite{DSYS} which is exactly the case. Now in our model, each node should be capable of executing flows and producing results as long as it  has the required dependencies and resources. Moreover, to ensure that flows are composable, nodes should be able to communicate seamlessly even though nodes hosting this flows might be disconnected.
@@ -120,14 +123,14 @@ A possible solution to the framework demands and challenges is to use a machine-
 
 Now addressing the challenge of nodes service discovery, messaging queues are able to send broadcast messages in order to discover all the nodes connected to the messaging system through any kind of network.  They are also dynamic in the sense that they are sensitive to the addition or removal of new nodes to or from the system. 
 
-Having solved the problem of service discovery, nodes can now send and recieve messages. But since we also care to send computations as well, we must differentiate between data  and coputations messages. Thus, a possible solution is to reserve a unique topic only for exchanging computations between nodes.
+Having solved the problem of service discovery, nodes can now send and receive messages. But since we also care to send computations as well, we must differentiate between data  and computations messages. Thus, a possible solution is to reserve a unique topic only for exchanging computations between nodes.
 \\
 - write about sending to random against well-known nodes.
 \\
-Last but not least, pub-sub messageing queues allow carrying binary data inside the message body. Therefore, computation dependencies can be converted into binaries and added to the message body of their respective computations. Thus solving the obstacle of carrying dependencies mentioned earlier.
+Last but not least, pub-sub messaging queues allow carrying binary data inside the message body. Therefore, computation dependencies can be converted into binaries and added to the message body of their respective computations. Thus solving the obstacle of carrying dependencies mentioned earlier.
 \\
 
- - write something about disconneted nodes
+ - write something about disconnected nodes
 \\
 \section{Data Model}
 
