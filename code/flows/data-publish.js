@@ -1,6 +1,3 @@
-/**
- * Created by Aly on 2/24/17.
- */
 [
     {
         "id": "6246f5af.9db90c",
@@ -18,8 +15,8 @@
         "repeat": "",
         "crontab": "",
         "once": false,
-        "x": 126.5,
-        "y": 110,
+        "x": 119.83333587646484,
+        "y": 176.66665744781494,
         "wires": [
             [
                 "7a2c901b.b513f"
@@ -34,29 +31,22 @@
         "active": true,
         "console": "false",
         "complete": "false",
-        "x": 634.5,
-        "y": 136,
+        "x": 589.1666793823242,
+        "y": 176.55556106567383,
         "wires": []
     },
     {
-        "id": "8382ee88.25143",
-        "type": "exec",
+        "id": "7dd95601.3f9a38",
+        "type": "http request",
         "z": "6246f5af.9db90c",
-        "command": "java -cp interface-1.0-SNAPSHOT.jar com.scampi.publish.Publisher",
-        "addpay": true,
-        "append": "data",
-        "useSpawn": false,
-        "timer": "10",
-        "name": "Publish",
-        "x": 462,
-        "y": 285,
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "url": "localhost:8080/publish",
+        "tls": "",
+        "x": 406.94441986083984,
+        "y": 176.22223663330078,
         "wires": [
-            [
-                "42d9392e.25faa8"
-            ],
-            [
-                "42d9392e.25faa8"
-            ],
             [
                 "42d9392e.25faa8"
             ]
@@ -67,14 +57,14 @@
         "type": "function",
         "z": "6246f5af.9db90c",
         "name": "",
-        "func": "msg.payload = {timestamp:msg.payload};\nmsg.payload = JSON.stringify(msg.payload);\nreturn msg;",
+        "func": "var time = JSON.stringify({timestamp:msg.payload});\n\nvar payload = {\n    data : time,\n    topic:\"test\"\n};\n\nmsg.payload = JSON.stringify(payload);\nmsg.headers = {'Content-Type' : 'application/json'} ;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 259.5,
-        "y": 257,
+        "x": 257.27777099609375,
+        "y": 176.3333339691162,
         "wires": [
             [
-                "8382ee88.25143"
+                "7dd95601.3f9a38"
             ]
         ]
     }
