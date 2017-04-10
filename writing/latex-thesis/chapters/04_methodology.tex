@@ -41,56 +41,9 @@ To allow both types to communicate, our model proposes to use SCAMPI to transfer
 
 \newpage
 \subsubsection{IO Specification}
-Turning now to consider the modularity of the input and output specification, as discussed above, we need the IO to have a specific structure that all nodes can understand regardless of the content. There are multiple ways in our design to specify how the IO data communicates which is explained below. But, the key idea however is that every type of IO communication can be described as a form of node-red flow in one way or another.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{images/IO.png}
-	\caption{All IO types could be expressed as a flow}
-	\label{fig:io}
-\end{figure}
-
-\begin{itemize}
-\item The first way allows data communication between computations of the same node through a database. One computation  writes interesting data into a specific table with locally unique name in a database. Then, any other local computation which needs to use this is data is allowed to fetch it from this table. Since node-red allows database configuration from inside the computation flow there is no extra effort in writing an additional script to write data into a database. The example in \ref{fig:db} shows a flow that takes an image and then store it in the database, while the other pulls the data from the database upon receiving a request on a specific URL. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{images/db-out.png}
-	\includegraphics[scale=0.5]{images/db-in.png}
-	\caption{Two separate computational flows describing the IO through a database }
-	\label{fig:db}
-\end{figure}
-
-\item Another way is to use SCAMPI publish-subscribe messaging pattern to communicate, this way computations  does not have to be on the same node, in fact, they do not have to be connected at all. The reason for that, is because SCAMPI can connect to mobile devices passing by, hence allowing them to make the data transfer  to another nodes. The node which generates the data publishes its resulting data to a generally unique topic, therefore any node interested in the data could simply subscribe to that topic and process the data accordingly. The figure \ref{fig:scampi} shows two flows as an example of this method, the first flow generates data and publishes it to SCAMPI. Then, on any node, the data could be received via subscribing to the same topic and any computation could be carried out with the data on the flow. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{images/SCAMPI-pub.png}
-	\includegraphics[scale=0.6]{images/SCAMPI-sub.png}
-	\caption{ }
-	\label{fig:scampi}
-\end{figure}
-
-\item Streaming
-\end{itemize}	
 
 
 \newpage
-
-
-
-\section{Data Model}
-
-\subsection{Data Types}
-%we can ask the high performance units to stream from cameras no low devices. but how to do it ?
-
-%\subsection{Explain data distribution among several nodes to apply pervasive computing}
-
-\subsection{Moving Data}
-
-% moreover, the way that the input data used while doing this computation will be provided, whether it gets the input data from a local database or is it going to be included along with the computational data. 
-\subsection{IO Specification}
-- I/O spec design for databases for two composable flows
 
 
 \section{Summary}
