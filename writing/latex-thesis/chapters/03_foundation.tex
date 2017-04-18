@@ -58,7 +58,7 @@ In order to start with the framework explanation we must understand the idea beh
 
 
 
-Turning to flows, in essence every challenge related to making the nodes distributed also apply to flows because nodes host flows. However, there are more to flows, distributing them across nodes could have different approaches depending on the use case. Let us explain this with figure \ref{fig:distributing-flows}, to start with, lets take the set of all nodes in the system and call it \(S(t)\) which is a function of time since nodes can be removed or added to the system dynamically at any instant of time. Moreover, nodes in  Then comes the candidate set \(S_C(t)\), which are nodes that satisfy the required dependencies and resources of a certain computation. Note that, nodes inside any of the these sets might not have end-to-end path.
+Turning to flows, in essence every challenge related to making the nodes distributed also applies to flows because nodes host flows. However, there are more to flows, distributing them across nodes could have different approaches depending on the use case. Let us explain this with figure \ref{fig:distributing-flows}, to start with, lets take the set of all nodes in the system and call it \(S(t)\) which is a function of time since nodes can be removed or added to the system dynamically at any instant of time. Moreover, nodes in  Then comes the candidate set \(S_C(t)\), which are nodes that satisfy the required dependencies and resources of a certain computation. Note that, nodes inside any of the these sets might not have end-to-end path.
 
 Given \(S_C(t)\), the flows could be either sent to a random set of nodes or to a specific set of nodes. This provides flexibility in applying the use case without wasting resources. In addition, it magnifies the effect of locational context, meaning that if we want to compute a certain computation or measurement in a specific location  and we know the general identifiers of  the  nodes residing in this location, we can send a flow to this exact set of nodes with our desired computation. 
 
@@ -67,8 +67,8 @@ Continuing to explain flows approaches with figure \ref{fig:distributing-flows},
  \begin{figure}[H]
  	\centering
  	\includegraphics[scale=0.45]{images/set.png} 
- 	\label{fig:distributing-flows}
  	\caption{Distributing flows approaches}
+ 	\label{fig:distributing-flows}
  \end{figure}
 
 Another main challenge is to actually find the connected nodes. Distributed and pervasive environments are dynamic, their components are not known to be live or dead at compile-time. Thus the framework should be able to run service discovery at run-time in order to find the connected nodes or it should be able to broadcast its message to all the other nodes and receive them as well. Otherwise, the approach would not qualify to be a distributed system. 
@@ -81,28 +81,31 @@ There are possible ways to achieve that, one could set up a static DNS server to
 
 
 
-\newpage
 
 
 \subsection{Software Dependencies}
 
 Dependencies are one of the main requirements of computation execution, dropping one or more dependencies would stop the execution from proceeding. Thus, we need to deal with them and make sure that all dependencies are satisfied.  There are two types of dependencies; the static software frameworks that the whole design relies on and must exist on each node, and the dynamic dependencies that are specific to each computation.
 
-First, are the static dependencies are mainly the common libraries and software that most of the computations would require, they represent the base of framework. That is why these dependencies are installed to each node in our design, examples of these dependencies include the operating system, data store and any other standard or custom libraries that are mandatory for the computation to run.
+First, are the static dependencies are mainly the common libraries and software that most of the computations would require, they represent the base of framework. That is why these dependencies are installed to each node in our design, examples of these dependencies include the operating system, data store and any other standard or custom libraries that are used by most computations.
  In addition to, the messaging system which implements the communication model allowing interaction between nodes. 
 
  Second, are the dynamic dependencies which are specific to each computation such as additional scripts, configuration files or libraries. In this case, they cannot be installed at node initialization since we can not know what are the custom dependencies any computation would need beforehand. Therefore, the computational model design should allow a way to configure additional dependencies. Moreover, the communication mechanism should support this configuration and grant a way to carry the configured dependencies forward to other nodes.
  
  
-  Dynamic dependencies creates a bit of ambiguity. Suppose that the dependency which is being sent by means of the communication mechanism is already on the receiving node. This introduces a  versioning problem, also what makes it more complicated, is that the node does not know if it possesses an older version of the dependency or a newer one. Furthermore,  imagine there is a computation on the node that uses an older version of the same library while the maintainer is sending a new computation with a newer version of the same library that is not backward compatible. 
+  Static dependencies create ambiguity. Suppose that we want to upgrade the versions of current libraries installed on the nodes. This introduces a  versioning problem, imagine that there is a computation on the node that uses an older version of the same library while the maintainer is upgrading to a newer version of the same library that is not backward compatible. 
   
-   Nevertheless, there are multiple possible solutions to remove the ambiguity and make the custom dependency shipping more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
+   Nevertheless, there are multiple possible solutions to remove the ambiguity and make  version upgrading more concrete; one solution would be to give the dependencies different names according to their versions before shipping them, hence, any different version would not replace the existing ones. Another solution would be to design a system that links each running computation on the node to its dependencies and once a collision appears, the new computation renames its dependency and uses the renamed one.
  
 
 \subsection {Resources " Physical Dependencies" }
 
 
 Resources are physical dependencies which are also necessary for computations to run. However, they might differ or not exist at all on each node. If one of the needed resources is missing then the computation could be either dismissed or queued depending on the type of resource. Moreover, the maintainers cannot make any assumptions about the resources, meaning, an assumption stating that each node has a camera is not necessarily true. Since the resources are not standardized across all nodes, each computation must provide meta data expressing the resources it is going to require, also, the node must realize its available resources. Then a node can check against its capabilities and decide whether it could carry out the execution or not. Further, the meta data can be exposed to the routing layer, thus helping the router take an informed decision whether a specific route contains nodes with the required resources or not. This could also provide an insight for developing better routing algorithms.
+
+Considering that each computation model has meta data describing its resource consumption, then it is possible to know if it is going to be deployed on a specific node or not. Additionally, if it is not going to be deployed then it should be decided whether the computation is going to be queued or dismissed according to the possibility of acquiring the resource.
+
+The idea of queuing computations however develops a scheduling problem. Since we have a queue of computations inside each node, we will have a race condition on which computation should be deployed first according to available resources. Furthermore, since some computations might be dismissed, a rather bigger scheduling problem will come up when we try to fit the all computations across nodes in the whole system framework.
 
  There are two types of resources; sensors and actuators which are used throughout a computation, and the hardware resources which influences the performance requirements of a specific computation.
 
@@ -120,19 +123,19 @@ Resources are physical dependencies which are also necessary for computations to
 
 \subsubsection{Hardware Resources }
 
-The second type of resources is related to the node performance, its power and memory capabilities, it is heavily biased by the processor of the node and its random access memory type and size. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a node which is already loaded. 
+The second type of resources is related to the node performance, its power and memory capabilities, it is heavily biased by the  node processor  and its random access memory type and size. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a node which is already loaded. 
 
-Considering that each computation model has meta data describing its resource consumption, then it is possible to decide if it is going to be deployed on a specific node or not. Additionally, if it is not going to be deployed then it should be decided whether the computation is going to be queued or dismissed according to the possibility of acquiring the resource.
-
-The idea of queuing computations however develops a scheduling problem. Since we have a queue of computations inside each node, we will have a race condition on which computation should be deployed first according to available resources. Furthermore, since some computations might be dismissed, a rather bigger scheduling problem will come up when we try to fit the all computations across nodes in the whole system framework 
-\newpage
+Queuing this type of dependencies should have a higher probability because it is highly possible that one of the computations will finish soon, thus decreasing the cpu usage and freeing more memory.
 
 
 
 
-\subsection{Pub-Sub Messaging Queues}
 
-The communication model is an essential part of this framework, it solves some of the biggest challenges, which are in a nutshell, service discovery, carrying dependencies, sending and receiving of data or computations whether nodes have an end-to-end paths or not. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since we are unable to target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric meaning it knows that there are some parties interested in sending data and others willing to receive the same data given a certain context and regardless their network location. 
+
+
+\subsection{Pub-Sub Messaging Queues}\label{subsec:pub-sub}
+
+The communication model is an essential part of this framework, it solves some of the biggest challenges, which are in a nutshell, service discovery, carrying dependencies, sending and receiving of data or computations whether nodes have an end-to-end paths or not. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since we are unable to target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric or information-centric meaning it knows that there are some parties interested in sending data and others willing to receive the same data given a certain context and regardless their network location. 
 
 A possible solution to the framework demands and challenges is to use a publish-subscribe message queues. The pub-sub pattern is data centric messaging architecture in which senders also known as \textit{publishers} do not send messages directly to receivers, rather send to specific topics. Then, \textit{subscribers} receive messages which are relevant to them by subscribing to these topics. Now addressing the mentioned challenges:
 
@@ -160,13 +163,23 @@ A possible solution to the framework demands and challenges is to use a publish-
 In this section we describe the data model which includes the structure of the data sent between nodes through the messaging system, how the data travels from one node to another and the input/output specification used to combine and compose different flows.
 
 \subsection{Data Types}
-A flow can generate different types of data depending on the use case. This data could be intermediate processing data or a computational result. Also, we should not attempt to limit the data types, in order to make sure the framework is as dynamic as possible. Different data types include: i) structured data that could be stored either in a relational or non-relational data base, ii) unstructured data such as event triggering and issuing commands, iii)  data streams.
+A flow can generate different types of data depending on the use case. This data could be intermediate processing data or a computational result. Also, we should not attempt restrict the data types in order to make sure the framework is as dynamic as possible. The challenge is to be able to represent these data types in a composable way. Therefore, if a developer wants to create a composable flow he/she should define an IO specification explained latter. However, the good thing is that, the developer dictates how the input or output data are structured while developing the computational flow. Hence, he/she is in complete control and can structure the data in any way as long as it can be used afterwards.  Different data types include: i) structured data that could be stored either in a relational or non-relational data base, ii) unstructured data, iii)  data streams.
 
 \subsection{Moving Data}
 
-% moreover, the way that the input data used while doing this computation will be provided, whether it gets the input data from a local database or is it going to be included along with the computational data. 
+Moving data is the idea  to send/receive raw or processed data to any flow. We should be to able use data from different remote or local sources in any computation. Some use cases for moving data are:
+\begin{itemize}
+\item Composing flows is one of the main use cases, we would like to get input data for a computation from the output of another.
+
+\item We can send data to be processed by a computational flow on any node and then obtain the outcome. For instance, we can send an image to a node containing computational flow with image recognition algorithm, then the image gets processed on that node and we get back the computation results. 
+
+\item A Node can act as a monitoring node in which it is interested in all outputs of a certain computation running on several nodes.
+
+\end{itemize} 
+ As mentioned in \ref{subsec:pub-sub}, our approach and communication model is data-centric. Therefore, flows could subscribe/publish to a certain data topic in the distributed pub-sub messaging queue. Thus, data should reach any node which contains a flow subscribed to a certain topic. This allows us to move data freely and at will, we just need to express how a flow receives or publishes data.
+
 \subsection{IO Specification}
-Turning now to consider the input and output specification, which is an important part to be able to compose flows. The IO specification explains how the output of a flow in one node can be linked to the input of another flow either on the same node or on a remote one. There are multiple way to specify how the IO data communicates which is explained below:
+Turning now to consider the input and output specification, the IO spec. explains how the output of a flow in one node can be linked to the input of another flow either on the same node or on a remote one. There are multiple ways to specify how the IO data communicates which are explained below:
 
 
 \begin{itemize}
@@ -199,8 +212,8 @@ Figure \ref{fig:scampi} shows two flows as an example of this method, the first 
 
 
 \section{System Design }
-A System Design can be broadly described as an architecture of the system, which includes an explanation of each and every hardware component of the system, the connection between these components if there is any, and the data flowing between these components. Moreover, it provides a wide glimpse of the whole system but not its exact functionality, hence, giving a simple understanding of the architecture without jumping into much detail.\\
-Initially, the components of the System Design is introduced, then, the connection between these components is shown, and eventually, the flow of the data is pointed out.
+A system design can be broadly described as an architecture of the system, which includes an explanation of each hardware component of the system, the connection between these components if there is any, and the data flowing between these components. Moreover, it gives an idea of the whole system but not its exact functionality, hence, giving a simple understanding of the architecture without jumping into much detail.\\
+
 
 \subsection{Components}
 \label{sub:components}
@@ -270,9 +283,8 @@ A Network described in \ref{subsub:network}, is a simple form of connectivity be
 
 
 
-
-
 \section{Summary}
 
+In this chapter we explained the key concepts and foundations behind this framework, what is a flow and how it can be composed. We also described the computational model as an abstraction the framework design, and illustrated the challenges that faces this model which included  dealing with dependencies, resources and having a distributed system model in addition to their possible solutions . We also elaborated the communication model and how it solves some of the challenges in our design. Moreover, we have shown how data inside the computation can be structured, and how input and output data of different nodes could be connected together. Last but not least, we introduced hardware architecture of system. 
 
 
