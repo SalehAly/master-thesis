@@ -1,13 +1,18 @@
 package com.scampi.api;
 
+import com.google.gson.GsonBuilder;
 import com.scampi.constants.Constants;
 import com.scampi.domain.MessageHandler;
 import com.scampi.model.Metadata;
+import com.scampi.model.Resource;
 import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import fi.tkk.netlab.dtn.scampi.applib.AppLibLifecycleListener;
 import fi.tkk.netlab.dtn.scampi.applib.MessageReceivedCallback;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 import lombok.Data;
+import org.apache.log4j.Logger;
+
+import java.io.FileReader;
 
 /**
  * Sample Scampi application that sends and receives Hello World! messages.
@@ -19,8 +24,8 @@ import lombok.Data;
 @Data
 public class ScampiService {
     static private final AppLib APP_LIB = AppLib.builder().build();
-    static private Metadata machineSpec = new Metadata();
-
+    static private Metadata machineSpec;
+    static Logger log = Logger.getLogger(ScampiApi.class);
 
     public static void init() throws InterruptedException {
         // initalize Scampi API
@@ -36,6 +41,17 @@ public class ScampiService {
 
     public static void initMachineSpec() {
         //TODO: initialize machine specification from json file
+
+        try {
+            machineSpec = new GsonBuilder().create().
+                    fromJson(new FileReader(Constants.HOME_DIR + "/" +  Constants.NODE_RED_DIR + "/" + Constants.SPEC_FILE_PATH), Metadata.class);
+        } catch (Exception e) {
+            log.fatal("Either file not found or could not be parsed", e);
+            // init with default settings
+            machineSpec = new Metadata("1GB", "1.2GHZ", new Resource(true, false, false));
+        }
+
+
     }
 
     public static void initService() {

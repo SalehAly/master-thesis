@@ -22,4 +22,5 @@ public class Constants {
 
     public static final String HOME_DIR = System.getProperty("user.home");
     public static final String NODE_RED_DIR = ".node-red";
+    public static final String SPEC_FILE_PATH = "spec.json";
 }
