@@ -137,7 +137,31 @@ Queuing this type of dependencies should have a higher probability because it is
 
 The communication model is an essential part of this framework, it solves some of the biggest challenges, which are in a nutshell, service discovery, carrying dependencies, sending and receiving of data or computations whether nodes have  end-to-end paths or not. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since we are unable to target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric or information-centric meaning it assumes that there are some parties interested in sending data and others willing to receive the same data given a certain context and regardless their network location. 
 
-A possible solution to the framework demands and challenges is to use publish-subscribe message queues. The pub-sub pattern is data centric messaging architecture in which senders also known as \textit{publishers} do not send messages directly to receivers, rather send to specific topics. Then, \textit{subscribers} receive messages which are relevant to them by subscribing to these topics. Now addressing the mentioned challenges:
+ 
+
+A possible solution to the framework demands and challenges is to use publish-subscribe message queues. The pub-sub pattern is data centric messaging architecture in which senders also known as \textit{publishers} do not send messages directly to receivers, rather send to specific topics. Then, \textit{subscribers} receive messages which are relevant to them by subscribing to these topics.
+
+
+Commonly the pub-sub message queues contains a centralized bus \textit{broker} which handles publishing, subscribing, notifying and persistence. 
+When the bus receives a message published on a specific topic, the data is stored on a local storage for persistence and failure recovery. 
+Parties can subscribe to the data topics on the  bus hence notified when a new message is published. Figure \ref{fig:message-queues} shows  publishers publishing data to topic \textit{t1} on the bus, subscribers subscribing to \textit{t1} and notified when a new message is on the bus.
+	
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/message-queues.png}
+	\caption{Common message queues}
+	\label{fig:message-queues}
+\end{figure}
+
+However having a pub-sub message queue with a centralized bus can not be used in our case. Since we do not know machines addresses thus knowing where is the centralized message queue located is not possible. Therefore, each party or node would have its own message bus and local storage which are then synchronized together.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/de-message-queues.png}
+	\caption{Common message queues}
+	\label{fig:de-message-queues}
+\end{figure}
+ Now addressing the mentioned challenges:
 
 \begin{itemize}
 \item First off, nodes service discovery, messaging queues are able to send broadcast messages in order to discover all the nodes connected to the messaging system through any kind of network.  They are also dynamic in the sense that they are sensitive to the addition or removal of new nodes to or from the system. 
