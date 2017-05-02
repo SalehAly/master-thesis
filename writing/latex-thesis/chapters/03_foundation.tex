@@ -135,9 +135,9 @@ Queuing this type of dependencies should have a higher probability because it is
 
 \subsection{Pub-Sub Messaging Queues}\label{subsec:pub-sub}
 
-The communication model is an essential part of this framework, it solves some of the biggest challenges, which are in a nutshell, service discovery, carrying dependencies, sending and receiving of data or computations whether nodes have an end-to-end paths or not. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since we are unable to target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric or information-centric meaning it knows that there are some parties interested in sending data and others willing to receive the same data given a certain context and regardless their network location. 
+The communication model is an essential part of this framework, it solves some of the biggest challenges, which are in a nutshell, service discovery, carrying dependencies, sending and receiving of data or computations whether nodes have  end-to-end paths or not. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since we are unable to target the actual nodes as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric or information-centric meaning it assumes that there are some parties interested in sending data and others willing to receive the same data given a certain context and regardless their network location. 
 
-A possible solution to the framework demands and challenges is to use a publish-subscribe message queues. The pub-sub pattern is data centric messaging architecture in which senders also known as \textit{publishers} do not send messages directly to receivers, rather send to specific topics. Then, \textit{subscribers} receive messages which are relevant to them by subscribing to these topics. Now addressing the mentioned challenges:
+A possible solution to the framework demands and challenges is to use publish-subscribe message queues. The pub-sub pattern is data centric messaging architecture in which senders also known as \textit{publishers} do not send messages directly to receivers, rather send to specific topics. Then, \textit{subscribers} receive messages which are relevant to them by subscribing to these topics. Now addressing the mentioned challenges:
 
 \begin{itemize}
 \item First off, nodes service discovery, messaging queues are able to send broadcast messages in order to discover all the nodes connected to the messaging system through any kind of network.  They are also dynamic in the sense that they are sensitive to the addition or removal of new nodes to or from the system. 
@@ -149,7 +149,7 @@ A possible solution to the framework demands and challenges is to use a publish-
 \item Sending data or computation messages to specific node or set of nodes can be done by reserving a unique topic for each. Therefore, to target any node, the message should be published once to each unique topic. For example, if we use the general identifier as a unique topic and want to publish a message to node 1, then, we can create  unique topic \textit{"N \#1 "} and send the messages over this topic.
 
  
-\item Pub-sub messaging queues allow carrying binary data inside the message body. Therefore, computation dependencies can be converted into binaries and added to the message body of their respective computations. Thus solving the obstacle of carrying dependencies mentioned earlier.
+\item Pub-sub messaging queues allow carrying arbitrary kinds of data inside the message body. Therefore, computation dependencies can be  added to the message body of their respective computations. Thus solving the obstacle of carrying dependencies mentioned earlier and creating self-contained computations that are ready to execute anywhere.
 
 \item Last but not least, in order to send data or computation messages to disconnected nodes, either because there exists no end-to-end path or the nodes are experiencing network connectivity issues. The pub-sub messaging system should be delay tolerant and implements the store-carry-forward technique, this will allow the messaging system to store messages until connectivity is back or keep the message hopping from one device to another till it finds its end destination.
 
@@ -163,7 +163,7 @@ A possible solution to the framework demands and challenges is to use a publish-
 In this section we describe the data model which includes the structure of the data sent between nodes through the messaging system, how the data travels from one node to another and the input/output specification used to combine and compose different flows.
 
 \subsection{Data Types}
-A flow can generate different types of data depending on the use case. This data could be intermediate processing data or a computational result. Also, we should not attempt restrict the data types in order to make sure the framework is as dynamic as possible. The challenge is to be able to represent these data types in a composable way. Therefore, if a developer wants to create a composable flow he/she should define an IO specification explained latter. However, the good thing is that, the developer dictates how the input or output data are structured while developing the computational flow. Hence, he/she is in complete control and can structure the data in any way as long as it can be used afterwards.  Different data types include: i) structured data that could be stored either in a relational or non-relational data base, ii) unstructured data, iii)  data streams.
+A computational flow can generate different types of data depending on the use case. This data could be intermediate processing data or a computational result. Also, we should not attempt restrict the data types in order to make sure the framework is as dynamic as possible. The challenge is to be able to represent these data types in a composable way. Therefore, if a developer wants to create a composable flow he/she should define an IO specification explained latter. However, the good thing is that, the developer dictates how the input or output data are structured while developing the computational flow. Hence, he/she is in complete control and can structure the data in any way as long as it can be used afterwards.  Different data types include: i) structured data that could be stored either in a relational or non-relational data base, ii) unstructured data, iii)  data streams.
 
 \subsection{Moving Data}
 
@@ -211,80 +211,8 @@ Figure \ref{fig:scampi} shows two flows as an example of this method, the first 
 \end{itemize}	
 
 
-\section{System Design }
-A system design can be broadly described as an architecture of the system, which includes an explanation of each hardware component of the system, the connection between these components if there is any, and the data flowing between these components. Moreover, it gives an idea of the whole system but not its exact functionality, hence, giving a simple understanding of the architecture without jumping into much detail.\\
-
-
-\subsection{Components}
-\label{sub:components}
-Below, each component of the proposed system design is explained.
-
-\subsubsection{Node}
-\label{subsub:node}
-%The first set of components to explain are the sensors, they refer to objects that detect certain change in the environment and converts these changes into digital data and 
-%which refer to objects that can detect certain changes in the environment and converts them to digital data, 
-A Node is one of the core components of this design, it is a small computer device of low storage and computation capacity compared to nowadays portable computers, commonly a \textit{Raspberry Pi} but could be any other device. It is connected to several sensors which typically detect certain changes in the environment and converts it into digital data, for instance, Gas sensor, Temperature sensor or a Camera. Then, the device either stores the data into a local database, performs a computation locally, does both or even asks other nodes to do computation instead, however, an assumption about which sensors or specifications does a specific node  possess can not be made, meaning, each node might not have the exact number or types of sensors because each node may be deployed in a different timing or context. Thus, each node has a configuration file specifying its capabilities. A typical node is shown in figure \ref{fig:node}
-
-\begin{figure}[H]
-\centering
- \includegraphics[scale=0.4]{images/node.png}
- \caption{A typical node in the system}
- \label{fig:node}
-\end{figure}
-
-\subsubsection{High Performance  Units }
-
-CPUs in the proposed system nodes in \ref{subsub:node}. An example of a high processing unit is  a Graphics Processing unit \textit{GPU}.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.7]{images/gpu.png}
-		\caption{Figure denoting a Graphics Processing Unit GPU}
-	\label{fig:gpu}
-\end{figure}
-
-\subsubsection{Network}
-\label{subsub:network}
-A Network in this design is a set of connected components which are capable of communicating and therefore allowing data sharing between them.
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{images/network.png}
-	\caption{A network consisting of three connected nodes and a GPU}
-	\label{fig:network}
-\end{figure}
--- TODO: 
-Emphasis the difference between persistent and non persistent network links in system design.
-
-\subsubsection{Mobile Device}
-A Mobile Device in this context is any device that can connect to the network containing the nodes and is allowed to  carry data from one network to another, hence, allowing a form of data sharing between networks or nodes which are not connected.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.3]{images/mobile.png}
-	\caption{Figure denoting a Mobile Device}
-	\label{fig:mobile}
-\end{figure}
-
-
-
-\subsection{Connectivity and Data Flow}
-A Network described in \ref{subsub:network}, is a simple form of connectivity between components, however, components and specifically nodes are not necessarily connected, sometimes they are just a standalone component that cannot share any information via direct connectivity, also, networks could be disconnected as well, meaning, a network might not be connected to the whole system, thus, is a standalone network. In these cases, a mobile device could help in carrying information and data between these disconnected nodes or networks. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{images/system.png}
-	\label{fig:system}
-	\caption{Two networks connected with a GPU and one standalone network}
-\end{figure}
-
-
-
-
-
-
-
 \section{Summary}
 
-In this chapter we explained the key concepts and foundations behind this framework, what is a flow and how it can be composed. We also described the computational model as an abstraction the framework design, and illustrated the challenges that faces this model which included  dealing with dependencies, resources and having a distributed system model in addition to their possible solutions . We also elaborated the communication model and how it solves some of the challenges in our design. Moreover, we have shown how data inside the computation can be structured, and how input and output data of different nodes could be connected together. Last but not least, we introduced hardware architecture of system. 
+In this chapter we explained the key concepts and foundations behind this framework, what is a flow and how it can be composed. We also described the computational model as an abstraction the framework design, and illustrated the challenges that faces this model which included  dealing with dependencies, resources and having a distributed system model in addition to their possible solutions . We also elaborated the communication model and how it solves some of the challenges in our design. Moreover, we have shown how data inside the computation can be structured, and how input and output data of different nodes could be connected together.
 
 
