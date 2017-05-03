@@ -17,7 +17,7 @@ The IoT concept can be viewed from different perspectives, it is very elastic an
 \item Smart homes which tend to use sensors and actuators to monitor and optimize home resource consumption and control home devices in a way that increases humans satisfaction. Further, expenses generated from resource usage such as gas, power, water and telecommunications can be sent directly to related authorities without any human intervention \cite{Chan:2008:RSH:1377032.1377113}.  
 \item Smart factories also known as "Industry 4.0" the fourth industrial revolution which are optimized machines that communicate together in order to improve the manufacturing process and gather data to analyze factories logistics, pipeline and product availability It also creates intelligent products that can be located and identified at all times in the process \cite{Gilchrist:2016:III:2994178}.
 
-\item Smart cities is one of the most adopted applications in the IoT field, it compromises smart parking, traffic congestion monitoring and control, real time noise analysis, waste management and others.  All this applications need enhanced communication and data infrastructure. It aims to increasing quality of living for individuals\cite{6740844}. 
+\item Smart cities is one of the most adopted applications in the IoT field, it comprises smart parking, traffic congestion monitoring and control, real time noise analysis, waste management and others.  All this applications need enhanced communication and data infrastructure. It aims to increasing quality of living for individuals\cite{6740844}. 
 
 \item There are also applications in  health care, environmental monitoring, security and surveillance.
 \end{itemize}
@@ -71,6 +71,46 @@ The road to pervasiveness is not paved with gold, there are many challenges that
 
 \section{Networking}
 \subsection{Information Centric Networking}
+Information Centric Networking (ICN) is a concept that focuses on content sharing and distribution. In contrast to current network approaches which are host-centric where communication takes place between hosts such as servers, personal computers, etc. ICN was brought to light as a result of the increasing demand on content sharing in highly scalable, distributed and efficient fashion. ICN compromises network caching, replication across entities and resilience to failure.
+
+The content types includes web-pages, videos, images, documents, streaming and others which are titled Named Data Objects (NDO). The NDO is only concerned by its name and data. As long as name identity is preserved, it does not matter where the NDO is going to be persisted, what is the storage method or which type of transport procedure is used. Therefore, copies of NDO are equivalent and can be supplied from any location or replica across an ICN network. However, since the name represents its identity, ICN requires unique naming for individual NDOs.
+
+ICN also provides an Application Programming interface (API) that is responsible for sending and receiving NDOs. The two main roles in this API are the producer who produces content to a specific name and the consumer who asks if an NDO is available by its name. There is also the publish-subscribe approach in which a consumer registers for a subscription to a certain name and gets notified whenever new content is available. This caters for  decoupling between producers and consumers. 
+
+However to ensure that an NDO goes from one entity to another, a consumer request must go through two different routing phases. The first is to find a node that holds a copy of the  NDO
+and deliver the request to that node. The second is to find a routing path back from the receiving node to requester carrying the required NDO. This can be achieved in two different ways: i) \textit{name-resolution} in which a resolution service is queried in order to find a way to locate a source node, ii) \textit{name-based routing} in which the request is forwarded to	 another entity on the network based routing algorithms, policies and cached information.
+
+ICN caches are available on all nodes, requests to an NDO can be served from any node having a copy in the cache. An NDO can be cached on-path from sender to receiver or off-path through routing protocols or by registering it into a name-resolution service\cite{6231276}.
+
+
+\subsubsection{Content Centric Networking}
+
+Content centric networking (CCN) is an architecture based on the ICN concept. Namespace in CCN  is hierarchal, for instance, \verb|/tum.de/connected-mobility/iot| matches the figure \ref{fig:ccn-namespace}. Names do not have to be meaningful or readable, they can include hashes, timestamps, ids, etc. A request matches an NDO if its name is a prefix of any named object, for example,  a request with the name  \verb|/tum.de/connected-mobility/iot| matches an NDO with the name  \verb|/tum.de/connected-mobility/iot/pervasive-computing|.\\ CCN natively support on-path caching, however, off-path can also be supported\cite{6563278}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{images/namespace.png}
+	\caption{Hierarchal namespace example for CCN}
+	\label{fig:ccn-namespace}
+\end{figure}
+
+Each node in the network contains a \textit{Content Router} which includes three data structures \cite{6563278}\cite{6231276}. 
+\begin{itemize}
+\item Pending Interest Table (PIT) which stores the subscriptions and interests of NDOs. The subscription does have to originate  from the node itself, rather can be a forwarded from another node. Once an interest reaches a content source and the data is retrieved, the PIT entries serves as a trail to the original subscriber and is removed afterwards.
+
+\item Forwarding Information base (FIB)  stores a mapping that indicates which node should the request be forwarded to. The FIB uses longest common prefix in order to determine the next hop. Multiple entries are allowed and can be queried in parallel.
+\item Content Store (CS) which is basically the cache that stores the NDOs and uses \textit{least recently used} (LRU) eviction strategy. Caches with high hierarchy posses a larger storage to be able to store popular NDOs which might get evicted due to  lower storage down in the hierarchy
+\end{itemize}  
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.55]{images/ccn2.png}
+	\caption{Content centric networking architecture and flow \textit{Adapted from \cite{6563278}}}
+	\label{fig:ccn}
+\end{figure}
+
+Figure \ref{fig:ccn} describes the flow and state of PIT, FIB and CS of network nodes when receiving the interest message and after acquiring the data. Notice that all the PIT entries have been erased after acquiring the data and CSs have been updated.
+
+
 \subsection{Delay Tolerant Networking}
 
 
