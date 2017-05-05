@@ -1,16 +1,19 @@
 package com.scampi.domain;
 
 
+import Exceptions.RestFailed;
 import com.google.gson.JsonObject;
+import com.scampi.api.ScampiApi;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import org.apache.log4j.Logger;
 
 /**
  * Created by Aly on 1/19/17.
  */
 public class RESTHandler {
-
+    private static  Logger log = Logger.getLogger(RESTHandler.class);
     public static ClientResponse post(String resource, String target, String data) {
         try {
             System.out.println(data);
@@ -21,26 +24,21 @@ public class RESTHandler {
                     .post(ClientResponse.class, data.toString());
 
             if (response.getStatus() != 200 && response.getStatus() != 204) {
-                System.out.println(response.toString());
-                System.out.println(response.getEntity(String.class));
-                throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+                log.error(response.toString());
+                log.error(response.getEntity(String.class));
+                throw new RestFailed("Failed : HTTP error code : " + response.getStatus());
             }
 
             String output = response.getEntity(String.class);
-            System.out.println("============getCtoFResponse============");
-            System.out.println(output);
+            StringBuffer sb = new StringBuffer();
+            sb.append("============getCtoFResponse============");
+            sb.append(output);
+            log.info(sb.toString());
             return response;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (RestFailed e) {
+            log.error("Request Failed" + e.getMessage(), e);
         }
-
         return null;
-    }
-
-    public static JsonObject getResponse(String status, String message, String stacktrace) {
-        JsonObject response = getResponse(status, message);
-        response.addProperty("stacktrace", stacktrace);
-        return response;
     }
 
     public static JsonObject getResponse(String status, String message) {

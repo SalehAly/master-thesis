@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @SpringBootApplication
 public class ScampiApi {
-    Logger log = Logger.getLogger(ScampiApi.class);
+    private static Logger log = Logger.getLogger(ScampiApi.class);
 
     @RequestMapping(value = "/publish", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody

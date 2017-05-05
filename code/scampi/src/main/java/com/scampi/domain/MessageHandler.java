@@ -6,16 +6,21 @@ import com.scampi.api.ScampiService;
 import com.scampi.constants.Constants;
 import com.scampi.model.Computation;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
+import org.apache.log4j.Logger;
+
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import java.util.List;
+
 /**
  * Created by Aly on 1/19/17.
  */
 public class MessageHandler {
-
+    private static Logger log = Logger.getLogger(MessageHandler.class);
+    private static TopicMapping topicMapping = TopicMapping.getInstance();
 
     public static void handleMessage(SCAMPIMessage message, String topic) {
 
@@ -38,9 +43,9 @@ public class MessageHandler {
         try {
             if (message.hasString(Constants.JSON)) {
                 jsonMessage = message.getString(Constants.JSON);
-                System.out.println(jsonMessage);
+                log.info(jsonMessage);
             } else {
-                System.out.println("No computation Models included");
+                log.info("No computation Models included");
                 return;
             }
 
@@ -59,22 +64,19 @@ public class MessageHandler {
             }
 
             if (inputDataTopic != null) {
-                System.out.println("Subscribing to " + inputDataTopic);
+                log.info("Subscribing to " + inputDataTopic);
                 ScampiService.getAppLib().subscribe(inputDataTopic);
+                String id = computation.getFlow().get("id").getAsString();
+                topicMapping.put(inputDataTopic, id) ;
             }
-
 
             // run node-red on rest and add flow
             RESTHandler.post(Constants.NODE_RED_REST, Constants.FLOW_TARGET, flow);
-
-
-            System.out.println("Message Received");
+            log.info("Message Received");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Message Failed");
+            log.fatal("Message Failed", e);
         }
-
     }
 
     /**
@@ -85,10 +87,16 @@ public class MessageHandler {
 
     public static void handleSpecialTopic(SCAMPIMessage message, String topic) {
 
-        // run node-red on rest and add flow
-        RESTHandler.post(Constants.NODE_RED_REST, topic, new JsonParser().parse(
-                message.getString(Constants.JSON)).toString());
-        System.out.println("Message Received");
+
+        List<String> endpoints = topicMapping.getEndpoints(topic);
+        System.out.println(endpoints.toString());
+        // send data to all endpoints subscribing to this topic
+        for (String endpoint : endpoints) {
+            RESTHandler.post(Constants.NODE_RED_REST, endpoint, new JsonParser().parse(
+                    message.getString(Constants.JSON)).toString());
+            log.info("Message Received");
+
+        }
 
 
     }

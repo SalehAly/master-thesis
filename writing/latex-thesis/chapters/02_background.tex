@@ -85,7 +85,7 @@ ICN caches are available on all nodes, requests to an NDO can be served from any
 
 \subsubsection{Content Centric Networking}
 
-Content centric networking (CCN) is an architecture based on the ICN concept. Namespace in CCN  is hierarchal, for instance, \verb|/tum.de/connected-mobility/iot| matches the figure \ref{fig:ccn-namespace}. Names do not have to be meaningful or readable, they can include hashes, timestamps, ids, etc. A request matches an NDO if its name is a prefix of any named object, for example,  a request with the name  \verb|/tum.de/connected-mobility/iot| matches an NDO with the name  \verb|/tum.de/connected-mobility/iot/pervasive-computing|.\\ CCN natively support on-path caching, however, off-path can also be supported\cite{6563278}.
+Content centric networking (CCN) is an architecture based on the ICN concept. Namespace in CCN  is hierarchal, for instance, \verb|/tum.de/connected-mobility/iot| matches the figure \ref{fig:ccn-namespace}. Names do not have to be meaningful or readable, they can include hashes, timestamps, ids, etc. A request matches an NDO if its name is a prefix of any named object, for example,  a request with the name  \verb|/tum.de/connected-mobility/iot| matches an NDO with the name  \verb|/tum.de/connected-mobility/iot/pervasive-computing|.\\ CCN natively support on-path caching, however, off-path can also be supported\cite{6563278}. Routing in this architecture name-based.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.3]{images/namespace.png}
@@ -103,7 +103,7 @@ Each node in the network contains a \textit{Content Router} which includes three
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.55]{images/ccn2.png}
+	\includegraphics[scale=0.4]{images/ccn2.png}
 	\caption{Content centric networking architecture and flow \textit{Adapted from \cite{6563278}}}
 	\label{fig:ccn}
 \end{figure}
@@ -111,7 +111,20 @@ Each node in the network contains a \textit{Content Router} which includes three
 Figure \ref{fig:ccn} describes the flow and state of PIT, FIB and CS of network nodes when receiving the interest message and after acquiring the data. Notice that all the PIT entries have been erased after acquiring the data and CSs have been updated.
 
 
+\subsubsection{Networking of Information }
+Network of Information (NetInf) is an architecture based on the ICN concept. Unlike CCN, routing in NetInf is a hybrid of name-based  and the name-resolution scheme, also, NDO names are not human readable. Namespace is not hierarchal rather flat, however, there is one common naming format for all NDOs across all nodes. Moreover, it supports on-path and off-path caching\cite{Dannewitz:2013:NII:2459510.2459643}. In figure \ref{fig:netinf}, there are two requests namely \textbf{A} and \textbf{B}.  NetInf used name-resolution service (NRS) to get the source location of \textbf{B}. Alternatively, it used name-based routing (NBR) in combination with NRS to find the request source of \textbf{A}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{images/netinf.png}
+	\caption{\textit{Adapted from \cite{Dannewitz:2013:NII:2459510.2459643}}}
+	\label{fig:netinf}
+\end{figure}
+
+
+
 \subsection{Delay Tolerant Networking}
+
 
 
 \section{Used Platforms}
