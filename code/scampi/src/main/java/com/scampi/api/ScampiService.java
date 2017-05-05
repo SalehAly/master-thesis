@@ -23,9 +23,9 @@ import java.io.FileReader;
 
 @Data
 public class ScampiService {
-    static private final AppLib APP_LIB = AppLib.builder().build();
-    static private Metadata machineSpec;
-    static Logger log = Logger.getLogger(ScampiApi.class);
+     private static final AppLib APP_LIB = AppLib.builder().build();
+     private static Metadata machineSpec;
+     private static Logger log = Logger.getLogger(ScampiApi.class);
 
     public static void init() throws InterruptedException {
         // initalize Scampi API
@@ -106,5 +106,8 @@ public class ScampiService {
 
     public static AppLib getAppLib() {
         return APP_LIB;
+    }
+    public static Metadata getMachineSpec() {
+        return machineSpec;
     }
 }

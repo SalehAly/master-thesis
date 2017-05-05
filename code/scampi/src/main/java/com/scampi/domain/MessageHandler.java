@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.scampi.api.ScampiService;
 import com.scampi.constants.Constants;
 import com.scampi.model.Computation;
+import com.scampi.model.Metadata;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 import org.apache.log4j.Logger;
 
@@ -21,6 +22,8 @@ import java.util.List;
 public class MessageHandler {
     private static Logger log = Logger.getLogger(MessageHandler.class);
     private static TopicMapping topicMapping = TopicMapping.getInstance();
+    private static Metadata machineSpec = ScampiService.getMachineSpec();
+
 
     public static void handleMessage(SCAMPIMessage message, String topic) {
 
@@ -52,8 +55,24 @@ public class MessageHandler {
             // Model the computation from json into java models
             Computation computation = new GsonBuilder().create().fromJson(jsonMessage, Computation.class);
 
+            // Check if machine spec is a valid for the computation
+            if (! computation.getMetadata().getPower().equals(machineSpec.getPower())
+                    || ! computation.getMetadata().getRam().equals(machineSpec.getRam())) {
+                log.info("Hardware requirements not satisfied");
+                return;
+            }
+            // Check if sensors and actuators are there.
+            if (computation.getMetadata().getResources().isCamera() && ! machineSpec.getResources().isCamera()
+                || computation.getMetadata().getResources().isGasSensor() && ! machineSpec.getResources().isGasSensor()
+                || computation.getMetadata().getResources().isTempSensor() && ! machineSpec.getResources().isTempSensor()) {
+
+                log.info("Resource requirements not satisfied");
+                return;
+            }
+            
             // Get the flow itself from the mode
             String flow = computation.getFlow().toString();
+
 
             for (String source : computation.getSources()) {
                 Files.copy(message.getBinary(source), Paths.get(source), StandardCopyOption.REPLACE_EXISTING);
@@ -69,6 +88,8 @@ public class MessageHandler {
                 String id = computation.getFlow().get("id").getAsString();
                 topicMapping.put(inputDataTopic, id) ;
             }
+
+
 
             // run node-red on rest and add flow
             RESTHandler.post(Constants.NODE_RED_REST, Constants.FLOW_TARGET, flow);
