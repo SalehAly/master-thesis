@@ -72,7 +72,7 @@ The fog is an extension to cloud computing at the edge of the network. It provid
 \section{Networking}
 \subsection{Information Centric Networking}
 
-Information Centric Networking (ICN) is an architecture that focuses on WHAT information is being exchanged rather than WHO are exchanging it. ICN was mainly exposed by Dirk Trossen et al. as a networking architecture that aim to replace the current Internet inter-networking layer using publish-subscribe model as an underlying service \cite{Trossen:2010:AII:1764873.1764878}. Trossen introduced four main challenges that faces the architecture which are namely information-centrism of applications, supporting and exposing tussles, increasing accountability, and addressing attention scarcity.
+Information-Centric Networking (ICN) is an architecture that focuses on WHAT information is being exchanged rather than WHO are exchanging it. ICN was mainly exposed by Dirk Trossen et al. as a networking architecture that aim to replace the current Internet inter-networking layer using publish-subscribe model as an underlying service \cite{Trossen:2010:AII:1764873.1764878}. Trossen introduced four main challenges that faces the architecture which are namely information-centrism of applications, supporting and exposing tussles, increasing accountability, and addressing attention scarcity.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{images/trossen.png}
@@ -82,7 +82,7 @@ Information Centric Networking (ICN) is an architecture that focuses on WHAT inf
 
 The architecture  design has three main functions:
 \begin{itemize}
-\item Rendezvous which are used to match  publishers and subscribers of information, each of them is identified by a globally unique identifier. The information items required to perform this matching exists in the Rendezvous Points (RP).
+\item Rendezvous which are used to match  publishers and subscribers of information, each of them is identified by a globally unique identifier called Rendezvous Identifier (RI). The information items required to perform this matching exists in the Rendezvous Points (RP).
 \item Forwarding Topology which is created once there is a match between publications and subscriptions in cooperation with the inter-domain topology formation (ITF). It depends on the publishers and subscribers location on the level of Autonomous Systems (AS).
 \item Topology manager which resides in each AS and is used as a transfer link between ASes. Moreover, it is used to guide Forwarding Nodes (FN) to create a route between local publishers and subscribers.
 \end{itemize}
@@ -101,9 +101,12 @@ and deliver the request to that node. The second is to find a routing path back 
 ICN caches are available on all nodes, requests to an NDO can be served from any node having a copy in the cache. An NDO can be cached on-path from sender to receiver or off-path through routing protocols or by registering it into a name-resolution service\cite{6231276}.
 
 
-\subsubsection{Content Centric Networking}
+\subsubsection{PSIRP \& POINT} 
 
-Content centric networking (CCN) is an architecture based on the ICN concept. Namespace in CCN  is hierarchal, for instance, \verb|/tum.de/connected-mobility/iot| matches the figure \ref{fig:ccn-namespace}. Names do not have to be meaningful or readable, they can include hashes, timestamps, ids, etc. A request matches an NDO if its name is a prefix of any named object, for example,  a request with the name  \verb|/tum.de/connected-mobility/iot| matches an NDO with the name  \verb|/tum.de/connected-mobility/iot/pervasive-computing|.\\ CCN natively support on-path caching, however, off-path can also be supported\cite{6563278}. Routing in this architecture name-based.
+\subsubsection{Content Centric Networking}
+Content-centric networking (CCN) was first introduced by Van Jacobson et al., in order to tackle current network architecture issues such as availability, security and location independence. The main communication model relies on two main CCN packets namely \verb|interest| and \verb|data| packets. It works as follows, a consumer broadcasts its interest of information to all connected nodes. If an node posses the desired data and received and interest packet, it should respond with a data packet\cite{Jacobson:2009:NNC:1658939.1658941}.
+
+ CCN is  based on the ICN concept, namespace in CCN  is hierarchal, for instance, \verb|/tum.de/connected-mobility/iot| matches the figure \ref{fig:ccn-namespace}. Names do not have to be meaningful or readable, they can include hashes, timestamps, ids, etc. A request matches an NDO if its name is a prefix of any named object, for example,  a request with the name  \verb|/tum.de/connected-mobility/iot| matches an NDO with the name  \verb|/tum.de/connected-mobility/iot/pervasive-computing|. CCN natively support on-path caching with name-based routing, however, off-path can also be supported\cite{6563278}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.3]{images/namespace.png}
@@ -143,6 +146,11 @@ Network of Information (NetInf) is an architecture based on the ICN concept. Unl
 
 \subsection{Delay Tolerant Networking}
 
+Delay-Tolerant Networking (DTN) is an overlay architecture proposed to overcome unreliable connections between end-to-end paths through asynchronous message forwarding. In some challenged networks, there might not exist an end-to-end path between nodes either wired or not. Further, valid connections might exhibit extensive delays which might not be acceptable and thus cause the message transfer to drop. By an overlay architecture, it is meant that, DTN functions above the existing protocol stacks achieving interoperability and providing the store-carry-forward functionality \cite{Fall:2003:DNA:863955.863960}.
+
+The DTN research group (DTNRG) has proposed and architecture which was published as Request For Comments (RFC) to the Internet Engineering Task Force (IETF). The architecture defines an end-to-end message-oriented overlay called "bundle layer" which is injected  between  application layer and  transport layer. The bundle layer encompasses a persistent storage, basic security model and store-and-forward to overcome disconnected and disrupted communications. Devices implementing the bundle layer are called DTN nodes. Data units exchanged between these layers are named "bundles",  which are messages containing a header, user application's data and control information such as how to handle, store and dispose of user data. Bundles can also be divided into fragments  to increase delivery performance which are assembled again at the destination. Fragments are also bundles themselves, two or more of them can be re-assembled anywhere in the network to create a bundle. Bundles contain identifiers which distinguish the original sender and final destination. DTN nodes can store and persist bundles over longer time periods until a connection is regained.  Persistence allows DTN nodes to recover from system restarts.  
+
+\subsubsection{IBR-DTN}
 
 
 \section{Used Platforms}
