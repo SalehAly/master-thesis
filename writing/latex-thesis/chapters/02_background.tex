@@ -7,7 +7,7 @@ This chapter describes the concepts and background information that this thesis 
 
 \section{Internet of Things}
 
-In general terms, IoT refers to a highly dynamic and scalable distributed network of connected devices equipped with context-aware gadgets that enables them to see, hear and think\cite{DAC:DAC2417}. Then, transfer theses senses to a stream of information allowing them to digest the data and act intelligently through actuators if needed. They are also allowed to communicate and share knowledge, which make them smart, powerful and capable of acting independently. Smart devices in an IoT network are heterogeneous in terms of computation capabilities, also each device is energy optimized and able to communicate. Moreover, to qualify for being smart, devices must have a unique global identifier, name, address and can sense the environment. However, the IoT network may also contain devices that are not "smart" which act upon receiving orders triggered through certain circumstances in the network, for example, a lamp post that is set on and off according to network signals. 
+In general terms, IoT refers to a highly dynamic and scalable distributed network of connected devices equipped with context-aware gadgets that enables them to see, hear and think\cite{DAC:DAC2417}. Then, transform theses senses to a stream of information allowing them to digest the data and act intelligently through actuators if needed. They are also allowed to communicate and share knowledge, which make them smart, powerful and capable of acting independently. Smart devices in an IoT network are heterogeneous in terms of computation capabilities, also each device is energy optimized and able to communicate. Moreover, to qualify for being smart, devices must have a unique global identifier, name, address and can sense the environment. However, the IoT network may also contain devices that are not "smart" which act upon receiving orders triggered through certain circumstances in the network, for example, a lamp post that is set on and off according to network signals. 
 
 Since smart devices have unique identifier and are context-aware, they can be tracked and localized, which is very helpful when performing geospatial computations \cite{Miorandi20121497}. The huge demand on IoT has triggered the development small-scale, high-performance, low-cost computers, in addition, sensors and actuators are getting cheaper, smaller and more powerful which in turn increased the interest even more.
  
@@ -22,17 +22,15 @@ The IoT concept can be viewed from different perspectives, it is very elastic an
 \item There are also applications in  health care, environmental monitoring, security and surveillance.
 \end{itemize}
 
-IoT is very diverse, one way of applying it is to gather data from the smart devices, then process data in the cloud via \textit{Cloud Computing}. Afterwards, results could be sent back to smart devices in order to act somehow. However, exploiting the overwhelming capacity of IoT lead to more specialized and concrete terms that are more focused on pushing computations to the smart devices "Edges" . Consequently, more terms like 
+IoT is very diverse, one way of applying it is to gather data from the smart devices, then process data in the cloud via \textit{Cloud Computing}. Afterwards, results could be sent back to smart devices in order to act somehow. Nevertheless, there are specialized and more concrete terms that are more focused on pushing computations to the smart devices "Edges"  such as 
 \textit{Edge Computing}, \textit{Pervasive Computing} and \textit{Fog Computing} emerged.
 
 
 \subsection{Wireless Sensor Networks}
-\subsection{Fog Computing}
 
-The fog is an extension to cloud computing at the edge of the network. It provides computation, storage, networking and application services to end-users. Fog and cloud are independent, in fact, cloud can be used to manage the fog. They are also mutually beneficial, some use cases are better deployed in the fog and the other way around. Research yet to determine which applications should go where. The fog is characterized by having lower latency than the cloud, thus are more useful in time critical applications. Also, fog devices have location awareness with a better geographical distribution than the centralized cloud approach. It can distribute the computations and storage between the cloud, itself and idling devices on the network edge \cite{7498684}.
 
 \subsection{Pervasive Computing} 
- Pervasive computing also known as \textit{Ubiquitous Computing} followed from the general IoT networks in which software devices and agents are expected to support and act upon human needs anytime and anywhere without their interference \cite{Chen:2003:OCP:991804.991806}. It is usually integrated with intelligent agents and smart devices which keep learning from human actions and the decisions taken previously to be even more helpful every time. Also, pervasive software agents are context-aware in most of the cases, in which they know what changes are happening around them at a specific point in time and they even hold a history of what has happened in the environment. They also communicate seamlessly in order to share knowledge and help each other take better decisions. Moreover, pervasive devices can be relocated from one place to another, thus changing the network and possibly environment. Therefore, devices can not be addressed with their respective networked addresses because they might eventually change. 
+ Pervasive computing also known as \textit{Ubiquitous Computing} is a concept in which software devices and agents are expected to support and act upon human needs anytime and anywhere without their interference \cite{Chen:2003:OCP:991804.991806}. It is usually integrated with intelligent agents and smart devices which keep learning from human actions and the decisions taken previously to be even more helpful every time. Also, pervasive software agents are context-aware in most of the cases, in which they know what changes are happening around them at a specific point in time and they even hold a history of what has happened in the environment. They also communicate seamlessly in order to share knowledge and help each other take better decisions. Moreover, pervasive devices can be relocated from one place to another, thus changing the network and possibly environment. Therefore, devices can not be addressed with their respective networked addresses because they might eventually change. 
 
 In 1991 Mark Wieser said in the paper describing his vision of ubiquitous computing  \say{The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it} \cite{weiser1991ubicomp}. Since then, computing has evolved from using only desktop personal computers to the current phase of wireless sensor networks, small computational devices and distributed systems. Imagine the large scale of applications that could incorporate the computational power, machine learning and context-awareness at the finger tips of  human beings without them even noticing that it exists. In the same paper Wieser also concluded \say{Most important, ubiquitous computers will help overcome the problem of information overload. There is more information available at our fingertips during a walk in the woods than in any computer system, yet people find a walk among trees relaxing and computers frustrating. Machines that fit the human environment, instead of forcing humans to enter theirs, will make using a computer as refreshing as taking a walk in the woods.} 
 
@@ -47,7 +45,7 @@ Figure \ref{fig:pervaisive-computing} shows the architecture of a pervasive envi
  	\label{fig:pervaisive-computing}
 \end{figure}
 
-The road to pervasiveness is not paved with gold, there are many challenges that faces the implementation and design of pervasive applications. Some of these challenges are \cite{Schiele2010}:
+The road to pervasiveness is not paved with gold, there are many challenges that faces the design and implementation of pervasive applications. Some of these challenges are \cite{Schiele2010}:
 \begin{enumerate}
 \item Devices have become more heterogeneous and the middleware must be able to execute on each of them, therefore, the use of self-contained software environments is advised. For example, using docker as an execution environment for all the heterogeneous devices.
 \item Communication reliability is often questioned, in addition,  environments are highly dynamic thus devices are only known at run time.   Therefore, service discovery is a must, either peer-based in which all nodes  take part in the discovery or mediator-bases in which some special devices are promoted to perform service discovery.
@@ -64,14 +62,34 @@ The road to pervasiveness is not paved with gold, there are many challenges that
 
 
 
+\subsection{Fog Computing}
 
+The fog is an extension to cloud computing at the edge of the network. It provides computation, storage, networking and application services to end-users. Fog and cloud are independent, in fact, cloud can be used to manage the fog. They are also mutually beneficial, some use cases are better deployed in the fog and vice versa. Research yet to determine which applications should go where. The fog is characterized by having lower latency than the cloud, thus are more useful in time critical applications. Also, fog devices have location awareness with a better geographical distribution than the centralized cloud approach. It can distribute the computations and storage between the cloud, itself and idling devices on the network edge \cite{7498684}. However, it remains a challenge to deal with all the hetrogenous devices in the fog. Connecting various components with different nature ensuring quality of service is not easy. Moreover, a unified programming model should be used in all fog devices in order to help programmers make use of the fog model. Other issues are also being researched such as security and privacy of the fog network\cite{Yi:2015:SFC:2757384.2757397}. 
 
 
 
 
 \section{Networking}
 \subsection{Information Centric Networking}
-Information Centric Networking (ICN) is a concept that focuses on content sharing and distribution. In contrast to current network approaches which are host-centric where communication takes place between hosts such as servers, personal computers, etc. ICN was brought to light as a result of the increasing demand on content sharing in highly scalable, distributed and efficient fashion. ICN compromises network caching, replication across entities and resilience to failure.
+
+Information Centric Networking (ICN) is an architecture that focuses on WHAT information is being exchanged rather than WHO are exchanging it. ICN was mainly exposed by Dirk Trossen et al. as a networking architecture that aim to replace the current Internet inter-networking layer using publish-subscribe model as an underlying service \cite{Trossen:2010:AII:1764873.1764878}. Trossen introduced four main challenges that faces the architecture which are namely information-centrism of applications, supporting and exposing tussles, increasing accountability, and addressing attention scarcity.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{images/trossen.png}
+	\caption{ICN architecture by Dirk Trossen et al., \textit{Adapted from } \cite{Trossen:2010:AII:1764873.1764878} }
+	\label{fig:trossen}
+\end{figure}
+
+The architecture  design has three main functions:
+\begin{itemize}
+\item Rendezvous which are used to match  publishers and subscribers of information, each of them is identified by a globally unique identifier. The information items required to perform this matching exists in the Rendezvous Points (RP).
+\item Forwarding Topology which is created once there is a match between publications and subscriptions in cooperation with the inter-domain topology formation (ITF). It depends on the publishers and subscribers location on the level of Autonomous Systems (AS).
+\item Topology manager which resides in each AS and is used as a transfer link between ASes. Moreover, it is used to guide Forwarding Nodes (FN) to create a route between local publishers and subscribers.
+\end{itemize}
+
+
+ 		 
+ICN centers on content sharing and distribution. It is content-centric in contrast to current network approaches which are  host-centric, wherein communication takes place between hosts such as servers, personal computers, etc. ICN was brought to light as a result of the increasing demand on content sharing in highly scalable, distributed and efficient fashion. ICN compromises network caching, replication across entities and resilience to failure.
 
 The content types includes web-pages, videos, images, documents, streaming and others which are titled Named Data Objects (NDO). The NDO is only concerned by its name and data. As long as name identity is preserved, it does not matter where the NDO is going to be persisted, what is the storage method or which type of transport procedure is used. Therefore, copies of NDO are equivalent and can be supplied from any location or replica across an ICN network. However, since the name represents its identity, ICN requires unique naming for individual NDOs.
 

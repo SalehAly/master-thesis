@@ -76,8 +76,31 @@ A Network described in \ref{subsub:network}, is a simple form of connectivity be
 
 \section{Use Cases}
 \section{Requirements}
+The framework should
+\begin{itemize}
+	\item  send computations to all or selected nodes.
+	\item  allow computations to carry custom dependencies.
+	\item  allow communication between nodes in a publish-subscribe manner.
+	
+	\item  carry computations forward even without an end-to-end path between sender and receiver.
+	\item  allow computations to receive data as an input or publish data as an output using the communication layer.
+	
+	\item  send a computations to nodes according to their computation capabilities, available sensors and actuators.
+	
+	\item  send computations to  specific nodes with a given global identifiers.
+	
+	\item  allow computations to be composable locally and globally.
+	
+\end{itemize}
 
-
+The computations should
+\begin{itemize}
+	\item  be able to access their dependencies.
+	\item  be triggered either by a scheduler or at-will.
+	\item  persist data in any form.
+	\item  access hardware resources such as camera, sensors and actuators.
+	\item  be pervasive and act on their own.
+\end{itemize}
 %It is believed that development of smart pervasive computing devices that uses sensors and actuators are mainly grouped into smaller disconnected architectures and thus hard to create a composite framework in which all devices can communicate and integrate\cite{5470524}. In order to tackle this problem and to ensure that our computational model design is dynamic and flexible enough, we must ensure that our model is composable. By Composability we mean that computational models should be able to communicate, send and receive input and output data. 
 
 
