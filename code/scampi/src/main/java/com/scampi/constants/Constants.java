@@ -6,8 +6,6 @@ package com.scampi.constants;
 public class Constants {
     public static final String JSON = "json";
 
-    public static final String DATA = "data";
-
 
     public static final String NODE_RED = "node-red";
     public static final String NODE_RED_REST = "http://localhost:1880/";

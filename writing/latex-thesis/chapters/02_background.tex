@@ -157,22 +157,49 @@ There are different implementations of the DTN architecture. DTN2 is a reference
 
 
 \section{Used Platforms}
-\subsection{Node-Red}
-Node-Red is an open-source flow-based programming project originally developed by IBM Emerging Technology Services and now a part of the JS foundation. Flow-based programming describes an application as a network of black-box elements that exchange data together.  Node-red is widely used as a visual tool for wiring IoT applications that can be deployed locally, on the cloud or on edge devices such as (Raspberry PI, Android, Arduino). Elements are the building blocks of node-red, each element has its own defined purpose and can be given a certain input which in turn returns an output. Further, these elements can be re-used and  have different visuals which makes them easy to use and more handy to a wider range of users. The function of these elements varies from digital, social  or even physical events that include sensors. The network of elements is called a  \textit{flow}. Flows can be easily serialized into JSON objects and thus simplifying  importing, exporting sharing process. Since node-red is an open-source project, therefore, the community is allowed to create new flows and extend current flows for their own use cases and make them available to the public, they are also allowed to report potential problems and bugs to the contributers. 
 
-Node-red user interface is available through the browser, however, there is an API to import and export flows through node-red engine without using the user interface. Figure \ref{fig:node-red} shows the browser window with node-red UI. On the left side there are the elements which represent the building blocks of the flow, they can be dragged and dropped inside the plane area. Afterwards, elements can be wired together and deployed. In the figure, a simple flow including a time-stamp triggered every five seconds and debug node is deployed. On the right side of the figure, printed time-stamps can be seen in the debug pane as a result of wiring the debug element into our flow and connecting it to a configured time-stamp element.
+
+\subsection{SCAMPI}
+\newpage
+\subsection{Raspberry Pi}
+Raspberry Pi is a very small, low-cost and single-board computer.  Originally developed to promote computer science education in schools by the Raspberry Pi Foundation. It has a rather low processing power and random access memory compared to todays computers and mobile devices. Nevertheless, its graphical processing units equals the latest of todays mobile devices that it can stream high definition videos and play 3D games. Raspberry Pi also has 40 General Purpose Input/Output (gpio) pins that act like switches in order to send signals to devices such as LED lamps, sensors and actuators which makes it suitable for the IoT applications. Further, there are lightweight operating systems deigned especially to cope with the edge devices and Raspberry Pi  such as \textit{Ubuntu MATE},  \textit{Windows 10 IoT Core} and \textit{Raspbian} which is officially supported by the foundation.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/rpi.png}
+	\caption{Raspberry Pi model 3 model B design. \textit{Adapted from \cite{RASPI}}}
+	\label{fig:rpi}
+\end{figure}
+The model 3 as shown in figure \ref{fig:rpi} has the following specifications:
+\begin{itemize}
+	\item 1.2 GHz processor designed by ARM and 1 GB of random access memory.
+	\item Ethernet port, wireless LAN, Bluetooth 4.1 and Bluetooth low energy to enable wide range of connectivity.
+	\item Micro-SD card slot for storage.
+	\item Audio jack, HDMI port and 4 USB ports.
+	\item Camera, display interface and 40 gpio pins.
+\end{itemize}
+
+There are other models of the Raspberry Pi such as  Pi 2 Model B, the Pi Zero, and the Pi 1 Model B+ and A+, they differ in size and specification. However, they all share the same concept of being low-cost and single-board computers.
+
+
+\subsection{Node-Red}
+Node-Red is a powerful, open-source and flow-based programming project originally developed by IBM Emerging Technology Services and now a part of the JS foundation designed for IoT. Flow-based programming describes an application as a network of black-box nodes that exchange data together.  Node-red is widely used as a visual tool for wiring IoT applications that can be deployed locally, on the cloud or on edge devices such as (Raspberry Pi, Android, Arduino). nodes are the building blocks of node-red, each element has its own defined purpose and can be given a certain input which in turn can returns an output. Further, these nodes can be re-used and  have different visuals which makes them easy to use and more handy for a wider range of users. The function of these nodes varies from digital, social  or even physical events that include sensors. The network of nodes is called a  \textit{flow}. Flows can be easily serialized into JSON objects and thus simplifying  importing, exporting and sharing process. Since node-red is an open-source project which is very well adopted. Therefore, the community is allowed to create new flows and extend current flows for their own use cases and make them available to the public, they are also allowed to report potential problems and bugs to the contributers. This results in a very fast development, fixes, new features and releases.
+
+Node-red user interface is available through the browser, however, there is an API to import and export flows through node-red engine without using the user interface. Figure \ref{fig:node-red} shows the browser window with node-red UI. On the left side, there are the nodes which represent the building blocks of the flow, they can be dragged and dropped inside the plane area. Afterwards, nodes can be wired together and deployed. In the figure, a simple flow including a time-stamp triggered every five seconds and debug node are wired together and deployed. On the right side of the figure, printed time-stamps can be seen in the debug pane as a result of wiring the debug element into our flow and connecting it to a configured time-stamp element. The Info tab on the right side, explains each element once it was selected and shows how to use it.
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.65]{images/node-red.png}
+	\includegraphics[scale=0.5]{images/node-red.png}
 	\caption{Node-Red user interface to create  flows for IoT applications}
 	\label{fig:node-red}
 \end{figure}
 
-\subsection{SCAMPI}
-\subsection{Raspberry Pi}
+
+Node-red also allows global context, meaning, custom variables that live across all nodes can be set. This is really helpful when  an application should keep a certain state that is shared across all nodes. The main programming language of node-red is JavaScript, it is also used to write nodes with custom functions and code. Moreover, node-red has a built-in node to control gpio pins of a Raspberry Pi , that can send low or high signals whenever desired to a certain pin. This is powerful because it hides the abstraction behind controlling the Raspberry Pi  pins.
+
 \subsection{Time-series Databases}
+
+
 
 
 
