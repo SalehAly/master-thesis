@@ -1,15 +1,19 @@
 package com.scampi.domain;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.scampi.api.ScampiService;
 import com.scampi.constants.Constants;
 import com.scampi.model.Computation;
 import com.scampi.model.Metadata;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
+import netscape.javascript.JSObject;
 import org.apache.log4j.Logger;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -113,8 +117,23 @@ public class MessageHandler {
         System.out.println(endpoints.toString());
         // send data to all endpoints subscribing to this topic
         for (String endpoint : endpoints) {
-            RESTHandler.post(Constants.NODE_RED_REST, endpoint, new JsonParser().parse(
-                    message.getString(Constants.JSON)).toString());
+            JsonObject body = new JsonObject();
+            body.addProperty(Constants.DATA, message.getString(Constants.DATA));
+            body.addProperty(Constants.ENDPOINT, endpoint);
+            InputStream binary = message.getBinary(Constants.FILE);
+            if (binary != null) {
+                int ch;
+                StringBuilder sb = new StringBuilder();
+                try {
+                    while((ch = binary.read()) != -1)
+                        sb.append((char)ch);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                body.addProperty(Constants.FILE, sb.toString());
+            }
+
+            RESTHandler.post(Constants.NODE_RED_REST, endpoint, body.toString());
             log.info("Message Received");
 
         }

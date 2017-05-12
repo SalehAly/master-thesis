@@ -5,6 +5,9 @@ package com.scampi.constants;
  */
 public class Constants {
     public static final String JSON = "json";
+    public static final String DATA = "data";
+    public static final String FILE = "file";
+    public static final String ENDPOINT = "endpoint" ;
 
 
     public static final String NODE_RED = "node-red";
@@ -21,4 +24,5 @@ public class Constants {
     public static final String HOME_DIR = System.getProperty("user.home");
     public static final String NODE_RED_DIR = ".node-red";
     public static final String SPEC_FILE_PATH = "spec.json";
+
 }

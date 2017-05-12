@@ -9,4 +9,6 @@ import lombok.Data;
 public class Payload {
     private String data;
     private String topic;
+    private String file;
+    private String endpoint;
 }

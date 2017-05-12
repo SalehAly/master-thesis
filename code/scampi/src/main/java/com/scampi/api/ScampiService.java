@@ -28,7 +28,7 @@ public class ScampiService {
      private static Logger log = Logger.getLogger(ScampiApi.class);
 
     public static void init() throws InterruptedException {
-        // initalize Scampi API
+        // initialize Scampi API
         initService();
         initMachineSpec();
         APP_LIB.subscribe(Constants.TOPIC_MAIN);
@@ -48,7 +48,7 @@ public class ScampiService {
         } catch (Exception e) {
             log.fatal("Either file not found or could not be parsed", e);
             // init with default settings
-            machineSpec = new Metadata("1GB", "1.2GHZ", new Resource(true, false, false));
+            machineSpec = new Metadata("low", "medium", new Resource(true, false, false));
         }
 
 

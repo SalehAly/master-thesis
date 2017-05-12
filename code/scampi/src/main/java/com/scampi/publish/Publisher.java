@@ -5,6 +5,7 @@ import com.scampi.api.ScampiService;
 import com.scampi.constants.Constants;
 import com.scampi.domain.RESTHandler;
 import com.scampi.model.Computation;
+import com.scampi.model.Payload;
 import com.sun.jersey.core.util.Base64;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 import org.apache.log4j.Logger;
@@ -20,12 +21,12 @@ public class Publisher {
 
     private static Logger log = Logger.getLogger(Publisher.class);
 
-    public static String publish(String topic, String data) {
+    public static String publish(Payload payload) {
         try {
-            if (topic == null) {
-                publishMainTopic(data);
+            if (payload.getTopic() == null) {
+                publishMainTopic(payload.getData());
             } else {
-                publishSpecialTopic(topic, data);
+                publishSpecialTopic(payload);
             }
         } catch (Exception e) {
 
@@ -58,7 +59,7 @@ public class Publisher {
         // get source files
         if (computation.getSources() != null) {
             for (String source : computation.getSources()) {
-                System.out.println(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + source);
+                log.info(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + source);
                 byte[] file = Files.readAllBytes(Paths.get(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + source));
                 //include files
                 message.putBinary(source, Base64.encode(file));
@@ -70,14 +71,18 @@ public class Publisher {
     }
 
 
-    public static void publishSpecialTopic(String topic, String data) throws Exception {
+    public static void publishSpecialTopic(Payload payload) throws Exception {
 
         // build a new message
-        log.info("Publishing to SPECIAL Topic:" + topic);
+        log.info("Publishing to SPECIAL Topic:" + payload.getTopic());
         SCAMPIMessage message = SCAMPIMessage.builder().build();
-        message.putString(Constants.JSON, data);
-        ScampiService.publish(message, topic);
-        log.info("Special Data Topic " + topic);
+        if (payload.getFile() != null){
+            byte[] file = Files.readAllBytes(Paths.get(payload.getFile()));
+            message.putBinary(Constants.FILE, Base64.encode(file));
+        }
+        message.putString(Constants.DATA, payload.getData());
+        ScampiService.publish(message, payload.getTopic());
+        log.info("Special Data Topic " + payload.getTopic());
     }
 
 }

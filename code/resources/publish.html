@@ -236,11 +236,11 @@
                 contentType: "application/json",
                 success: function (data) {
                     //success message mybe...
-                    console.log("sent");
-                    console.log(data);
-                    if(data == 0){
+                    if(data.status == "success"){
+                        $("#fail").hide();
                         $("#success").show();
                     }else{
+                        $("#success").hide();
                         $("#fail").show();
                     }
 

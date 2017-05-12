@@ -1,6 +1,7 @@
 package com.scampi.api;
 
 import com.scampi.constants.Constants;
+import com.scampi.domain.TopicMapping;
 import com.scampi.model.Payload;
 import com.scampi.domain.RESTHandler;
 import com.scampi.publish.Publisher;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @SpringBootApplication
 public class ScampiApi {
     private static Logger log = Logger.getLogger(ScampiApi.class);
+    private static TopicMapping topicMapping = TopicMapping.getInstance();
 
     @RequestMapping(value = "/publish", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
@@ -25,7 +27,7 @@ public class ScampiApi {
             return RESTHandler.getResponse(Constants.STATUS_FAIL, "Scampi not connected")
                     .toString();
 
-        return Publisher.publish(payload.getTopic(), payload.getData().toString());
+        return Publisher.publish(payload);
     }
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -36,12 +38,13 @@ public class ScampiApi {
                     .toString();
 
         try {
+            topicMapping.put(payload.getTopic(), payload.getData());
             ScampiService.getAppLib().subscribe(payload.getTopic());
         } catch (InterruptedException e) {
             log.fatal("Could not Subscribe", e);
             return e.getMessage();
         }
-        log.info("subscribed to" + payload.getTopic());
+        log.info("subscribed to " + payload.getTopic());
         return RESTHandler.getResponse(Constants.STATUS_SUCCESS, "subsribed to " + payload.getTopic()).toString();
     }
 
