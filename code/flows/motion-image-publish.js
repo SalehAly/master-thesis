@@ -1,30 +1,35 @@
 [
     {
-        "id": "ab32f847.4c5bf8",
+        "id": "777d0e22.8e3b3",
+        "type": "tab",
+        "label": "Flow 1"
+    },
+    {
+        "id": "efd7afd8.cad5b",
         "type": "inject",
-        "z": "50e0b88c.901a28",
+        "z": "777d0e22.8e3b3",
         "name": "",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "repeat": "",
         "crontab": "",
-        "once": false,
-        "x": 96.11112213134766,
-        "y": 65.77777671813965,
+        "once": true,
+        "x": 121.00000762939453,
+        "y": 80.0000228881836,
         "wires": [
             [
-                "581f49d5.dd2418"
+                "b1153bd1.757f58"
             ]
         ]
     },
     {
-        "id": "581f49d5.dd2418",
+        "id": "38c1a17d.bbb1ce",
         "type": "camerapi-takephoto",
-        "z": "50e0b88c.901a28",
+        "z": "777d0e22.8e3b3",
         "filemode": "1",
         "filename": "",
-        "filedefpath": "0",
+        "filedefpath": "1",
         "filepath": "/home/pi/.node-red/images/",
         "fileformat": "jpeg",
         "resolution": "1",
@@ -36,90 +41,136 @@
         "sharpness": "0",
         "imageeffect": "none",
         "name": "",
-        "x": 284.61112213134766,
-        "y": 72.77777671813965,
+        "x": 192.00001525878906,
+        "y": 205.0000457763672,
         "wires": [
             [
-                "892301e1.7500e",
-                "3b2a698a.a18866"
+                "1341e42.d727b1c",
+                "60cd8711.d62068"
             ]
         ]
     },
     {
-        "id": "58a806f7.72a9f8",
+        "id": "df6c0cf1.d763c",
         "type": "influxdb out",
-        "z": "50e0b88c.901a28",
-        "influxdb": "b6a185ac.5f0db8",
+        "z": "777d0e22.8e3b3",
+        "influxdb": "f638d6e8.4378f8",
         "name": "",
         "measurement": "image",
-        "x": 702.1111335754395,
-        "y": 71.02778244018555,
+        "x": 723.8958511352539,
+        "y": 157.25000667572021,
         "wires": []
     },
     {
-        "id": "892301e1.7500e",
+        "id": "8d56342d.f0edb8",
         "type": "function",
-        "z": "50e0b88c.901a28",
+        "z": "777d0e22.8e3b3",
         "name": "",
         "func": "var fileName = msg.payload.replace(/^.*[\\\\\\/]/, '')\nmsg.payload={\n    path:msg.payload,\n    name:fileName\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 479.1111259460449,
-        "y": 72.52777862548828,
+        "x": 524.8958587646484,
+        "y": 156.75001335144043,
         "wires": [
             [
-                "58a806f7.72a9f8"
+                "df6c0cf1.d763c"
             ]
         ]
     },
     {
-        "id": "3b2a698a.a18866",
+        "id": "112083b6.03e44c",
         "type": "function",
-        "z": "50e0b88c.901a28",
+        "z": "777d0e22.8e3b3",
         "name": "",
-        "func": "\nvar payload = {\n    file : msg.payload,\n    data : \"image from server x\",\n    topic: \"Listener\"\n};\n\nmsg.payload = JSON.stringify(payload);\nmsg.headers = {'Content-Type' : 'application/json'} ;\nreturn msg;\nreturn msg;",
+        "func": "\n\nvar payload = {\n    file : msg.payload,\n    data : \"image from server x\",\n    topic: \"NUC\",\n    localOutputResponse: true,\n    endpoint: \"777d0e22.8e3b3\"\n};\n\nmsg.payload = JSON.stringify(payload);\nmsg.headers = {'Content-Type' : 'application/json'} ;\nreturn msg;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 268.33335876464844,
-        "y": 166.66667366027832,
+        "x": 228.11808013916016,
+        "y": 428.8889446258545,
         "wires": [
             [
-                "4b0ded44.54b844",
-                "d2f11a25.7434a8"
+                "25ee8f4.da3917"
             ]
         ]
     },
     {
-        "id": "4b0ded44.54b844",
+        "id": "25ee8f4.da3917",
         "type": "http request",
-        "z": "50e0b88c.901a28",
+        "z": "777d0e22.8e3b3",
         "name": "publish",
         "method": "POST",
         "ret": "txt",
         "url": "localhost:8080/publish",
         "tls": "",
-        "x": 428.88890075683594,
-        "y": 171.88889932632446,
+        "x": 434.6736488342285,
+        "y": 437.1111660003662,
         "wires": [
-            []
+            [
+                "60cd8711.d62068"
+            ]
         ]
     },
     {
-        "id": "d2f11a25.7434a8",
+        "id": "60cd8711.d62068",
         "type": "debug",
-        "z": "50e0b88c.901a28",
+        "z": "777d0e22.8e3b3",
         "name": "",
         "active": true,
         "console": "false",
         "complete": "false",
-        "x": 462.7778015136719,
-        "y": 273.3333225250244,
+        "x": 675.5625457763672,
+        "y": 432.5555772781372,
         "wires": []
     },
     {
-        "id": "b6a185ac.5f0db8",
+        "id": "b1153bd1.757f58",
+        "type": "exec",
+        "z": "777d0e22.8e3b3",
+        "command": "python ir-sensor.py",
+        "addpay": true,
+        "append": "",
+        "useSpawn": true,
+        "timer": "",
+        "name": "",
+        "x": 333.2743110656738,
+        "y": 85.0555648803711,
+        "wires": [
+            [
+                "38c1a17d.bbb1ce"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1341e42.d727b1c",
+        "type": "switch",
+        "z": "777d0e22.8e3b3",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "/*.jpg",
+                "vt": "str",
+                "case": false
+            }
+        ],
+        "checkall": "true",
+        "outputs": 1,
+        "x": 452.28123474121094,
+        "y": 214.16321086883545,
+        "wires": [
+            [
+                "112083b6.03e44c"
+            ]
+        ]
+    },
+    {
+        "id": "f638d6e8.4378f8",
         "type": "influxdb",
-        "z": "50e0b88c.901a28",
+        "z": "777d0e22.8e3b3",
         "hostname": "127.0.0.1",
         "port": "8086",
         "protocol": "http",
