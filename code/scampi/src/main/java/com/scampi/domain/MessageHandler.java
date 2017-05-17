@@ -12,6 +12,7 @@ import netscape.javascript.JSObject;
 import org.apache.log4j.Logger;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -31,7 +32,7 @@ public class MessageHandler {
 
     public static void handleMessage(SCAMPIMessage message, String topic) {
 
-        System.out.println(topic);
+
         if (topic.equals(Constants.TOPIC_MAIN)) {
             handleMainTopic(message);
         } else {
@@ -50,7 +51,6 @@ public class MessageHandler {
         try {
             if (message.hasString(Constants.JSON)) {
                 jsonMessage = message.getString(Constants.JSON);
-                log.info(jsonMessage);
             } else {
                 log.info("No computation Models included");
                 return;
@@ -81,10 +81,12 @@ public class MessageHandler {
             for (String source : computation.getSources()) {
                 Files.copy(message.getBinary(source), Paths.get(source), StandardCopyOption.REPLACE_EXISTING);
             }
+
             String inputDataTopic = null;
             if (computation.getIoSpec().getInput() != null && computation.getIoSpec().getInput().has("topic")) {
                 inputDataTopic = computation.getIoSpec().getInput().get("topic").getAsString();
             }
+
 
             if (inputDataTopic != null) {
                 log.info("Subscribing to " + inputDataTopic);
@@ -114,24 +116,38 @@ public class MessageHandler {
 
 
         List<String> endpoints = topicMapping.getEndpoints(topic);
-        System.out.println(endpoints.toString());
+
         // send data to all endpoints subscribing to this topic
         for (String endpoint : endpoints) {
             JsonObject body = new JsonObject();
+            body.addProperty(Constants.PUBLISHER_ID, message.getString(Constants.PUBLISHER_ID));
             body.addProperty(Constants.DATA, message.getString(Constants.DATA));
             body.addProperty(Constants.ENDPOINT, endpoint);
-            InputStream binary = message.getBinary(Constants.FILE);
-            if (binary != null) {
-                int ch;
-                StringBuilder sb = new StringBuilder();
-                try {
-                    while((ch = binary.read()) != -1)
-                        sb.append((char)ch);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                body.addProperty(Constants.FILE, sb.toString());
+
+            try {
+                String filePath = message.getString(Constants.PATH);
+                body.addProperty(Constants.PATH, filePath);
+                Files.copy(message.getBinary(Constants.FILE)
+                        , Paths.get(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + filePath)
+                        , StandardCopyOption.REPLACE_EXISTING);
+
+                log.info(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + filePath);
+            } catch (Exception e) {
+                log.info("No File attached" , e );
             }
+
+//            InputStream binary = message.getBinary(Constants.FILE);
+//            if (binary != null) {
+//                int ch;
+//                StringBuilder sb = new StringBuilder();
+//                try {
+//                    while((ch = binary.read()) != -1)
+//                        sb.append((char)ch);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                body.addProperty(Constants.FILE, sb.toString());
+//            }
 
             RESTHandler.post(Constants.NODE_RED_REST, endpoint, body.toString());
             log.info("Message Received");

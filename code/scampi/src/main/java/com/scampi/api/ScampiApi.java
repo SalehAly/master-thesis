@@ -2,8 +2,9 @@ package com.scampi.api;
 
 import com.scampi.constants.Constants;
 import com.scampi.domain.TopicMapping;
-import com.scampi.model.Payload;
+import com.scampi.model.PublishPayload;
 import com.scampi.domain.RESTHandler;
+import com.scampi.model.SubscribePayload;
 import com.scampi.publish.Publisher;
 import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import org.apache.log4j.Logger;
@@ -22,7 +23,7 @@ public class ScampiApi {
 
     @RequestMapping(value = "/publish", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
-    String publish(@RequestBody Payload payload) {
+    String publish(@RequestBody PublishPayload payload) {
         if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
             return RESTHandler.getResponse(Constants.STATUS_FAIL, "Scampi not connected")
                     .toString();
@@ -32,7 +33,7 @@ public class ScampiApi {
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
-    String subscribe(@RequestBody Payload payload) {
+    String subscribe(@RequestBody SubscribePayload payload) {
         if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
             return RESTHandler.getResponse(Constants.STATUS_FAIL, "Scampi not connected")
                     .toString();

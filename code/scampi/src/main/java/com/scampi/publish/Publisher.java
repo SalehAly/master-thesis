@@ -4,14 +4,13 @@ import com.google.gson.GsonBuilder;
 import com.scampi.api.ScampiService;
 import com.scampi.constants.Constants;
 import com.scampi.domain.RESTHandler;
+import com.scampi.domain.TopicMapping;
 import com.scampi.model.Computation;
-import com.scampi.model.Payload;
-import com.sun.jersey.core.util.Base64;
+import com.scampi.model.PublishPayload;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 import org.apache.log4j.Logger;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File;
 
 /**
  * Created by Aly on 1/23/17.
@@ -20,8 +19,9 @@ import java.nio.file.Paths;
 public class Publisher {
 
     private static Logger log = Logger.getLogger(Publisher.class);
+    private static TopicMapping topicMapping = TopicMapping.getInstance();
 
-    public static String publish(Payload payload) {
+    public static String publish(PublishPayload payload) {
         try {
             if (payload.getTopic() == null) {
                 publishMainTopic(payload.getData());
@@ -48,6 +48,7 @@ public class Publisher {
         // build a new message
         SCAMPIMessage message = SCAMPIMessage.builder().build();
 
+
         // Model the computation from json into java models
         Computation computation = new GsonBuilder().create().fromJson(data, Computation.class);
 
@@ -59,27 +60,32 @@ public class Publisher {
         // get source files
         if (computation.getSources() != null) {
             for (String source : computation.getSources()) {
-                log.info(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + source);
-                byte[] file = Files.readAllBytes(Paths.get(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + source));
-                //include files
-                message.putBinary(source, Base64.encode(file));
+               message.putBinary(source, new File(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + source))   ;
             }
         }
+        message.putString(Constants.PUBLISHER_ID, ScampiService.getAppLib().getLocalID());
         message.putString(Constants.JSON, data);
         ScampiService.publish(message, Constants.TOPIC_MAIN);
 
     }
 
 
-    public static void publishSpecialTopic(Payload payload) throws Exception {
+    public static void publishSpecialTopic(PublishPayload payload) throws Exception {
 
         // build a new message
         log.info("Publishing to SPECIAL Topic:" + payload.getTopic());
         SCAMPIMessage message = SCAMPIMessage.builder().build();
-        if (payload.getFile() != null){
-            byte[] file = Files.readAllBytes(Paths.get(payload.getFile()));
-            message.putBinary(Constants.FILE, Base64.encode(file));
+        if (payload.getFile() != null) {
+            log.info("Attaching file " + payload.getFile());
+            File file = new File(payload.getFile());
+            message.putBinary(Constants.FILE, file);
+            message.putString(Constants.PATH, file.getName());
         }
+
+        if (payload.isLocalOutputResponse())
+            topicMapping.put(ScampiService.getAppLib().getLocalID(), payload.getEndpoint());
+
+        message.putString(Constants.PUBLISHER_ID, ScampiService.getAppLib().getLocalID());
         message.putString(Constants.DATA, payload.getData());
         ScampiService.publish(message, payload.getTopic());
         log.info("Special Data Topic " + payload.getTopic());

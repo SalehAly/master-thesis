@@ -2,6 +2,7 @@ package com.scampi.api;
 
 import com.google.gson.GsonBuilder;
 import com.scampi.constants.Constants;
+import com.scampi.domain.MessageCache;
 import com.scampi.domain.MessageHandler;
 import com.scampi.model.Metadata;
 import com.scampi.model.Resource;
@@ -26,12 +27,17 @@ public class ScampiService {
      private static final AppLib APP_LIB = AppLib.builder().build();
      private static Metadata machineSpec;
      private static Logger log = Logger.getLogger(ScampiApi.class);
+     private static MessageCache messageCache = MessageCache.getInstance();
+
 
     public static void init() throws InterruptedException {
         // initialize Scampi API
         initService();
         initMachineSpec();
         APP_LIB.subscribe(Constants.TOPIC_MAIN);
+        // Subscribe to the machine own SCAMPI Id
+        APP_LIB.subscribe(APP_LIB.getLocalID());
+
 
     }
 
@@ -95,6 +101,10 @@ public class ScampiService {
 
         public void messageReceived(SCAMPIMessage message, String topic) {
             try {
+                if (messageCache.hasMessage(message)){
+                    return;
+                }
+                messageCache.put(message);
                 MessageHandler.handleMessage(message, topic);
             } catch (Exception e) {
                 e.printStackTrace();

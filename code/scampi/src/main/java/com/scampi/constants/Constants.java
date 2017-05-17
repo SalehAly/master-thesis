@@ -7,7 +7,10 @@ public class Constants {
     public static final String JSON = "json";
     public static final String DATA = "data";
     public static final String FILE = "file";
+    public static final String PATH = "path";
     public static final String ENDPOINT = "endpoint" ;
+    public static final String PUBLISHER_ID =  "publisher_id";
+    public static final String OUTPUT =  "output";
 
 
     public static final String NODE_RED = "node-red";

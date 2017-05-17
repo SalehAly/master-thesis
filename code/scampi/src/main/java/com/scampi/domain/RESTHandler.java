@@ -16,7 +16,7 @@ public class RESTHandler {
     private static  Logger log = Logger.getLogger(RESTHandler.class);
     public static ClientResponse post(String resource, String target, String data) {
         try {
-            System.out.println(data);
+
             Client client = Client.create();
             WebResource webResource = client.resource(resource + target);
 
@@ -32,7 +32,9 @@ public class RESTHandler {
             String output = response.getEntity(String.class);
             StringBuffer sb = new StringBuffer();
             sb.append("============getCtoFResponse============");
-            sb.append(output);
+            sb.append(response.getStatus());
+            sb.append(response.getStatusInfo());
+            // sb.append(output);
             log.info(sb.toString());
             return response;
         } catch (RestFailed e) {
