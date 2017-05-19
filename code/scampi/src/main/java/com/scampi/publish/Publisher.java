@@ -11,6 +11,7 @@ import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.util.UUID;
 
 /**
  * Created by Aly on 1/23/17.
@@ -37,17 +38,21 @@ public class Publisher {
                     .toString();
         }
 
-        log.info("Message Published");
+
         return RESTHandler.getResponse(Constants.STATUS_SUCCESS, "Message Published")
                 .toString();
     }
 
     public static void publishMainTopic(String data) throws Exception {
 
-        log.info("Publishing to Main Topic");
+
         // build a new message
         SCAMPIMessage message = SCAMPIMessage.builder().build();
 
+        // Generate a Unique id and put in the message
+        message.putString(Constants.UNIQUE_GLOABL_ID, UUID.randomUUID().toString());
+
+        log.info("Publishing to Main Topic "  + message.getString(Constants.UNIQUE_GLOABL_ID));
 
         // Model the computation from json into java models
         Computation computation = new GsonBuilder().create().fromJson(data, Computation.class);
@@ -66,6 +71,7 @@ public class Publisher {
         message.putString(Constants.PUBLISHER_ID, ScampiService.getAppLib().getLocalID());
         message.putString(Constants.JSON, data);
         ScampiService.publish(message, Constants.TOPIC_MAIN);
+        log.info("Message Published " + message.getString(Constants.UNIQUE_GLOABL_ID));
 
     }
 
@@ -73,8 +79,14 @@ public class Publisher {
     public static void publishSpecialTopic(PublishPayload payload) throws Exception {
 
         // build a new message
-        log.info("Publishing to SPECIAL Topic:" + payload.getTopic());
         SCAMPIMessage message = SCAMPIMessage.builder().build();
+
+        // Generate a Unique id and put in the message
+        message.putString(Constants.UNIQUE_GLOABL_ID, UUID.randomUUID().toString());
+
+        log.info("Publishing to SPECIAL Topic:" + payload.getTopic() + " "
+                + message.getString(Constants.UNIQUE_GLOABL_ID));
+
         if (payload.getFile() != null) {
             log.info("Attaching file " + payload.getFile());
             File file = new File(payload.getFile());
@@ -88,7 +100,8 @@ public class Publisher {
         message.putString(Constants.PUBLISHER_ID, ScampiService.getAppLib().getLocalID());
         message.putString(Constants.DATA, payload.getData());
         ScampiService.publish(message, payload.getTopic());
-        log.info("Special Data Topic " + payload.getTopic());
+
+        log.info("Message Published " + message.getString(Constants.UNIQUE_GLOABL_ID));
     }
 
 }

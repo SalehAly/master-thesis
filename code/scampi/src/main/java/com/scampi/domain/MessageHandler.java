@@ -62,7 +62,7 @@ public class MessageHandler {
             // Check if machine spec is a valid for the computation
             if (! computation.getMetadata().getPower().equals(machineSpec.getPower())
                     || ! computation.getMetadata().getRam().equals(machineSpec.getRam())) {
-                log.info("Hardware requirements not satisfied");
+                log.info( "Hardware requirements not satisfied in " + message.getString(Constants.UNIQUE_GLOABL_ID));
                 return;
             }
             // Check if sensors and actuators are there.
@@ -70,7 +70,7 @@ public class MessageHandler {
                 || computation.getMetadata().getResources().isGasSensor() && ! machineSpec.getResources().isGasSensor()
                 || computation.getMetadata().getResources().isTempSensor() && ! machineSpec.getResources().isTempSensor()) {
 
-                log.info("Resource requirements not satisfied");
+                log.info("Resource requirements not satisfied in "+ message.getString(Constants.UNIQUE_GLOABL_ID));
                 return;
             }
             
@@ -98,11 +98,12 @@ public class MessageHandler {
 
 
             // run node-red on rest and add flow
-            RESTHandler.post(Constants.NODE_RED_REST, Constants.FLOW_TARGET, flow);
-            log.info("Message Received");
+            RESTHandler.post(Constants.NODE_RED_REST, Constants.FLOW_TARGET, flow,
+                    message.getString(Constants.UNIQUE_GLOABL_ID));
+            log.info("Message Received " + message.getString(Constants.UNIQUE_GLOABL_ID));
 
         } catch (Exception e) {
-            log.fatal("Message Failed", e);
+            log.fatal("Message Failed " + message.getString(Constants.UNIQUE_GLOABL_ID), e);
         }
     }
 
@@ -133,24 +134,29 @@ public class MessageHandler {
 
                 log.info(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + filePath);
             } catch (Exception e) {
-                log.info("No File attached" , e );
+                log.info("No File attached");
             }
 
-//            InputStream binary = message.getBinary(Constants.FILE);
-//            if (binary != null) {
-//                int ch;
-//                StringBuilder sb = new StringBuilder();
-//                try {
-//                    while((ch = binary.read()) != -1)
-//                        sb.append((char)ch);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                body.addProperty(Constants.FILE, sb.toString());
-//            }
+         /**
+          Code to transfer an image to bytes and send it as a string in response body
 
-            RESTHandler.post(Constants.NODE_RED_REST, endpoint, body.toString());
-            log.info("Message Received");
+            InputStream binary = message.getBinary(Constants.FILE);
+            if (binary != null) {
+                int ch;
+                StringBuilder sb = new StringBuilder();
+                try {
+                    while((ch = binary.read()) != -1)
+                        sb.append((char)ch);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                body.addProperty(Constants.FILE, sb.toString());
+            }
+          */
+
+            RESTHandler.post(Constants.NODE_RED_REST, endpoint, body.toString(),
+                    message.getString(Constants.UNIQUE_GLOABL_ID));
+            log.info("Message Received " + message.getString(Constants.UNIQUE_GLOABL_ID));
 
         }
 

@@ -10,6 +10,7 @@ public class Constants {
     public static final String PATH = "path";
     public static final String ENDPOINT = "endpoint" ;
     public static final String PUBLISHER_ID =  "publisher_id";
+    public static final String UNIQUE_GLOABL_ID =  "global-id";
     public static final String OUTPUT =  "output";
 
 

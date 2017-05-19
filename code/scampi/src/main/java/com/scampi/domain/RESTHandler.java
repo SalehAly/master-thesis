@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  */
 public class RESTHandler {
     private static  Logger log = Logger.getLogger(RESTHandler.class);
-    public static ClientResponse post(String resource, String target, String data) {
+    public static ClientResponse post(String resource, String target, String data, String id) {
         try {
 
             Client client = Client.create();
@@ -31,6 +31,7 @@ public class RESTHandler {
 
             String output = response.getEntity(String.class);
             StringBuffer sb = new StringBuffer();
+            sb.append("Deployed "  + id + " to node-RED ");
             sb.append("============getCtoFResponse============");
             sb.append(response.getStatus());
             sb.append(response.getStatusInfo());
