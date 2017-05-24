@@ -125,7 +125,7 @@ The second type of resources is related to the node performance, its power and m
 
 \subsection{Pub-Sub Messaging Queues}\label{subsec:pub-sub}
 
-The communication model is an essential part of this framework, it solves some of the biggest challenges, which are in a nutshell, service discovery, carrying dependencies, sending and receiving of data or computations whether nodes have  end-to-end paths or not. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since in the general case we are unable to target the actual nodes with their host names as end points. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric or information-centric meaning it assumes that there are some parties interested in sending data and others willing to receive the same data given a certain context and regardless their network location. \\
+The communication model is an essential part of this framework, it solves some of the biggest challenges, which are in a nutshell, service discovery, carrying dependencies, sending and receiving of data or computations whether nodes have  end-to-end paths or not. Moreover, given our distributed approach and the need for service discovery, the communications model cannot be  end-point centric since in the general case we are unable to target the actual nodes with their host names as endpoints. The reason for that is, we do not know their respective addresses or either they are connected or not. Rather our communication model is data-centric or information-centric meaning it assumes that there are some parties interested in sending data and others willing to receive the same data given a certain context and regardless their network location. \\
 
  
 
@@ -205,7 +205,7 @@ Turning now to consider the input and output specification, the IO spec. explain
 		\centering
 		\includegraphics[scale=0.5]{images/db-out.png}
 		\includegraphics[scale=0.5]{images/db-in.png}
-		\caption{Two separate computational flows describing the IO through a database }
+		\caption{Two separate computational flows describing the IO through a database.}
 		\label{fig:db}
 	\end{figure}
 	
@@ -217,7 +217,7 @@ Figure \ref{fig:scampi} shows two flows as an example of this method, the first 
 		\centering
 		\includegraphics[scale=0.6]{images/SCAMPI-pub.png}
 		\includegraphics[scale=0.6]{images/SCAMPI-sub.png}
-		\caption{ }
+		\caption{Two composable flows exchanging data via the messaging system.}
 		\label{fig:scampi}
 	\end{figure}
 	
