@@ -1,20 +1,15 @@
-package com.scampi.domain;
+package com.middleware.domain;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.scampi.api.ScampiService;
-import com.scampi.constants.Constants;
-import com.scampi.model.Computation;
-import com.scampi.model.Metadata;
+import com.middleware.api.SCAMPIApi;
+import com.middleware.constants.Constants;
+import com.middleware.model.Computation;
+import com.middleware.model.Metadata;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
-import netscape.javascript.JSObject;
 import org.apache.log4j.Logger;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -27,7 +22,7 @@ import java.util.List;
 public class MessageHandler {
     private static Logger log = Logger.getLogger(MessageHandler.class);
     private static TopicMapping topicMapping = TopicMapping.getInstance();
-    private static Metadata machineSpec = ScampiService.getMachineSpec();
+    private static Metadata machineSpec = SCAMPIApi.getMachineSpec();
 
 
     public static void handleMessage(SCAMPIMessage message, String topic) {
@@ -90,7 +85,7 @@ public class MessageHandler {
 
             if (inputDataTopic != null) {
                 log.info("Subscribing to " + inputDataTopic);
-                ScampiService.getAppLib().subscribe(inputDataTopic);
+                SCAMPIApi.getAppLib().subscribe(inputDataTopic);
                 String id = computation.getFlow().get("id").getAsString();
                 topicMapping.put(inputDataTopic, id) ;
             }
@@ -115,15 +110,26 @@ public class MessageHandler {
 
     public static void handleSpecialTopic(SCAMPIMessage message, String topic) {
 
-
+        // Get the endpoints subscribing to this topic
         List<String> endpoints = topicMapping.getEndpoints(topic);
 
-        // send data to all endpoints subscribing to this topic
+        // Check if message should be sent to a specific node on its global unique id
+        boolean localOutput = false;
+        try {
+            localOutput = Boolean.valueOf(message.getString(Constants.LOCAL_OUTPUT));
+        } catch (Exception e ){
+            log.debug("Message does not have local output");
+        }
+
+        // Send data to all endpoints subscribing to this topic
         for (String endpoint : endpoints) {
             JsonObject body = new JsonObject();
             body.addProperty(Constants.PUBLISHER_ID, message.getString(Constants.PUBLISHER_ID));
             body.addProperty(Constants.DATA, message.getString(Constants.DATA));
-            body.addProperty(Constants.ENDPOINT, endpoint);
+            if(localOutput)
+                body.addProperty(Constants.ENDPOINT, message.getString(Constants.PUBLISHER_ID));
+            else
+                body.addProperty(Constants.ENDPOINT, message.getString(Constants.ENDPOINT));
 
             try {
                 String filePath = message.getString(Constants.PATH);
@@ -154,8 +160,7 @@ public class MessageHandler {
             }
           */
 
-            RESTHandler.post(Constants.NODE_RED_REST, endpoint, body.toString(),
-                    message.getString(Constants.UNIQUE_GLOABL_ID));
+            RESTHandler.post(Constants.NODE_RED_REST, endpoint, body.toString(), message.getString(Constants.UNIQUE_GLOABL_ID));
             log.info("Message Received " + message.getString(Constants.UNIQUE_GLOABL_ID));
 
         }

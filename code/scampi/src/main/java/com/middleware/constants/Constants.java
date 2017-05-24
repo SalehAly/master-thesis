@@ -1,4 +1,4 @@
-package com.scampi.constants;
+package com.middleware.constants;
 
 /**
  * Created by Aly on 1/19/17.
@@ -11,7 +11,7 @@ public class Constants {
     public static final String ENDPOINT = "endpoint" ;
     public static final String PUBLISHER_ID =  "publisher_id";
     public static final String UNIQUE_GLOABL_ID =  "global-id";
-    public static final String OUTPUT =  "output";
+    public static final String LOCAL_OUTPUT =  "output";
 
 
     public static final String NODE_RED = "node-red";

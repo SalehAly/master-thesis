@@ -1,9 +1,8 @@
-package com.scampi.domain;
+package com.middleware.domain;
 
 
-import Exceptions.RestFailed;
+import com.middleware.exceptions.RestFailed;
 import com.google.gson.JsonObject;
-import com.scampi.api.ScampiApi;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -44,6 +43,12 @@ public class RESTHandler {
         return null;
     }
 
+    /**
+     * generates a response in a json formatz
+     * @param status
+     * @param message
+     * @return
+     */
     public static JsonObject getResponse(String status, String message) {
         JsonObject json = new JsonObject();
         json.addProperty("status", status);

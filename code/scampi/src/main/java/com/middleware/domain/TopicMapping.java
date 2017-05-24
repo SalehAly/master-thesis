@@ -1,4 +1,4 @@
-package com.scampi.domain;
+package com.middleware.domain;
 
 
 

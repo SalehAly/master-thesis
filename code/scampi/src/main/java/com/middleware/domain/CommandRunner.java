@@ -1,6 +1,6 @@
-package com.scampi.domain;
+package com.middleware.domain;
 
-import com.scampi.constants.Constants;
+import com.middleware.constants.Constants;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

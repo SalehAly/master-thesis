@@ -83,7 +83,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>1.5.2.RELEASE</version>
                 <configuration>
-                    <mainClass>com.scampi.api.ScampiApi</mainClass>
+                    <mainClass>com.middleware.api.MiddlewareApi</mainClass>
                     <outputDirectory>${project.basedir}</outputDirectory>
                 </configuration>
 
@@ -104,7 +104,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

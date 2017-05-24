@@ -1,4 +1,4 @@
-package com.scampi.model;
+package com.middleware.model;
 
 import com.google.gson.JsonObject;
 import lombok.Data;

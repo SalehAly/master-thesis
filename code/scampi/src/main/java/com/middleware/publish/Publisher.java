@@ -1,12 +1,12 @@
-package com.scampi.publish;
+package com.middleware.publish;
 
 import com.google.gson.GsonBuilder;
-import com.scampi.api.ScampiService;
-import com.scampi.constants.Constants;
-import com.scampi.domain.RESTHandler;
-import com.scampi.domain.TopicMapping;
-import com.scampi.model.Computation;
-import com.scampi.model.PublishPayload;
+import com.middleware.api.SCAMPIApi;
+import com.middleware.constants.Constants;
+import com.middleware.domain.RESTHandler;
+import com.middleware.domain.TopicMapping;
+import com.middleware.model.Computation;
+import com.middleware.model.PublishPayload;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 import org.apache.log4j.Logger;
 
@@ -68,9 +68,9 @@ public class Publisher {
                message.putBinary(source, new File(Constants.HOME_DIR + "/" + Constants.NODE_RED_DIR + "/" + source))   ;
             }
         }
-        message.putString(Constants.PUBLISHER_ID, ScampiService.getAppLib().getLocalID());
+        message.putString(Constants.PUBLISHER_ID, SCAMPIApi.getAppLib().getLocalID());
         message.putString(Constants.JSON, data);
-        ScampiService.publish(message, Constants.TOPIC_MAIN);
+        SCAMPIApi.publish(message, Constants.TOPIC_MAIN);
         log.info("Message Published " + message.getString(Constants.UNIQUE_GLOABL_ID));
 
     }
@@ -95,11 +95,12 @@ public class Publisher {
         }
 
         if (payload.isLocalOutputResponse())
-            topicMapping.put(ScampiService.getAppLib().getLocalID(), payload.getEndpoint());
+            topicMapping.put(SCAMPIApi.getAppLib().getLocalID(), payload.getEndpoint());
 
-        message.putString(Constants.PUBLISHER_ID, ScampiService.getAppLib().getLocalID());
+        message.putString(Constants.PUBLISHER_ID, SCAMPIApi.getAppLib().getLocalID());
         message.putString(Constants.DATA, payload.getData());
-        ScampiService.publish(message, payload.getTopic());
+        message.putString(Constants.LOCAL_OUTPUT, String.valueOf(payload.isLocalOutputResponse()));
+        SCAMPIApi.publish(message, payload.getTopic());
 
         log.info("Message Published " + message.getString(Constants.UNIQUE_GLOABL_ID));
     }

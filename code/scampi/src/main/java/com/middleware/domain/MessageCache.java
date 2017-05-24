@@ -1,12 +1,9 @@
-package com.scampi.domain;
+package com.middleware.domain;
 
 
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Aly on 5/4/17.

@@ -1,4 +1,4 @@
-package com.scampi.model;
+package com.middleware.model;
 
 import lombok.Data;
 

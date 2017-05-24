@@ -1,11 +1,11 @@
-package com.scampi.api;
+package com.middleware.api;
 
 import com.google.gson.GsonBuilder;
-import com.scampi.constants.Constants;
-import com.scampi.domain.MessageCache;
-import com.scampi.domain.MessageHandler;
-import com.scampi.model.Metadata;
-import com.scampi.model.Resource;
+import com.middleware.constants.Constants;
+import com.middleware.domain.MessageCache;
+import com.middleware.domain.MessageHandler;
+import com.middleware.model.Metadata;
+import com.middleware.model.Resource;
 import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import fi.tkk.netlab.dtn.scampi.applib.AppLibLifecycleListener;
 import fi.tkk.netlab.dtn.scampi.applib.MessageReceivedCallback;
@@ -23,10 +23,10 @@ import java.io.FileReader;
  */
 
 @Data
-public class ScampiService {
+public class SCAMPIApi {
      private static final AppLib APP_LIB = AppLib.builder().build();
      private static Metadata machineSpec;
-     private static Logger log = Logger.getLogger(ScampiApi.class);
+     private static Logger log = Logger.getLogger(MiddlewareApi.class);
      private static MessageCache messageCache = MessageCache.getInstance();
 
 

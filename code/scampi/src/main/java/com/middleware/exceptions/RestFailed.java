@@ -1,4 +1,4 @@
-package Exceptions;
+package com.middleware.exceptions;
 
 /**
  * Created by Aly on 5/4/17.

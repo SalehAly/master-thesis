@@ -1,4 +1,4 @@
-package com.scampi.model;
+package com.middleware.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,11 +1,11 @@
-package com.scampi.api;
+package com.middleware.api;
 
-import com.scampi.constants.Constants;
-import com.scampi.domain.TopicMapping;
-import com.scampi.model.PublishPayload;
-import com.scampi.domain.RESTHandler;
-import com.scampi.model.SubscribePayload;
-import com.scampi.publish.Publisher;
+import com.middleware.constants.Constants;
+import com.middleware.domain.TopicMapping;
+import com.middleware.model.PublishPayload;
+import com.middleware.domain.RESTHandler;
+import com.middleware.model.SubscribePayload;
+import com.middleware.publish.Publisher;
 import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @SpringBootApplication
-public class ScampiApi {
-    private static Logger log = Logger.getLogger(ScampiApi.class);
+public class MiddlewareApi {
+    private static Logger log = Logger.getLogger(MiddlewareApi.class);
     private static TopicMapping topicMapping = TopicMapping.getInstance();
 
     @RequestMapping(value = "/publish", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
     String publish(@RequestBody PublishPayload payload) {
-        if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
+        if (SCAMPIApi.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
             return RESTHandler.getResponse(Constants.STATUS_FAIL, "Scampi not connected")
                     .toString();
 
@@ -34,13 +34,13 @@ public class ScampiApi {
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody
     String subscribe(@RequestBody SubscribePayload payload) {
-        if (ScampiService.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
+        if (SCAMPIApi.getAppLib().getLifecycleState() != AppLib.State.CONNECTED)
             return RESTHandler.getResponse(Constants.STATUS_FAIL, "Scampi not connected")
                     .toString();
 
         try {
             topicMapping.put(payload.getTopic(), payload.getData());
-            ScampiService.getAppLib().subscribe(payload.getTopic());
+            SCAMPIApi.getAppLib().subscribe(payload.getTopic());
         } catch (InterruptedException e) {
             log.fatal("Could not Subscribe", e);
             return e.getMessage();
@@ -50,7 +50,7 @@ public class ScampiApi {
     }
 
     public static void main(String[] args) throws Exception {
-        ScampiService.init();
-        SpringApplication.run(ScampiApi.class, args);
+        SCAMPIApi.init();
+        SpringApplication.run(MiddlewareApi.class, args);
     }
 }
