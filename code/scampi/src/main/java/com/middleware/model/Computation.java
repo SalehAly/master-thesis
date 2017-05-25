@@ -12,7 +12,6 @@ import java.util.List;
 public class Computation {
     private Metadata metadata;
     private JsonObject flow;
-    private IOSpec ioSpec;
     private List<String> sources;
 }
 

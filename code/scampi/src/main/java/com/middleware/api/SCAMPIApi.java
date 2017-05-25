@@ -1,5 +1,6 @@
 package com.middleware.api;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.google.gson.GsonBuilder;
 import com.middleware.constants.Constants;
 import com.middleware.domain.MessageCache;
@@ -11,6 +12,7 @@ import fi.tkk.netlab.dtn.scampi.applib.AppLibLifecycleListener;
 import fi.tkk.netlab.dtn.scampi.applib.MessageReceivedCallback;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 import lombok.Data;
+import org.apache.catalina.LifecycleState;
 import org.apache.log4j.Logger;
 
 import java.io.FileReader;
@@ -34,6 +36,18 @@ public class SCAMPIApi {
         // initialize Scampi API
         initService();
         initMachineSpec();
+
+        if(APP_LIB.getLifecycleState() != AppLib.State.CONNECTED){
+            log.error("Scampi Server is not running");
+        }
+
+        while(APP_LIB.getLifecycleState() != AppLib.State.CONNECTED){
+            Thread.sleep(Constants.FIVE_SECONDS);
+            log.info("Waiting for SCAMPI to run and connect.. retrying");
+            APP_LIB.connect();
+            Thread.sleep(Constants.FIVE_SECONDS);
+        }
+
         APP_LIB.subscribe(Constants.TOPIC_MAIN);
         // Subscribe to the machine own SCAMPI Id
         APP_LIB.subscribe(APP_LIB.getLocalID());

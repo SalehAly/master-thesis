@@ -5,7 +5,7 @@ import com.middleware.domain.TopicMapping;
 import com.middleware.model.PublishPayload;
 import com.middleware.domain.RESTHandler;
 import com.middleware.model.SubscribePayload;
-import com.middleware.publish.Publisher;
+import com.middleware.domain.Publisher;
 import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;

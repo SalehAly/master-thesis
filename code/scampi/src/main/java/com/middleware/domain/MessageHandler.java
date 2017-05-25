@@ -24,7 +24,11 @@ public class MessageHandler {
     private static TopicMapping topicMapping = TopicMapping.getInstance();
     private static Metadata machineSpec = SCAMPIApi.getMachineSpec();
 
-
+    /**
+     *
+     * @param message
+     * @param topic
+     */
     public static void handleMessage(SCAMPIMessage message, String topic) {
 
 
@@ -77,18 +81,18 @@ public class MessageHandler {
                 Files.copy(message.getBinary(source), Paths.get(source), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            String inputDataTopic = null;
-            if (computation.getIoSpec().getInput() != null && computation.getIoSpec().getInput().has("topic")) {
-                inputDataTopic = computation.getIoSpec().getInput().get("topic").getAsString();
-            }
+//            String inputDataTopic = null;
+//            if (computation.getIoSpec().getInput() != null && computation.getIoSpec().getInput().has("topic")) {
+//                inputDataTopic = computation.getIoSpec().getInput().get("topic").getAsString();
+//            }
 
 
-            if (inputDataTopic != null) {
-                log.info("Subscribing to " + inputDataTopic);
-                SCAMPIApi.getAppLib().subscribe(inputDataTopic);
-                String id = computation.getFlow().get("id").getAsString();
-                topicMapping.put(inputDataTopic, id) ;
-            }
+//            if (inputDataTopic != null) {
+//                log.info("Subscribing to " + inputDataTopic);
+//                SCAMPIApi.getAppLib().subscribe(inputDataTopic);
+//                String id = computation.getFlow().get("id").getAsString();
+//                topicMapping.put(inputDataTopic, id) ;
+//            }
 
 
 

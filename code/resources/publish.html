@@ -86,30 +86,12 @@
                 <div class="col-md-6">
 
 
-
                     <div class="form-group">
                         <label for="flow" class="col-sm-3 control-label">Flow Id</label>
                         <div class="col-sm-6">
                             <input type="text" required="required" id="flow" class="form-control input-sm">
                         </div>
                       </div>
-
-                    <div class="form-group">
-                        <label for="input" class="col-sm-3 control-label">Data Input</label>
-                        <div class="col-sm-6">
-                            <select required="required" id="input" class="form-control input-sm">
-                                <option value="none">None</option>
-                                <option value="scampi">SCAMPI</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="scampi-input" style="display: none">
-                        <label for="input" class="col-sm-3 control-label">SCAMPI Input Topic</label>
-                        <div class="col-sm-6">
-                            <input  type="text" required="required" id="input-topic" class="form-control input-sm">
-                        </div>
-                    </div>
 
                 </div>
 
@@ -151,39 +133,6 @@
     $(document).ready(function () {
 
 
-        $( "#input" ).change(function() {
-            var value = $("#input").val();
-            if(value === "scampi"){
-                $("#scampi-input").show();
-          //      $("#database-input").hide();
-           // }else if(value === "datastore") {
-            //    $("#scampi-input").hide();
-             //   $("#database-input").show();
-            }else{
-                $("#scampi-input").hide();
-               // $("#database-input").hide();
-            }
-        });
-//        $( "#output" ).change(function() {
-//            var value = $("#output").val();
-//            if(value === "scampi"){
-//                $("#scampi-output").show();
-//                $("#database-output").hide();
-//            }else if(value === "datastore") {
-//                $("#scampi-output").hide();
-//                $("#database-output").show();
-//            }else{
-//                $("#scampi-output").hide();
-//                $("#database-output").hide();
-//            }
-//        });
-
-//        $(':file').change(function(e){
-//            for(var i =0; i<e.target.files.length;i++){
-//                var fileName = e.target.files[i].name;
-//                alert('The file "' + fileName +  '" has been selected.');
-//            }
-//        });
 
         $("#push").submit(function (event) {
 
@@ -202,28 +151,10 @@
                 resources: resources
             };
 
-            var input, output;
-            var ioSpec = {};
-
-            if($("#input").val() != "none"){
-                 input = {
-                    'topic': $('#input-topic').val(),
-                    'table': $('#input-table').val()
-                };
-                ioSpec['input'] = input;
-            }
-            if($("#output").val() != "none"){
-                output = {
-                    'topic': $('#output-topic').val(),
-                    'table': $('#output-table').val()
-                };
-                ioSpec['output'] = output;
-            }
 
             var json = {
                 'metadata': metadata,
                 flow: $('#flow').val(),
-                'ioSpec': ioSpec,
                 sources: names
             };
 

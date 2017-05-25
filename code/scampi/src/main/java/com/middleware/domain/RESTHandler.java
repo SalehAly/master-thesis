@@ -1,7 +1,7 @@
 package com.middleware.domain;
 
 
-import com.middleware.exceptions.RestFailed;
+import com.middleware.exception.RESTFailedException;
 import com.google.gson.JsonObject;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -25,7 +25,7 @@ public class RESTHandler {
             if (response.getStatus() != 200 && response.getStatus() != 204) {
                 log.error(response.toString());
                 log.error(response.getEntity(String.class));
-                throw new RestFailed("Failed : HTTP error code : " + response.getStatus());
+                throw new RESTFailedException("Failed : HTTP error code : " + response.getStatus());
             }
 
             String output = response.getEntity(String.class);
@@ -37,8 +37,8 @@ public class RESTHandler {
             // sb.append(output);
             log.info(sb.toString());
             return response;
-        } catch (RestFailed e) {
-            log.error("Request Failed" + e.getMessage(), e);
+        } catch (RESTFailedException e) {
+            log.error("Request Failed" + e.getMessage());
         }
         return null;
     }
