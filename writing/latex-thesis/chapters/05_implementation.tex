@@ -81,25 +81,35 @@ This flow was developed to make sure that the software framework works against t
 	\caption{A flow that reads temperature and stores it, also start a red lamp if temperature is above 30 degree Celsius.}
 	\label{fig:flow-temp}
 \end{figure}
-\subsection{TensorFlow Water Bottle Recognition}
-To prove that we can send flows to machines with heavy computation power and lots of free RAM. We developed an image recognition flow using \textit{TensorFlow} which is an open-source software library for machine intelligence. \textit{TensorFlow} needs a 54MB image recognition model that recognizes 1000 object classes, one of them is a water bottle. It also needs the code to run the recognition algorithm which is a Java jar file of 17.3MB size. Therefore, the flow  needs to carry all the mentioned dependencies. As show figure \ref{fig:flow-tensor}, the flow subscribes to the topic \textit{NUC} once it is deployed. Then, when the middleware that runs on the same machine receives a message on the topic \textit{NUC}, the middleware sends it to the corresponding endpoint  from the topic-endpoint mapping, it also puts the dependencies in node-RED directory. Thereafter, the flow uses the message payload which should be an image, and runs the jar. If it results in a water bottle as a best match, the flow responds to the sender with the result.
- \begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{images/flow-tensor.png}
-	\caption{A flow that uses tensorflow to recognize a water bottle.}
-	\label{fig:flow-tensor}
-\end{figure}
-\subsection{Detect Movement and Store Image Responses}
- \begin{figure}[H]
+
+
+
+\subsection{Detect Movement and Store Image Responses} \label{subsec:detect-move}
+As part of the implementation evaluation, we developed this flow to take part in a bigger use case. The flow is designed to detect movement through the infrared sensor and then take a picture, which is then published on the topic \textit{NUC} for image recognition. However, in the push payload along with the picture, there is a field stating that the response should come back to this exact node, therefore, the middleware creates a mapping between the device global identifier and the endpoint before publishing. Also, as demonstrated in \ref{fig:flow-motion}, the flow awaits messages on its endpoint and executes a script which starts a red led, it also store the recognized image in a database along with its accompanying data. 
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-motion.png}
 	\caption{A flow that detects motion, take an image, publish message and store response.}
 	\label{fig:flow-motion}
 \end{figure}
+
+
 \subsection{Show Recognized images}
- \begin{figure}[H]
+Since compatibility is an important part to validate in our framework. We created a simple flow to show local composable flows. It simply queries the database for recognized images from the previous flow \ref{subsec:detect-move} when requested on the endpoint \verb|GET localhost:1880/images|. It has an HTML page response showing all the images along with their image recognition confidence percentage data and time-stamp.
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-images.png}
 	\caption{A flow that creates an endpoint for stored database images.}
 	\label{fig:flow-image}
 \end{figure}
+
+\subsection{TensorFlow Water Bottle Recognition}
+To prove that we can send flows to machines with heavy computation power and lots of free RAM. We developed an image recognition flow using \textit{TensorFlow} which is an open-source software library for machine intelligence. \textit{TensorFlow} needs a 54MB image recognition model that recognizes 1000 object classes, one of them is a water bottle. It also needs the code to run the recognition algorithm which is a Java jar file of 17.3MB size. Therefore, the flow  needs to carry all the mentioned dependencies. As show figure \ref{fig:flow-tensor}, the flow subscribes to the topic \textit{NUC} once it is deployed. Then, when the middleware that runs on the same machine receives a message on the topic \textit{NUC}, the middleware sends it to the corresponding endpoint  from the topic-endpoint mapping, it also puts the dependencies in node-RED directory. Thereafter, the flow uses the message payload which should be an image, and runs the jar. If it results in a water bottle as a best match, the flow responds to the sender with the result and a confidence percentage.
+ \begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{images/flow-tensor.png}
+	\caption{A flow that uses tensorflow to recognize a water bottle.}
+	\label{fig:flow-tensor}
+\end{figure} 
