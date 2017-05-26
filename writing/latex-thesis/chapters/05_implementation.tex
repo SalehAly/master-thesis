@@ -106,10 +106,24 @@ Since compatibility is an important part to validate in our framework. We create
 \end{figure}
 
 \subsection{TensorFlow Water Bottle Recognition}
-To prove that we can send flows to machines with heavy computation power and lots of free RAM. We developed an image recognition flow using \textit{TensorFlow} which is an open-source software library for machine intelligence. \textit{TensorFlow} needs a 54MB image recognition model that recognizes 1000 object classes, one of them is a water bottle. It also needs the code to run the recognition algorithm which is a Java jar file of 17.3MB size. Therefore, the flow  needs to carry all the mentioned dependencies. As show figure \ref{fig:flow-tensor}, the flow subscribes to the topic \textit{NUC} once it is deployed. Then, when the middleware that runs on the same machine receives a message on the topic \textit{NUC}, the middleware sends it to the corresponding endpoint  from the topic-endpoint mapping, it also puts the dependencies in node-RED directory. Thereafter, the flow uses the message payload which should be an image, and runs the jar. If it results in a water bottle as a best match, the flow responds to the sender with the result and a confidence percentage.
+To prove that we can send flows to machines with heavy computation power and lots of free RAM. We developed an image recognition flow using \textit{TensorFlow} which is an open-source software library for machine intelligence. \textit{TensorFlow} needs a 54MB image recognition model that recognizes 1000 object classes, one of them is a water bottle. It also needs the code to run the recognition algorithm which is a Java jar file of 29MB size. Therefore, the flow  needs to carry all the mentioned dependencies. As show figure \ref{fig:flow-tensor}, the flow subscribes to the topic \textit{NUC} once it is deployed. Then, when the middleware that runs on the same machine receives a message on the topic \textit{NUC}, the middleware sends it to the corresponding endpoint  from the topic-endpoint mapping, it also puts the dependencies in node-RED directory. Thereafter, the flow uses the message payload which should be an image, and runs the jar. If it results in a water bottle as a best match, the flow responds to the sender with the result and a confidence percentage.
  \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-tensor.png}
 	\caption{A flow that uses tensorflow to recognize a water bottle.}
 	\label{fig:flow-tensor}
 \end{figure} 
+
+\section{Starting the framework}\label{subsec:starting-framework}
+
+The framework stack is run in the following order; SCAMPI, middleware and then node-red. The script used for starting the stack is as follows:
+\begin{verbatim}
+#!/bin/bash
+java -jar SCAMPI.jar default_settings.txt > scampi-log.txt 2>&1 & disown
+sleep 10
+java -jar interface-1.0-SNAPSHOT.jar > interface-log.txt 2>&1 & disown
+sleep 5
+node-red > node-red-log.txt 2>&1 & disown
+echo "All Set Up"
+\end{verbatim}
+There is a sleeping period between each command in order to make sure that the previous one has started. The commands have to be executed in this order, however, if the middleware starts before SCAMPI it will not break and keep waiting for the server to start. But, node-RED must wait for both of them to start, as there are flows that only executes at the time of deployment, therefore the whole stack has to be running at this point. Note also, that there are logs for each process that can be found in the node-RED directory. 

@@ -20,6 +20,7 @@
 \newcommand*{\getAdvisor}{M.Sc. Teemu Kärkkäinen }
 \newcommand*{\getSubmissionDate}{Submission date}
 \newcommand*{\getSubmissionLocation}{Munich}
+\newcommand{\specialcell}[2][c]{\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 
 
 \textwidth16cm
@@ -29,7 +30,7 @@
 \oddsidemargin0cm
 \evensidemargin0cm
 \begin{document}
-
+\renewcommand{\cellalign/theadalign}{vh}
 % Set page numbering to avoid "destination with the same identifier has been already used" warning for cover page.
 % (see https://en.wikibooks.org/wiki/LaTeX/Hyperlinks#Problems_with_Links_and_Pages).
 \pagenumbering{alph}
