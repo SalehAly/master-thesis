@@ -1,0 +1,80 @@
+\begin{appendices}
+\chapter{Use case Evaluation Results}
+
+\section{Recognizing Water Bottles Experiment Delays }\label{app:tensor}
+\subsection{Image Recognition Flow }
+\begin{table}[!ht]
+	\centering
+\begin{tabular}{ c | c | c| c }	\toprule
+Number &$t_1 - t_0$  & $t_2 - t_0$  & $t_3-t_0$ \\ \midrule
+1&	23.245&	28.226&	20.826\\
+2&	20.699&	49.666&	19.051\\
+3&	22.330&	21.756&	29.425\\
+4&	21.387&	22.265&	32.680\\
+5&	22.549&	27.662&	22.627\\
+6&	24.095&	27.222&	15.922\\
+7&	19.597&	25.561&	43.311\\
+8&	22.586&	26.898&	28.627\\
+\end{tabular}
+\caption{Delays for sending image recognition flow for all devices.}
+\label{table:tensor-results}
+\end{table}
+
+\subsection{Detect Movement and Store Image Responses Flow}
+\begin{table}[!ht]
+	\centering
+\begin{tabular}{ c | c | c| c }	\toprule
+Number &$t_5 - t_4$  & $t_6 - t_4$  & $t_7-t_4$ \\ \midrule
+1&	0.104&	2.386&	2.233\\
+2&	0.106&	2.323&	2.348\\
+3&	0.090&	2.321&	1.380\\
+4&	0.080&	2.340&	1.275\\
+5&	0.076& 2.210&	1.441\\
+6&	0.081&	2.299&	2.247\\
+7& 0.088&	2.329&	2.211\\
+8&	0.074&	2.368&	2.450\\
+\end{tabular}
+\caption{Delays for sending the motion detection flow for all devices.}
+\label{table:motion-results}
+\end{table}
+
+\subsection{Images and Recognition Results}
+\begin{table}[!ht]
+	\centering
+\begin{tabular}{ c | c | c| c | c| c }	\toprule
+ Number &$t_9 - t_8$  & $t_{11} - t_{10}$  & $t_{13}-t_{12}$ & $t_{15}-t_{14}$&  $t_{tensor}$ \\ \midrule
+1&	0.266&	0.659&	0.276&	0.686&	5.582\\
+2&	0.296&	0.674&	0.323&	0.79&	5.640\\
+3&	0.186&	0.728&	0.313&	0.676&	5.573\\
+4&	0.342&	0.807&	0.222&	0.661&	4.940\\
+5&	0.227&	0.752&	0.219&	0.722&	5.603\\
+6&	0.262&	0.713&	0.322&	0.742&	5.599\\
+7&	0.306&	0.684&	0.212&	0.663&	5.575\\
+8&	0.374&	0.582&	0.293&	0.648&	5.581\\
+\end{tabular}
+\caption{Delays for data send between the Raspberry Pis and the NUC.}
+\label{table:data-results}
+\end{table}
+
+
+\section{Get Recognized Images Experiment Delays}\label{app:images}
+\begin{table}[!ht]
+	\centering
+\begin{tabular}{ c | c | c| c }	\toprule
+Number &$t_1 - t_0$  & $t_2 - t_0$  & $t_3-t_0$ \\ \midrule
+1&	0.102&	0.761&	0.838\\
+2&	0.163&	0.799&	0.799\\
+3&	0.125&	0.927&	0.923\\
+4&	0.091&	0.752&	0.868\\
+5&	0.070&	0.814&	0.778\\
+6&	0.095&	0.824&	0.861\\
+7& 0.094&	0.736&	0.835\\
+8&	0.098&	0.798&	0.769\\	
+\end{tabular}
+\caption{Delays for sending the flow which retrieves the recognized images for all devices.}
+\label{table:images}
+\end{table}
+
+\end{appendices}
+
+\end{document}

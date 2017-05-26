@@ -105,7 +105,7 @@ Since compatibility is an important part to validate in our framework. We create
 	\label{fig:flow-image}
 \end{figure}
 
-\subsection{TensorFlow Water Bottle Recognition}
+\subsection{TensorFlow Water Bottle Recognition} \label{subsec:tensor}
 To prove that we can send flows to machines with heavy computation power and lots of free RAM. We developed an image recognition flow using \textit{TensorFlow} which is an open-source software library for machine intelligence. \textit{TensorFlow} needs a 54MB image recognition model that recognizes 1000 object classes, one of them is a water bottle. It also needs the code to run the recognition algorithm which is a Java jar file of 29MB size. Therefore, the flow  needs to carry all the mentioned dependencies. As show figure \ref{fig:flow-tensor}, the flow subscribes to the topic \textit{NUC} once it is deployed. Then, when the middleware that runs on the same machine receives a message on the topic \textit{NUC}, the middleware sends it to the corresponding endpoint  from the topic-endpoint mapping, it also puts the dependencies in node-RED directory. Thereafter, the flow uses the message payload which should be an image, and runs the jar. If it results in a water bottle as a best match, the flow responds to the sender with the result and a confidence percentage.
  \begin{figure}[H]
 	\centering
