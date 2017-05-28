@@ -57,7 +57,7 @@ The class \verb|MiddlewareApi.java| contains REST API for the middleware web app
 
 \section{Flows}
 This section explains all the flows developed in this thesis. It shows how the flows can be implemented to achieve different use cases. It also shows how we use node-RED flows in order to send computations.
-\subsection{Send Computations}
+\subsection{Send Computations}\label{subsec:send-comp}
 In order to deliver flows which expresses computations for all nodes or selected ones according to available resources,  sensors, actuators and also attach dependencies, we developed a node-RED flow shown in figure \ref{fig:flow-publish-computation}. The flow responds to the endpoint \verb|GET localhost:1880/publish| and returns the HTML page in figure \ref{fig:html-publish}. Afterwards, the user can adjust the computation power needed by the flow, necessary free Random Access Memory(RAM), sensors and actuators. Then he/she must also write the flow identifier and attach dependencies, and eventually click on the button \textit{push}, which calls another endpoint on the same flow \verb|localhost:1880/push|, it receives the data, fetches the flow details and publish it to the middleware which handles the rest.
  \begin{figure}[H]
 	\centering
@@ -95,7 +95,7 @@ As part of the implementation evaluation, we developed this flow to take part in
 \end{figure}
 
 
-\subsection{Show Recognized images}
+\subsection{Show Recognized images}\label{subsec:images}
 Since compatibility is an important part to validate in our framework. We created a simple flow to show local composable flows. It simply queries the database for recognized images from the previous flow \ref{subsec:detect-move} when requested on the endpoint \verb|GET localhost:1880/images|. It has an HTML page response showing all the images along with their image recognition confidence percentage data and time-stamp.
 
 \begin{figure}[H]
