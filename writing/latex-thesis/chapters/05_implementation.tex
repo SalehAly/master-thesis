@@ -73,7 +73,7 @@ In order to deliver flows which expresses computations for all nodes or selected
 \end{figure}
 
 
-\subsection{Temperature Sensor Alert}
+\subsection{Temperature Sensor Alert}\label{susbec:temp}
 This flow was developed to make sure that the software framework works against the basic IoT usage of sensors, actuators and time-series databases. As presented in figure \ref{fig:flow-temp}, the flow runs once it was deployed to any node. Note that it would not have been deployed by the middleware without checking that it has the required resources and dependencies. Once the flow is deployed, it starts a script for sensing temperature  which is sent as a dependency while sending the flow to other nodes. It then checks if the temperature is a valid number, then it gets stored in a database. Further, if the temperature is above 30 degree Celsius it runs a script, which is also sent as a dependency, to light a red led lamp. On top of that, the flow responds to the endpoint \verb|localhost:1880/temp| and returns all the collected temperature data in the last two minutes.
  \begin{figure}[H]
 	\centering
@@ -127,3 +127,8 @@ node-red > node-red-log.txt 2>&1 & disown
 echo "All Set Up"
 \end{verbatim}
 There is a sleeping period between each command in order to make sure that the previous one has started. The commands have to be executed in this order, however, if the middleware starts before SCAMPI it will not break and keep waiting for the server to start. But, node-RED must wait for both of them to start, as there are flows that only executes at the time of deployment, therefore the whole stack has to be running at this point. Note also, that there are logs for each process that can be found in the node-RED directory. 
+
+
+\section{Summary}
+
+In this chapter we have described the software framework implementation following from the specifications, requirements and architecture design explained \ref{chapter:Approach}. Specifically, the middleware implementation and extending the Java API of SCAMPI. The other applications used in the software framework are only used but not implemented.  Moreover, we described the implementation of each flow used as part of implementing the use cases for the framework evaluation. At the end,  a brief is given on how to start the framework and the order in which it should be run.

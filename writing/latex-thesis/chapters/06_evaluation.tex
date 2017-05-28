@@ -5,7 +5,8 @@
 
 The goal of this chapter is to validate the framework architecture design for context-aware pervasive computing in challenged environments which was described in Chapter \ref{chapter:Approach}. It also evaluates the middleware implementation which was explained in Chapter \ref{chapter:implementation}. Note that, the delays and performances are to be taken with a grain of salt, as the system is designed as a proof-of-concept and not to run in production systems. \\
 
-\noindent In order to evaluate the framework and implementation with all its requirements, we divided the evaluation into several use cases. The devices used for  the use cases has different hardware capabilities. They might also have  sensors and actuators according to each use case. All the devices must be running our stack framework as explained in \ref{subsec:starting-framework} except for android phones which has \textit{Liberouter}, an implementation for SCAMPI on android phones. The devices we used in this evaluation are:
+\noindent To satisfy all the requirements and specification for the software framework, we divided the evaluation into several sections. Each section validates certain specification via implementing a use case scenario. We describe which requirements where targeted at the beginning of each section.
+The devices used for  the use cases have different hardware capabilities. They might also have  sensors and actuators according to each use case. All the devices must be running our stack framework as explained in \ref{subsec:starting-framework} except for android phones which has \textit{Liberouter}, an implementation for SCAMPI on android phones. The devices we used in this evaluation are:
 \begin{table}[!ht]
 	\centering
 	\begin{tabular}{*{4}{c}}\toprule
@@ -23,8 +24,19 @@ The goal of this chapter is to validate the framework architecture design for co
 \end{table}
 
 
-\section{Recognizing Water Bottles }
-This use case detects movements around the low computation devices portrayed as the Raspberry Pis. Once they detect movements around them, they take an image and send it to the topic \textit{NUC}. A high performance machine should be waiting for input on the same topic and as soon as it receives an image, it runs image recognition and responds back to the Raspberry Pi which sent the original message  only if the recognizer found a water bottle. When a Raspberry Pi receives the recognition result on its endpoint, this means that the image was a watter bottle with a certain confidence, therefore, the Pi signals a red led to start and stores the result in a database. The flows implementation used to create this use case can be found in \ref{subsec:tensor} and \ref{subsec:detect-move}. 
+\section{Recognizing Water Bottles } \label{sec:rwb}
+
+
+This use case scenario is as follows, movements are detected around the low computation devices portrayed as the Raspberry Pis. Once they detect movements around them, they take an image and send it to the topic \textit{NUC}. A high performance machine "an Intel NUC" should be waiting for input on the same topic. As soon as the NUC  receives an image, it runs an image recognition algorithm and responds back to the Raspberry Pi which sent the original message  only if the recognizer recognizes a water bottle. When a Raspberry Pi receives the recognition result on its endpoint, this means that the image was a watter bottle with a certain confidence, therefore, the Pi signals a red led to start and stores the result in a database. The flows implementation used to create this use case can be found in \ref{subsec:tensor} and \ref{subsec:detect-move}.  As part of this experiment when a flow requiring high amount of performance such as the image recognition flow is received by low performing devices they will not get deployed and  will log that requirements were not satisfied. The same case applies when a flow requiring low amount of computing power is received by a high performing device, of course, this could be optimized because clearly high performance devices can execute flows which are not needy. The computational requirements needed by each flow are decided before sending the flow over to other devices using the HTML page implemented in the publishing flow explained in \ref{subsec:send-comp}.\\ 
+
+This scenario helps us validate several requirements for the software framework evaluation: 
+\begin{enumerate}
+	\item Sending flows to all nodes connected to a network  running our framework stack.
+	\item Controlling which devices can deploy the flows by sending meta-data for the resources and computation power along with flow. Therefore, being able to only send to some sets of nodes.
+	\item Checking requirements of flows and rejecting the deployment if they were not satisfied at the receiving devices.
+	\item Sending data or flows to a  specific node using its global identifier.
+	\item Carrying flow dependencies in order to guarantee a successful run at the receiving node.
+\end{enumerate}
 
 \noindent As stated every device must have the framework stack running before we start our use case. So after making sure its running we start publishing the flows. In this use case, the testbed setup is shown in figure \ref{fig:tb-tensor}, it consists of two Raspberry Pis, an Intel NUC and a router connected via switch. The PC which will publish the computations is connected through the router via WI-FI. 
  \begin{figure}[H]
@@ -36,7 +48,7 @@ This use case detects movements around the low computation devices portrayed as 
 
 \noindent We started by publishing the flow \ref{subsec:tensor} for  image recognition with all its dependencies in total 83MB, then we published the motion detection flow \ref{subsec:detect-move} with the sensor scripts. We measured the delay between publishing flows from the PC till it was received and deployed by node-RED on each instance. The use case was run 8 times and all the results can be found in \ref{app:tensor}. We also measured the delay when a motion was detected by Raspberry Pi and an image was sent to the NUC and the recognizer reply, this was also run 8 times for each Pi, a total of 16 runs. The sequence diagram shown in \ref{fig:sd-tensor},  illustrates the procedure in addition to the time initials for each part of the process.  \\
 
-\noindent As part of this experiment when a flow requiring high amount of performance such as the image recognition flow is received by low performing devices they will not get deployed and  will log that requirements were not satisfied. The same case applies when a flow requiring low amount of computing power is received by a high performing device, of course, this could be optimized because clearly high performance devices can execute flows which are not needy. The computational requirements needed by each flow are decided before sending the flow over to other devices using the HTML page implemented in the publishing flow explained in \ref{subsec:send-comp}.
+
 
 \begin{figure}[H]
 	\centering
@@ -85,10 +97,23 @@ $\sigma t$&0.061 s&0.067 s&	0.048 s&0.0488 s&0.217 s\\
 \noindent It is clear that the delays of the flow carrying image recognition dependencies took long times compared to the motion flow and the data messages between the NUC and Pis. That is mostly because the size of data in which the message is carrying. The data messages and motion sensing flow had dependencies with size less than 2K.
 
 \section{Local Composability}
-In order to prove that we can compose flows locally using the framework. We continued on the previous experiment, after the Raspberry Pis stored images of the recognized water bottles into their respective  databases, we sent an a flow explained in \ref{subsec:images} to retrieve these images from the database into a web endpoint along with their confidence percentages. By doing this, we make sure that flows can be locally composed using the same database configuration. We also measured the delay between sending the images flows until it was deployed by node-RED on other instances,
+In order to prove that we can compose flows locally using our framework, we created a use case that builds on the  previous experiment. After the Raspberry Pis stored the recognized images of water bottles into their respective  databases, we sent a flow that retrieves these images from the database into a web endpoint along with their confidence percentages explained in \ref{subsec:images}. By doing this, we make sure that flows can be locally composed using the same database configuration. We also measured the delay between sending the images flow from the PC until it was deployed by node-RED on other devices. The flow required low computational effort, therefore, ti will not get deployed on the NUC device. The experiment was run 8 times and the results can be found in \ref{app:images}.
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ c | c | c| c }	\toprule
+\$ &$t_{17} - t_{16}$  & $t_{18} - t_{16}$  & $t_{19}-t_{16}$ \\ \midrule
+$\Delta t$&	0.105&	0.801&	0.834\\
+$\sigma t$&	0.028&	0.060&	0.051\\
+\end{tabular}
+\caption{Mean and standard deviation for retrieving recognizing images flow delays.}
+\label{table:images}
+\end{table}
+
+
 
 \section{Challenged Networks}
-In this section, our aim is to evaluate that the framework works in challenged networks with no end-to-end path between  sender and receiver. We used the same setup as the previous experiment but with two major changes. The first change is that we disconnected  a Raspberry PI from the network switch, therefore, it is no longer connected to the other devices or the publishing PC, we also set-upped the disconnected node as an access point in which other devices can connect to using Wi-Fi. The second change is that we introduced an android phone that can connect to both the Raspberry Pi's access point and the router's Wi-Fi connected to the switch. Additionally, the device switches it's Wi-Fi between the access point and router Wi-Fi each 30 seconds. The system setup is shown in figure \ref{fig:tb-dtn}.
+In this section, our aim is to evaluate that the framework works in challenged networks with no end-to-end path between  sender and receiver. We used the same setup as \ref{sec:rwb} but with two major changes. The first change is that we disconnected  a Raspberry PI from the network switch, therefore, it is no longer connected to the other devices or the publishing PC, we also set-upped the disconnected node as an access point in which other devices can connect to using Wi-Fi. The second change is that we introduced an android phone that can connect to both the Raspberry Pi's access point and the router's Wi-Fi connected to the switch. Additionally, the device switches it's Wi-Fi between the access point and router Wi-Fi each 30 seconds. The system setup is shown in figure \ref{fig:tb-dtn}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/tb-dtn.png}
@@ -98,4 +123,4 @@ In this section, our aim is to evaluate that the framework works in challenged n
 
 \section{Basic IoT Usage}
 
-
+Finally, in this experiment, we wanted to evaluate that the software framework works with the basic IoT use cases using high rate data sensors and storing them in time-series database.  We implemented the flow explained in \ref{susbec:temp} that reads temperature on a regular time basis and stores it into a database. The flow also has an endpoint that can query for data between specific time intervals, also if no time interval is specified, it will return temperature readings for the last two minutes. The flow also alerts for high temperatures by igniting a red led lamp. The use case can be extended to include a monitoring system, that can show temperatures collected from different devices. It can also include location information along with the temperature data thus knowing what are the temperatures in different locations 
