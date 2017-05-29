@@ -122,7 +122,8 @@ public class MessageHandler {
         try {
             localOutput = Boolean.valueOf(message.getString(Constants.LOCAL_OUTPUT));
         } catch (Exception e ){
-            log.debug("Message does not have local output");
+            e.printStackTrace();
+            log.info("Message does not have local output");
         }
 
         // Send data to all endpoints subscribing to this topic
@@ -133,7 +134,7 @@ public class MessageHandler {
             if(localOutput)
                 body.addProperty(Constants.ENDPOINT, message.getString(Constants.PUBLISHER_ID));
             else
-                body.addProperty(Constants.ENDPOINT, message.getString(Constants.ENDPOINT));
+                body.addProperty(Constants.ENDPOINT, endpoint);
 
             try {
                 String filePath = message.getString(Constants.PATH);

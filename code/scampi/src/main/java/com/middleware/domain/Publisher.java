@@ -98,6 +98,8 @@ public class Publisher {
         message.putString(Constants.PUBLISHER_ID, SCAMPIApi.getAppLib().getLocalID());
         message.putString(Constants.DATA, payload.getData());
         message.putString(Constants.LOCAL_OUTPUT, String.valueOf(payload.isLocalOutputResponse()));
+
+
         SCAMPIApi.publish(message, payload.getTopic());
 
         log.info("Message Published " + message.getString(Constants.UNIQUE_GLOABL_ID));
