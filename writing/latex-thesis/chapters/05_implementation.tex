@@ -6,9 +6,8 @@ Building on the framework architecture explained in Chapter \ref{chapter:Approac
 
 \section{Middleware}
 
- The middleware is written in Java, it uses \textit{Maven} as a  software project dependency management which handles the middleware build. \textit{Maven} projects contain a Project Object Model (POM) file which describes the dependencies and libraries used by the project. In addition, it has build configuration management that is used to build the project and create a runnable jar file. The middleware can be compiled and packaged to a jar using the following command \verb|mvn clean package|. The project contains dependencies for \textit{Lombok} which is a library that generates getters, setters and constructors during compile time without the need to write them in the Java classes, \textit{Gson} dependency in order to be able to read and write in JSON format, \textit{SCAMPI API} which allows us to publish, subscribe and override  functions from SCAMPI, dependencies to create a web application via \textit{Spring Boot}. \\
- 
- \noindent The project is divided into several packages, we describe them in alphabetical order.
+
+The middleware is implemented as a Java project and web application that act as a middleman between node-RED and SCMAPI. It accepts publish and subscribe requests from node-RED flows through REST API and uses  SCAMPI Java API to propagate these requests to SCAMPI server. Further, whenever it receives a message that it had subscribed to from SCAMPI server, it forwards the message to  node-RED flows who issued the subscription requests. It is divided into several packages, we describe them in alphabetical order.
  \begin{itemize}
  
   \item First, the package \verb|com.middleware.api| which contains two classes, \verb|SCAMPApi.java|  and \verb|MiddlewareApi.java|. The class \verb|SCAMPIApi.java| has a field of type \verb|APP_LIB| from SCAMPI Java API which contains the core methods of SCAMPI server to connect, add status listeners, publish and subscribe to messages.  As shown in \ref{fig:cd-api}, \verb|SCAMPIApi| implements two classes via the \verb|APP_LIB| for the SCAMPI server which includes functions like \verb|OnConnected()|, \verb|OnDisconnected()|, \verb|OnConnectFailed()| and \verb|OnStopped()|. It also implements \verb|messageReceived()| which handles the messages once they are received from SCAMPI. Further, It contains a cache for messages and a field indicating the machine specification.
@@ -24,7 +23,7 @@ The class \verb|MiddlewareApi.java| contains REST API for the middleware web app
 \item The second package is called \verb|com.middleware.constants| and has one class \verb|Constants.java| which contains all the constant fields used in the middelware across all other classes. This includes string keys for SCAMPI messages, some Linux commands,  URL for the local node-RED instance, path for user home directory on the hosting machine and path for the JSON file that includes the machine specification. Furthermore, it contains the topic reserved for computations named \textit{Main} \\
  
  
- \item The third package is the most important one \verb|com.middleware.domain| which contains most of the services that is handled by the middleware. There are two singleton classes namely \verb|ToppicMapping.java| and \verb|MessageCache.java| that means there exist only one instance across the whole web application no matter how long it runs and no other class can create a new instance of these types. Thats because both are types of caches which should be consistent and global to any class which would need these caches. 
+ \item The third package is the most important one \verb|com.middleware.domain| which contains most of the services that is handled by the middleware. There are two singleton classes namely \verb|ToppicMapping.java| and \verb|MessageCache.java|, the first class is a cache that maps between the subscribed topics and the node-RED endpoints issued a subscription request to them. The second is a cache that makes sure a received message is not handled twice. A singleton class means there exist only one instance across the whole web application no matter how long it runs and no other class can create a new instance of these types. Thats because both are types of caches which should be consistent and global to any class which would need these caches. 
  
  The classes \verb|CommandRunner.java| and \verb|RESTHandler.java| are helpers. The first is used to run commands on the machine and  has two methods \verb|run(String)| and \verb|getFreeRam()| which is equivalent to calling \verb|run("free -m" )|. The second class is used as a REST client for sending requests to node-RED which are used to deploy computations and  send data to endpoints.
  
@@ -52,8 +51,10 @@ The class \verb|MiddlewareApi.java| contains REST API for the middleware web app
 	\label{fig:cd-models}
 \end{figure}
 
+
 \end{itemize}
 
+\noindent The middleware  uses \textit{Maven} as a  software project dependency management which handles the middleware build. \textit{Maven} projects contain a Project Object Model (POM) file which describes the dependencies and libraries used by the project. In addition, it has build configuration management that is used to build the project and create a runnable jar file. The middleware can be compiled and packaged to a jar using the following command \verb|mvn clean package|. The project contains dependencies for \textit{Lombok} which is a library that generates getters, setters and constructors during compile time without the need to write them in the Java classes, \textit{Gson} dependency in order to be able to read and write in JSON format, \textit{SCAMPI API} which allows us to publish, subscribe and override  functions from SCAMPI, dependencies to create a web application via \textit{Spring Boot}. \\
 
 \section{Flows}
 This section explains all the flows developed in this thesis. It shows how the flows can be implemented to achieve different use cases. It also shows how we use node-RED flows in order to send computations.
@@ -62,13 +63,13 @@ In order to deliver flows which expresses computations for all nodes or selected
  \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-publish-computation.png}
-	\caption{A flow that publishes computations to the middleware dn thus to SCAMPI.}
+	\caption{A flow that publishes computations to the middleware and thus to SCAMPI.}
 	\label{fig:flow-publish-computation}
 %\end{figure}
  %\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{images/html-publish.png}
-	\caption{The HTML page used to publish computations conveyed in \textit{html template} element.}
+	\caption{The HTML page used to publish computations conveyed in \textit{html page} element.}
 	\label{fig:html-publish}
 \end{figure}
 

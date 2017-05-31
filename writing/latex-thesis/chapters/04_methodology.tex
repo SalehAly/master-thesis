@@ -2,39 +2,64 @@
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
  \chapter{Approach}\label{chapter:Approach}
- In this chapter we explain the use cases and requirements to design a context-aware pervasive software framework. Then, we illustrate the  proposed architecture and design following from the concepts introduced in the background chapter and taking into account the challenges and possible solutions shown in the foundation chapter. To recap,  our aim is to design a context-aware pervasive software framework to manage and distribute computations while considering resources, dependencies and networking even with no end-to-end path.
-
-
+ In this chapter we explain the use cases and requirements to design a context-aware pervasive software framework. Then, we illustrate the  proposed architecture and design following from the concepts introduced in the background chapter and taking into account the challenges and possible solutions shown in the foundation chapter. To recap,  our aim is to design a context-aware pervasive software framework to manage and distribute computations while considering resources, dependencies and networking even with an end-to-end path.
 
 \section{Use Cases}
-\section{Requirements}
+This section provides real life scenarios that promotes the use of the proposed software framework. Requirements are then elicited from the use cases and then the framework implementation and design is evaluated against these requirements. Note that, the idea of framework is not just to implement the use cases, but the flexibility to distribute, compose and execute any use case for context-aware pervasive computing. The use cases are mainly targeted to help human beings, increasing their life quality and preserve the environment. 
+
+\subsection{Smart Cities}
+One of the most researched areas in the field of IoT is making our cities more advanced, connected and helpful to human beings and the environment. Researchers and professionals have had many ideas to make use of the context-aware sensor networks that can communicate and act independently whenever the situation needs intervention. We take some examples of the smart cities application and show how they can be implemented using our software framework.
+
+\subsubsection{Smart lighting}
+
+Smart lighting is a use case for automatic control of outdoor lamp posts hence optimizing costs for the governments and enterprises in addition to helping the environment by saving energy. The outdoor lighting can be automatically started or closed according to certain circumstances. For example, by lighting up when motion is detected   around it and turning off when there is no further motion, or by detecting natural light  and weather circumstances. Moreover, the lamp posts can be monitored in order to see if a lamp needs replacement or not.  Further, lamp posts can detect what is the best lighting percentage in a certain situation according to a machine learning algorithm based on the history of decisions taken and feedback provided by users.  In order to implement this use case in our proposed software framework, we must be able to distribute a computational flow to reach all lamp posts using a messaging system.  Also, the flow should be able to access sensors and  capable of adjusting the light according to the input gathered from several sources including motion, light and humidity sensors.  The decisions taken  should  be   stored into a database so that the flow can access  previous decisions in order to asses the current situation. In addition, a flow with an endpoint that  allows users send feedback on the lighting system can be locally composed to enhance the learning algorithm. Having sent the computational flow to all the lamp posts, the framework should assure that it does not get deployed on lamp posts without the  required resources, sensors and actuators
+
+\subsubsection{Smart Parking}
+
+Automatically detecting empty parking spots in crowded streets is the main idea behind smart parking. Since the number of vehicles on the streets are in tremendous increase nowadays, the urge for finding a parking spot in city centers and crowded places has also increased. Having a smart parking mechanism helps in wasting less time, decreasing energy consumption and maintaining a clean environment by reducing emissions.    There are different information sources used to rightfully detect empty parking spots, for instance, image and video footage of street cameras, crowd sourcing of information and APIs for parking services. Implementing this use case has almost similar requirements to smart lighting, however, it adds having  a camera integrated with smart devices which might produce the need for streaming the footage in real-time to other devices.
+
+%\subsubsection{Crowded Subway Cars detection}
+%Using the subway as a mean of transportation in the rush hour can be troublesome, most subway cars are crowded in that time. However, in some of the cases, people in the cars are not normally distributed meaning some cars may be less or more crowded than the others. In this sense, people %thought of using cameras, sensors and actuators to signal people for the less crowded cars. 
+
+
+
+\subsection{Mining Applications}
+
+In mining fields it is necessary to always monitor gas and temperature levels in order to prevent miners suffocation. At the same time, it very hard to maintain valid connection between sensors in the inside and  monitoring systems outside. Therefore, the devices incorporated with sensors inside the fields are expected to be pervasive and warn miners from unexpected increase of gas levels on their own. In addition to delivering the data somehow to the outside world to be able to gather data about the situation inside. This requires miners to act as middlemen who store delay-tolerant data into their mobile devices and carry it forward to the outside world. Of course the miners cannot do this process manually, therefore, there should be a messaging system on their mobile devices that carry the data and handle the synchronization with other device. Also, carrying the data in and out is not the only issue, importing and visualizing  data in the monitoring system should be also done automatically.\\
+
+\noindent The mining use case is a delay-tolerant application because there is a big chance there are no wiring going in and out of the mine thus a delay-tolerant messaging system should be used. But also, it is an information-centric  application because data should be globally composed by sending  data from  devices in the mine to be imported in  the monitoring system. Having smart devices installed in the mine means its very hard to target them as endpoints without a valid connection, even if there was one, knowing the host names of these devices will still be an issue. Same applies to the monitoring system outside,  data cannot be sent to a specific host name, rathe sent to whoever is interested in  these data.
+
+\subsection{Privacy and Security}
+The surveillance systems used at the moment upload  tapes, images and footage of people using public transportation to the cloud and then apply facial recognition algorithms in order to  detect faces of wanted criminals. Despite this being of  significant importance to the national security, this puts everyones privacy in deep water. Therefore, we thought of replacing this model by a pervasive one, where  the facial detection algorithm and faces of  wanted criminals are pushed to the smart devices in public transportation means and whenever a match is found the national security is notified. This helps greatly in increasing privacy, decreasing  latency between the footage and detection in addition to minimizing network bandwidth since the streaming footage  will not be uploaded to the cloud unless there is a match. Nevertheless, this is not trivial, facial recognition algorithms are complex and depends on other libraries and  detection models. Therefore, the computation which includes the recognition algorithm  must be able to carry dependencies otherwise the computation will not run. Moreover, the national security should be able to update the list of criminal faces thus messages sent to the smart devices should allow also attachments and dependencies as well.
+
+
+\section{Requirements} \label{sec:requirements}
+
+In this section, we explain the requirements extracted from the real life use cases mentioned in the previous section. Derived requirements are then used to evaluate the design and implementation of the framework. We classify the requirements  for our context-aware pervasive computing framework in the following points:
 %The framework should
-%\begin{itemize}
-%	\item  send computations to all or selected nodes.
-%	\item  allow computations to carry custom dependencies.
-%	\item  allow communication between nodes in a publish-subscribe manner.
-%	\item  carry computations forward even without an end-to-end path between sender and receiver.
-%	\item  allow computations to receive data as an input or publish data as an output using the communication layer.	
-%	\item  send a computations to nodes according to their computation capabilities, available sensors and actuators.
-%	\item  send computations to  specific nodes with a given global identifiers.
-%	\item  allow computations to be composable locally and globally.
-	
-%\end{itemize}
+\begin{enumerate}
+\item \textit{Service discovery}: since we do not know the host names of the smart devices nor their addresses, the framework should have service discovery mechanism encapsulated in the messaging system as explained in Section \ref{subsec:pub-sub}  to discover peers and  allow any interaction between smart devices.
+		
+\item \textit{Send and deploy computations}: whatever the use case may be, one of the main requirements of this work, is to be able to send computations to smart devices. This includes sending to one, a set or all smart devices connected together in a network. However, to deploy a computations, the receiving side must have the required hardware resources, sensors and actuators to be qualified for deploying the computation.
 
-%The computations should
-%\begin{itemize}
-%	\item  be able to access their dependencies.
-%	\item  be triggered either by a scheduler or at-will.
-%	\item  persist data in any form.
-%	\item  access hardware resources such as camera, sensors and actuators.
-%	\item  be pervasive and act on their own.
-%\end{itemize}
+\item \textit{Disconnected devices}: since the framework is also designed to be used in challenged networks, isolated devices in separate networks should also send and receive data or computations using the delay-tolerant architecture.
 
-\section{Framework Architecture}
-In this section we explain the software framework architecture designed for pervasive environments and challenged networks to distribute and manage computations with their respective resources and dependencies.  The main idea behind this design is to harness the features of node-RED to create, deploy and share computations of any kind. In addition to having SCAMPI as an information-centric, publish-subscribe and delay tolerant messaging system that gives the framework the skill to deliver messages even without an end-to-end path. However, node-RED and SCAMPI are two different environments that cannot manage computations, resources and dependencies on their own. They need a middleware to orchestrate the communication between them.\\
+ \item \textit{Computation dependencies}: complex computations which cannot be executed using the basic operating system and common libraries installed on the smart devices, should be allowed to carry their  own custom dependencies in order to guarantee a successful run on the receiving smart devices. 
+
+\item \textit{Communication}: smart devices should be able to communicate, send and receive data in an information-centric and a publish-subscribe manner.
+
+\item \textit{Global identifier}: each smart device must have its own unique global identifier which can be used to send data and computations to this device only.
+
+\item \textit{Composability}: the framework should allow composing multiple computations either locally through a database or globally by allowing data exchange via the publish-subscribe messaging system.
+
+\item \textit{Pervasiveness}: each computation should be able to act on its own, trigger actuators, persist data and access resources such as cameras and sensors if required by the use case.
+\end{enumerate}
+
+\section{Framework Architecture}\label{sec:design}
+In this section we explain the software framework architecture designed for pervasive environments and challenged networks to distribute and manage computations with their respective resources and dependencies.  The main idea behind this design is to harness the features of node-RED to create, deploy and share computations of any kind. In addition to having SCAMPI as an information-centric, publish-subscribe and delay tolerant messaging system that gives the framework the ability to deliver messages even without an end-to-end path. However, node-RED and SCAMPI are two different environments that cannot manage computations, resources and dependencies on their own. They need a middleware to orchestrate the communication between them.\\
 
 
-\noindent In general the architecture stack on each node should look like figure \ref{fig:stack}. With SCAMPI at the stack bottom relying only on the JVM. Then on top of SCAMPI is its Java API to communicate with the TCP API of SCAMPI. Afterwards, comes the middleware which acts mediator in between node-RED and SCAMPI. Finally, at the very top exits node-RED to run computations and interact with the user if needed. However, if SCAMPI is used on an android device, there might be no need to run neither the middelware nor node-RED since the device will be  used to transport data from one node to another having no end-to-end path. Below we explain how each component of the system work.
+\noindent In general the architecture stack on each node should look like Figure \ref{fig:stack}. With SCAMPI at the stack bottom relying only on the JVM. Then on top of SCAMPI is its Java API to communicate with the TCP API of SCAMPI. Afterwards, comes the middleware which acts mediator in between node-RED and SCAMPI. Finally, at the very top exits node-RED to run computations and interact with the user if needed. However, if SCAMPI is used on an android device, there might be no need to run neither the middelware nor node-RED since the device will be  used to transport data from one node to another having no end-to-end path. Below we explain how each component of the system works.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{images/stack.png}
@@ -47,7 +72,7 @@ In this section we explain the software framework architecture designed for perv
 \subsection{SCAMPI}
 As mentioned before SCAMPI is an information-centric, publish-subscribe and delay-tolerant messaging system. In this framework we use SCAMPI to send or receive messages that include computations and data. SCAMPI is also broker-less meaning we do not have to set up a server as broker which is one of the main reasons we chose SCAMPI, in order to be dynamic as possible. The other main reason is to reach nodes which do not have direct connectivity to the publishing node or do not have end-to-end path. \\
 
-\noindent Being a delay-tolerant networking architecture, SCAMPI can use its store-carry-forward routing to deliver messages to challenged environments. In figure \ref{fig:scampi-design}, we show how SCAMPI uses mobile devices to connect nodes that do not have a route or  direct connection and want to exchange messages. In the figure, there are three Raspberry Pi devices running our proposed stack. The first two  have network connection therefore it is rather easy to exchange messages between themselves. However, the third one is isolated, nevertheless it can be connected to a Wi-Fi network or run as an access point. In this case, an android device passing  between network \textit{N1} and \textit{N2} can carry the message bundles from one network and forward it to the other by connecting to both networks alternatingly.  Thus, reaching out to challenged environments that can not be reached using wired or wireless connections.
+\noindent Being a delay-tolerant networking architecture, SCAMPI can use its store-carry-forward routing to deliver messages in challenged environments. In figure \ref{fig:scampi-design}, we show how SCAMPI uses mobile devices to connect nodes that do not have a route or  direct connection and want to exchange messages. In the figure, there are three Raspberry Pi devices running our proposed stack. The first two  have network connection therefore it is rather easy to exchange messages between themselves. However, the third one is isolated, nevertheless it can be connected to a Wi-Fi network or run as an access point. In this case, an android device passing  between network \textit{N1} and \textit{N2} can carry the message bundles from one network and forward it to the other by connecting to both networks alternatingly.  Thus, reaching out to challenged environments that cannot be reached using wired or wireless connections.
 
 \begin{figure}[H]
 	\centering
@@ -64,7 +89,7 @@ As mentioned before SCAMPI is an information-centric, publish-subscribe and dela
 
 \subsection{Node-RED}
 
-Node-RED is a tool used for wiring IoT applications, its flows describe the intended computations. It has exporting and importing endpoints for flows via REST which makes it easy to deploy without human interaction.  Flows can be also configured to access certain tables or collections on a running database instance and this configuration can be serialized along with the flow. In this framework whenever a flow wants to send a message to another flow on the same node-RED instance or on other instances, it uses the REST API that the middleware provides to publish and subscribe to data topics. This allows node-RED to send or receive data and allow composability both locally and globally.  Further, node-RED is rich with predefined elements that  can be used to run flows on time intervals, connect to emails, twitter accounts or even access a gpio pin on Raspberry Pi. Node-RED usage is intuitive since it is based on flow-programming, it does not need a developer to create a flow.
+Node-RED is a tool used for wiring IoT applications, its flows describe the intended computations. It has exporting and importing endpoints for flows via REST which makes it easy to deploy without human interaction.  Flows can be also configured to access certain tables or collections on a running database instance and this configuration can be serialized along with the flow. In this framework whenever a flow wants to send a message to another flow on the same node-RED instance or on other instances, it either uses the REST API that the middleware provides to publish and subscribe to data topics or the same database configuration in both flows to be able to communicate data through the database.. This allows node-RED to send or receive data and allow composability both locally and globally.  Further, node-RED is rich with predefined elements that  can be used to run flows on time intervals, connect to emails, twitter accounts or even access a gpio pin on Raspberry Pi. Node-RED usage is intuitive since it is based on flow-programming, it does not need a developer to create a flow.
 
 \subsection{Middleware}
 The middleware is this framework's mediator and the main contribution in this work, it is deployed along with node-RED and SCAMPI on each instance in this architecture. It runs a jar file containing a web application server. It has several duties in orchestrating  SCAMPI messages to node-RED instances.
@@ -101,3 +126,4 @@ The following figure \ref{fig:design} explains how the framework works and shows
 
 \section{Summary}
 
+In this chapter we introduced real life use cases for our software framework that was utilized to elicit the requirements used to evaluate the implementation and design of this framework. Afterwards, we described the stack  to implement this framework starting by SCAMPI the  delay-tolerant information-centric messaging system, going through node-RED the platform used to implement, export and execute custom computations serving different use cases, finally we explained the middleware which orchestrates the communication between SCAMPI and node-RED.
