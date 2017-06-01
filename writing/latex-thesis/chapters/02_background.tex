@@ -1,7 +1,7 @@
 % !TeX root = ../main.tex
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
-\chapter{Background \& Related Work}\label{chapter:background}
+\chapter{Background and Related Work}\label{chapter:background}
 
 This chapter describes the concepts and background information that this thesis uses and relies on. It gives a brief introduction about Internet of things and other concepts such as pervasive and fog computing in addition to  explaining Delay-Tolerant and Information-Centric Networking as they play an important role in this thesis. Further, we explain the software platforms and hardware used to implement the system framework.
 
@@ -78,7 +78,7 @@ With the rise of IoT and the need for interoperability and seamless communicatio
 
 \section{Networking}
 
-In this section, we introduce the main networking grounds that are used in this thesis. Since, the software framework that is proposed in this thesis focuses on exchanging data and computation between nodes even without an end-to-end path, its imminent that we shed light on Information-Centric Networking which proposes replacing current host-centric  Internet architecture  with a content-centric one. Additionally,  having no end-to-end paths between some  of our nodes, guides us to leverage the concept of Delay-Tolerant Networking that can store messages and carry it forward even without a connection through mobile devices.
+The following is a brief introduction of the main networking grounds that are used in this thesis. Since, the software framework that is proposed in this thesis focuses on exchanging data and computation between nodes even without an end-to-end path, its imminent that we shed light on Information-Centric Networking which proposes replacing current host-centric  Internet architecture  with a content-centric one. Additionally,  having no end-to-end paths between some  of our nodes, guides us to leverage the concept of Delay-Tolerant Networking that can store messages and carry it forward even without a connection through mobile devices.
 \subsection{Information Centric Networking}
 
 Information-Centric Networking (ICN) is an architecture that focuses on \textit{WHAT} information is being exchanged rather than \textit{WHO} are exchanging it. ICN was mainly described by Dirk Trossen et al. as a networking architecture that aim to replace the current Internet inter-networking layer using publish-subscribe model as an underlying service \cite{Trossen:2010:AII:1764873.1764878}. Trossen introduced four main challenges that faces the architecture which are namely information-centrism of applications, supporting and exposing tussles, increasing accountability, and addressing attention scarcity.
@@ -162,7 +162,7 @@ Delay-Tolerant Networking (DTN) is an overlay architecture proposed to overcome 
 
 
 \section{Used Platforms}
-In this section, we describe the platforms that we used in order to create our framework. The section includes a hardware component which is the Raspberry Pi and all the other components are software oriented. This includes SCAMPI publish-subscribe platform for message passing in delay tolerant networks, node-red project for wiring IoT applications and time-series databases.
+Turning now to  the platforms that we used in order to implement our framework. The section includes a hardware component which is the Raspberry Pi and all the other components are software oriented. This includes SCAMPI publish-subscribe platform for message passing in delay tolerant networks, node-red project for wiring IoT applications and time-series databases.
 \newpage
 \subsection{SCAMPI}
 SCAMPI is a delay tolerant platform based on the DTNRG architecture that hides networking from the application user \cite{Karkkainen:2012:SAP:2348616.2348636}. It enables communication between peers even without and end-to-end path. The store-carry-forward router implemented by SCAMPI empower peer discovery via broadcast, mutlicast, TCP unicast  and subnet scanning for known ports. In addition, it offers caching and multi-hop message transfer. Unlike DTN2 and IBR-DTN which exchanges payloads as blobs of data, SCAMPI supports structured data messages as map where arbitrary string keys map to binary buffers, strings, numbers or file pointers. SCAMPI also provides the entity SCAMPIMessage that maps to the Bundle Protocol in the DTN architecture. Moreover, the SCAMPIMessage entity can carry meta-data that describes the content. \\

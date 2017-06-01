@@ -50,14 +50,15 @@ First, we wanted to evaluate that the software framework works with the basic Io
 %6& 	2.423& 	1.724& 	1.444& 	1.727\\
 %7& 	3.437& 	1.705& 	2.414& 	1.722\\
 %8& 	2.453& 	1.711& 	2.35& 	1.72\\
-mean &2.870&	1.723&	2.437&	1.717\\
-standard deviation& 0.769	&0.0376&	1.003&	0.013\\
+$ \overline{t} $ &2.870&	1.723&	2.437&	1.717\\
+$ \sigma t $& 0.769	&0.0376&	1.003&	0.013\\
 	\end{tabular}
 	\caption{Mean and standard deviation of temperature flow delays.}
 	\label{table:temp}
 \end{table}
 
-\noindent Given these delays, the average time a temperature flow takes to reach the Raspberry Pi and gets deployed is 2.653 seconds , the average time till the first temperature insert in the database    is 1.720 seconds. Which means that in our proof-of-concept implementation, it takes on average 4.373 seconds from the moment a flow  which can sense the environment and stores data into a database till the first metric insertion is done.
+\noindent Given these delays, the average time the temperature flow takes to reach the Raspberry Pi and gets deployed is 2.653 seconds, the average time till the first temperature measurement insert in the database    is 1.720 seconds. Which means that in our proof-of-concept implementation, it takes on average 4.373 seconds from the moment a
+the temperature flow till the first database  insertion is done.
 
 
 \section{Recognizing Water Bottles } \label{sec:rwb}
@@ -112,8 +113,8 @@ This scenario helps us validate several requirements for the software framework 
 %6&	24.095&	27.222&	15.922\\
 %7&	19.597&	25.561&	43.311\\
 %8&	22.586&	26.898&	28.627\\
-mean&	23.245 s&28.226 s&20.826 s\\ 
-standard deviation &1.440 s&8.830 s&8.851 s\\
+$ \overline{t} $&	23.245 s&28.226 s&20.826 s\\ 
+$ \sigma t $ &1.440 s&8.830 s&8.851 s\\
 \end{tabular}
 \caption{Mean and standard deviation of the image recognition flow delays.}
 \label{table:tensor}
@@ -132,8 +133,8 @@ standard deviation &1.440 s&8.830 s&8.851 s\\
 %6&	0.081&	2.299&	2.247\\
 %7& 0.088&	2.329&	2.211\\
 %8&	0.074&	2.368&	2.450\\
-mean &0.087 s&2.322 s&1.948 s\\
-standard deviation&0.012 s&0.053 s&0.491 s\\
+$ \overline{t} $ &0.087 s&2.322 s&1.948 s\\
+$ \sigma t $&0.012 s&0.053 s&0.491 s\\
 \end{tabular}
 \caption{Mean and standard deviation of the motion detection flow delays.}
 \label{table:motion}
@@ -151,14 +152,14 @@ standard deviation&0.012 s&0.053 s&0.491 s\\
 %6&	0.262&	0.713&	0.322&	0.742&	5.599\\
 %7&	0.306&	0.684&	0.212&	0.663&	5.575\\
 %8&	0.374&	0.582&	0.293&	0.648&	5.581\\
-mean&0.282 s&0.700 s&	0.273 s&0.6985 s&5.512 s\\
-standard deviation&0.061 s&0.067 s&	0.048 s&0.0488 s&0.217 s\\
+$ \overline{t} $&0.282 s&0.700 s&	0.273 s&0.6985 s&5.512 s\\
+$ \sigma t $&0.061 s&0.067 s&	0.048 s&0.0488 s&0.217 s\\
 	\end{tabular}
 	\caption{Mean and standard deviation for sending and receiving data delays.}
 	\label{table:data}
 \end{table}
 
-\noindent It is clear that  delays of the flow carrying image recognition dependencies took long times compared to the motion flow and the data messages between the NUC and Pis. That is mostly because the size of data in which the message is carrying. The data messages included images with size from 50K to 90K  and motion sensing flow had dependencies with size less than 2K. It is also clear that when the receiving side are the Raspberry Pis, delays are usually larger than when the receiving side is the NUC. This is evident in the motion sensing delays \ref{table:motion} and  also in \ref{table:data} despite the message sent from the Raspberry Pis to the NUC are heavier than their replies  in terms of size, but the delays are much less.
+\noindent It is apparent that delays of the flow carrying image recognition dependencies took long times compared to the motion flow and the data messages between the NUC and Pis. That is mostly because the size of data in which the message is carrying. The data messages included images with size from 50K to 90K  and motion sensing flow had dependencies with size less than 2K. It is also clear that when the receiving side are the Raspberry Pis, delays are usually larger than when the receiving side is the NUC. This is evident in the motion sensing delays \ref{table:motion} and  also in \ref{table:data} despite the message sent from the Raspberry Pis to the NUC are heavier than their replies  in terms of size, but the delays are much less.
 
 \section{Local Composability}
 In order to prove that we can compose flows locally using our framework, we created a use case that builds on the  previous experiment. Our goal is to use the same database configuration in both flows, one to write into a database while the other reads. Therefore, being able to compose two flows in order to achieve a bigger use case.\\
@@ -177,18 +178,18 @@ In order to prove that we can compose flows locally using our framework, we crea
 %6&	0.095&	0.824&	0.861\\
 %7& 0.094&	0.736&	0.835\\
 %8&	0.098&	0.798&	0.769\\	
-mean&	0.105&	0.801&	0.834\\
-standard deviation&	0.028&	0.060&	0.051\\
+$ \overline{t} $&	0.105&	0.801&	0.834\\
+$ \sigma t $&	0.028&	0.060&	0.051\\
 \end{tabular}
 \caption{Mean and standard deviation for retrieving recognized images flow delays.}
 \label{table:images}
 \end{table}
 
-\noindent Delays in this use case is quite low because this flow does not have any dependencies at all. Comparing the times in which the Raspberry Pi's have received and deployed flows, this one  has quite the least delay. However, the NUC in this flow seemed to have a bit higher delay average than the motion sensing flow with not so much dependencies as well.
+\noindent Closer inspection shows that  delays in this use case are quite low because this flow does not have any dependencies at all. Comparing the times in which the Raspberry Pi's have received and deployed flows, this one  has quite the least delay. However, the NUC in this flow seemed to have a bit higher delay average than the motion sensing flow with not so much dependencies as well.
 
 
 \section{Challenged Networks}
-In this section, our aim is to evaluate that the framework works in challenged networks with no end-to-end path between  sender and receiver. We used the same setup as \ref{sec:rwb} but with two major changes. The first change is that we disconnected  a Raspberry PI from the network switch, therefore, it is no longer connected to the other devices or the publishing PC, we also set-upped the disconnected node as an access point in which other devices can connect to using Wi-Fi. The second change is that we introduced an android phone that can connect to both the Raspberry Pi's access point and the router's Wi-Fi connected to the switch. Additionally, the device switches it's Wi-Fi between the access point and router Wi-Fi each 80 seconds. The system setup is shown in Figure \ref{fig:tb-dtn}.
+The section below shows our aim is to evaluate that the framework works in challenged networks with no end-to-end path between  sender and receiver. We used the same setup as \ref{sec:rwb} but with two major changes. The first change is that we disconnected  a Raspberry PI from the network switch, therefore, it is no longer connected to the other devices or the publishing PC, we also set-upped the disconnected node as an access point in which other devices can connect to using Wi-Fi. The second change is that we introduced an android phone that can connect to both the Raspberry Pi's access point and the router's Wi-Fi connected to the switch. Additionally, the device switches it's Wi-Fi between the access point and router Wi-Fi each 80 seconds. The system setup is shown in Figure \ref{fig:tb-dtn}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/tb-dtn.png}
@@ -233,10 +234,10 @@ Next we show the delays of some messages that were sent from the disconnected Pi
 %11&	179.825\\
 %12&	178.946\\
 %13&	166.999\\
-mean&	185.818\\
-standard deviation&	54.966\\
+$ \overline{t} $&	185.818\\
+$ \sigma t $&	54.966\\
 \end{tabular}
-	\caption{Messages delays mean and standard deviation sent from the disconnected Raspberry Pi to the NUC.}
+	\caption{Delay mean and standard deviation of 10 messages sent from the disconnected Raspberry Pi to the NUC.}
 	\label{table:DIS2}
 \end{table}
 
@@ -256,16 +257,16 @@ standard deviation&	54.966\\
 %8&	68.103\\
 %9&	64.292\\
 %10&	192.479\\
-mean& 	90.467\\
-standard deviation&	59.770\\
+$ \overline{t} $& 	90.467\\
+$ \sigma t $&	59.770\\
 	\end{tabular}
-	\caption{Messages delays mean and standard deviation sent from the NUC to disconnected Raspberry Pi having successfully recognized water bottles.}
+	\caption{Delay mean and standard deviation of 10 messages sent from the NUC to disconnected Raspberry Pi having successfully recognized water bottles.}
 	\label{table:DIS3}
 \end{table}
 
 
-\noindent Clearly, delays are much bigger, but the good thing is that several devices were able to communicate despite not having any direct connection between each other. We were also able to deploy computations to a device which was not in our publishing network. On another note, these delays can be drastically optimized if we decreased the switching window because unlike flows which can carry huge dependencies, these data message do not.
+\noindent What stands out in the previous tables it that delays are much bigger, but the good thing is that several devices were able to communicate despite not having any direct connection between each other. We were also able to deploy computations to a device which was not in our publishing network. On another note, these delays can be drastically optimized if we decreased the switching window because unlike flows which can carry huge dependencies, these data message do not.
 
 \section{Summary}
 
-In this section we have distributed our framework and middleware implementation evaluation on several parts each describing a different use case with various requirements. We started by showing the basic IoT usage of sensor networks in which we deployed a computation that monitors temperature on several devices.  Then, we went on with a more complex scenario where we ran image recognition algorithm for images on high performing machines coming from devices with low computation capabilities. Afterwards, we showed how flows can be composed locally using the same database configuration. Finally, we created a delay-tolerant network with a disconnected device and showed that we can deploy computations and communicate with it.
+During this chapter, we have distributed our framework and middleware implementation evaluation on several parts each describing a different use case with various requirements. We started by showing the basic IoT usage of sensor networks in which we deployed a computation that monitors temperature on several devices.  Then, we went on with a more complex scenario where we ran image recognition algorithm for images on high performing machines coming from devices with low computation capabilities. Afterwards, we showed how flows can be composed locally using the same database configuration. Finally, we created a delay-tolerant network with a disconnected device and showed that we can deploy computations and communicate with it.

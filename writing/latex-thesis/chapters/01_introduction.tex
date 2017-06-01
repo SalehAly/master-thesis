@@ -2,17 +2,14 @@
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
 \chapter{Introduction}\label{chapter:introduction}
-\section{IoT \& Distributed Sensor Networks}
-\subsection{Show how Iot is being currently used, its pros and cons}
-\subsection{Give an idea about the devices used to make a distributed sensor network}
-\section{Motivation}
-\subsection{Show the need to explore Pervasive Computing}
 
-\subsection{Illustrate why it might be better to distribute the data in some cases rather than accumulating it in a single server}
-
-\subsection{Explain why Cloud Computing is not always the right solution in some cases}
-
-\subsection{Explain the need to find IoT devices capabilities and limitations when used for data computation}
+ Pervasive or Ubiquitous computing existed long ago since 1991 in Mark Weiser's paper "The Computer for the 21st Century". Even though pervasive computing  was there for a long time, research and development in this area have recently risen again following the  prosperity of wireless sensor networks, single board computers and embedding micro-processors in our daily objects. Nowadays, pervasive devices are expected to act on their own, be context-aware and include intelligent agents to support human beings and increase their life quality while being indistinguishable from  everyday objects. In 1999 the term Internet of Things (IoT) appeared and since then it has been used to refer to networks of smart things and  ideas around establishing smart cities, homes, factories and so on. Smart devices used in these contexts are heterogeneous and  anticipated to communicate and share knowledge with either each other or using the cloud. Despite the various applications for pervasive agents and IoT networks, there is still a lack of frameworks that could harmonize and orchestrate the deployment of different use cases to these networks. There are many reasons for this absence, first is the heterogeneity of devices, they differ in their computing capabilities. Second is the varying  availability of gadgets including sensors and actuators attached to the smart devices in the network. Third, the different nature of use cases and their dependencies develops an obstacle towards using one framework for most use cases. Fourth, providing a communication mechanism to the framework that works seamlessly, integrates and discovers other peer smart devices remains a challenge. Last but not least, the existence of challenged networks makes it rather hard to reach devices without an end-to-end path. Advances in research and current available platforms have given us insights in order to pursue creating a framework for pervasive computing. The main goal of this work is to propose a framework architecture that can distribute  pervasive use case computations with their dependencies to all smart devices in a network with respect to their resources.
+  Also, the framework allows peer discovery and communication for  smart devices without host names which makes even it more dynamic. The framework also allows computations to  be self-contained and have inter-relationships between each other. In addition, it provides the proper environment for use case computations to execute. Further, we extended the framework architecture to deliver the computations to smart devices in challenged networks. 
+ 
+ 
+\section{Scope and Goals}
 
 
-%It is believed that development of smart pervasive computing devices that uses sensors and actuators are mainly grouped into smaller disconnected architectures and thus hard to create a composite framework in which all devices can communicate and integrate\cite{5470524}. In order to tackle this problem and to ensure that our computational model design is dynamic and flexible enough, we must ensure that our model is composable. By Composability we mean that computational models should be able to communicate, send and receive input and output data. 
+\section{Thesis Structure}
+
+This thesis is constructed in the following way; in the first chapter we present the problem along with a brief introduction to the proposed solution. The second chapter consists of the background information  that represent the main concepts of this thesis in addition to the platforms used to implement the proposed framework. In the third chapter we define the theoretical terms, key concepts and possible solutions to the framework's main challenges. Afterwards in Chapter \ref{chapter:Approach}, we explain some of the real life use cases, requirements elicitation and the approach we took to design our framework architecture. Chapter \ref{chapter:implementation} describes the implementation details of the main contribution of this work besides the use cases implementation applied in the evaluation chapter. Then, we evaluate the framework implementation and  architecture in Chapter \ref{chapter:Evaluation}. Finally we conclude our work, summarize the results and also explain the room for improvement and future work in Chapter \ref{chapter:conclusion}.
