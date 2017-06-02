@@ -163,7 +163,7 @@ Delay-Tolerant Networking (DTN) is an overlay architecture proposed to overcome 
 
 \section{Used Platforms}
 Turning now to  the platforms that we used in order to implement our framework. The section includes a hardware component which is the Raspberry Pi and all the other components are software oriented. This includes SCAMPI publish-subscribe platform for message passing in delay tolerant networks, node-red project for wiring IoT applications and time-series databases.
-\newpage
+
 \subsection{SCAMPI}
 SCAMPI is a delay tolerant platform based on the DTNRG architecture that hides networking from the application user \cite{Karkkainen:2012:SAP:2348616.2348636}. It enables communication between peers even without and end-to-end path. The store-carry-forward router implemented by SCAMPI empower peer discovery via broadcast, mutlicast, TCP unicast  and subnet scanning for known ports. In addition, it offers caching and multi-hop message transfer. Unlike DTN2 and IBR-DTN which exchanges payloads as blobs of data, SCAMPI supports structured data messages as map where arbitrary string keys map to binary buffers, strings, numbers or file pointers. SCAMPI also provides the entity SCAMPIMessage that maps to the Bundle Protocol in the DTN architecture. Moreover, the SCAMPIMessage entity can carry meta-data that describes the content. \\
 
@@ -223,3 +223,5 @@ Time-series databases are optimized for storing  and fetching data which is coll
  
 
 \section{Summary}
+
+In this chapter we explained the fundamental concepts that we rely on in this work. We started by explaining Internet of Things and Pervasive computing, we also gave a brief about Fog computing which is yet  another model of executing computation on the network edge. Then, we elaborated networking concepts such as Information-Centric architectures which are content-centric in contrast to current network approaches which are  host-centric and gave two example architectures based on this models. Later, we explained Delay-Tolerant networking architectures which are used to overcome unreliable connections and challenged networks. Eventually, we explained all the platforms and applications used to implement our framework including SCAMPI, node-RED and time-series databases in addition to explaining Raspberry Pi the low cost single board computer.
