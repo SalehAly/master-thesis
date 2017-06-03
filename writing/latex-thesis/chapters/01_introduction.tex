@@ -9,11 +9,9 @@
  
 \section{Scope and Goals}
 The scope of this thesis is to present the design and architecture of a pervasive  framework for distributing, composing and executing computations which represents pervasive agents and use cases. The design is based on the concepts of delay-tolerant, information-centric networking, pervasive computing and executing computations on the network edge. Requirements of the framework design where extracted from real life use cases. We base our design on these requirements and also present a proof-of-concept implementation to show that the design is feasible and can be realized. Then, the implementation and design are evaluated by running several experiments each targeting a specific set of requirements.\\
-
+	
 
 \noindent The framework will enable smart devices to communicate together through a publish-subscribe scheme even without an end-to-end path, thus sending, receiving data and computations.  It will also provide the user  an interface to design flows which represent computations of use cases as well as to publish flows either to all smart devices in a network, set or specific device. It will also allow the user to adjust the resources and attach dependencies to flows in order to compensate for the heterogeneous devices in the network and make sure flows will be executed successfully.\\
-
-
 
 \noindent Our framework architecture  suggests a stack that is installed on each smart device and composed of a delay-tolerant, information-centric and publish subscribe messaging system that handles communication between all smart devices and implements service discovery at the stack bottom. Above the messaging system, exists a middleware that harmonizes and orchestrates computation dependencies, resources and deployment. This is done by ensuring that each computation has its dependencies attached, and verifies that the smart device has the required resources from hardware requirement, sensors and actuators.  Then the middelware decides whether to deploy the computation or not. Finally on top of the stack, an execution environment that act as a host for all computations deployed from the middleware and as user interface to design and compose different use case computations.
 
