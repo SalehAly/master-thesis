@@ -10,7 +10,7 @@ Building on the framework architecture explained in Chapter \ref{chapter:Approac
 Maestro is implemented as a Java project and web application that act as a middleman between node-RED and SCMAPI. It accepts publish and subscribe requests from node-RED flows through REST API and uses  SCAMPI Java API to propagate these requests to SCAMPI server. Further, whenever it receives a message that it had subscribed to from SCAMPI server, it forwards the message to  node-RED flows who issued the subscription requests. It is divided into several packages, we describe them in alphabetical order.
  \begin{itemize}
  
-  \item First, the package \verb|com.middleware.api| which contains two classes, \verb|SCAMPApi.java|  and \verb|MiddlewareApi.java|. The class \verb|SCAMPIApi.java| has a field of type \verb|APP_LIB| from SCAMPI Java API which contains the core methods of SCAMPI server to connect, add status listeners, publish and subscribe to messages.  As shown in Figure \ref{fig:cd-api}, \verb|SCAMPIApi| implements two classes via the \verb|APP_LIB| for the SCAMPI server which includes functions like \verb|OnDisconnected()|, \verb|OnConnectFailed()|,\\  \verb|OnStopped()| and  \verb|OnConnected()|. It also implements \verb|messageReceived()| which handles the messages once they are received from SCAMPI. Further, It contains a cache for messages and a field indicating the machine specification which is read from a file on the device.
+  \item First, the package \verb|com.middleware.api| which contains two classes, \verb|SCAMPApi.java|  and \verb|MiddlewareApi.java|. The class \verb|SCAMPIApi.java| has a field of type \verb|APP_LIB| from SCAMPI Java API which contains the core methods of SCAMPI server to connect, add status listeners, publish and subscribe to messages.  As shown in Figure \ref{fig:cd-api}, \verb|SCAMPIApi| implements two classes via the \verb|APP_LIB| for the SCAMPI server which includes functions like \verb|OnDisconnected()|, \verb|OnConnectFailed()|,\\  \verb|OnStopped()| and  \verb|OnConnected()|. It also implements \verb|messageReceived()| which handles the messages once they are received from SCAMPI. Further, It contains a cache for messages and a field indicating the machine specification which is read from a file on the device. Also, \verb|SCAMPIApi.java| subscribes to the global identifier of SCAMPI on service initialization which is used as a global identifier for the whole framework. 
  
 The class \verb|MiddlewareApi.java| contains REST API for Maestro's web application that runs on port \verb|8080|. It has two requests \verb|POST /publish| and \verb|POST| \verb|/subscribe|  that reference  the \verb|APPL_LIB| in order to submit publish and subscribe requests to SCAMPI server. The class \verb|MiddlewareAPI.java| has a field for the \verb|topicMapping| which is the topic-endpoint mapping we explained in \ref{subsec:usage}. Last but no least, it has a main method which in Java is used to run a class. In this case, it is used to run the built  jar file from \textit{Maven} which means once the jar file runs via the command \verb|java -jar interface-1.0-SNAPSHOT.jar|, the main method is only thing that runs and therein it starts a web application via \textit{Spring Boot}.
  \begin{figure}[H]
@@ -42,7 +42,7 @@ The class \verb|MiddlewareApi.java| contains REST API for Maestro's web applicat
 
 \item The fourth package \verb|com.middleware.exception| which contains the project's custom exceptions. Currently it only has a \verb|RESTFailedException.java| class which handles node-RED deployments and data requests failures.
 
-\item The fifth and last package is \verb|com.middleware.model|, it holds the models which are classes used to hold data and encapsulate them. Note that the Java classes do not contain any getters and setters or constructors. However, using \textit{Lombok} library they are generated in compile time and they can be picked up by the Integrated Development Environment (IDE) as shown in Figure \ref{fig:cd-models}. 
+\item The fifth and last package is \verb|com.middleware.model|, it holds the models which are classes used to hold data and encapsulate them. Remark up on that, the Java classes do not contain any getters and setters or constructors. However, using \textit{Lombok} library they are generated in compile time and they can be picked up by the Integrated Development Environment (IDE) as shown in Figure \ref{fig:cd-models}. 
 
  \begin{figure}[H]
 	\centering
@@ -59,7 +59,7 @@ The class \verb|MiddlewareApi.java| contains REST API for Maestro's web applicat
 \section{Flows}
 This section explains all the flows developed in this thesis. It shows how the flows can be implemented to achieve different use cases. It also shows how we use node-RED flows in order to send computations.
 \subsection{Send Computations}\label{subsec:send-comp}
-In order to deliver flows which expresses computations for all devices or selected ones according to available resources,  sensors, actuators and also attach dependencies, we developed a node-RED flow shown in Figure \ref{fig:flow-publish-computation}. The flow responds to the endpoint \verb|GET localhost:1880/publish| and returns the HTML page in Figure \ref{fig:html-publish}. Afterwards, the user can adjust the computation power needed by the flow, necessary free Random Access Memory(RAM), sensors and actuators. Then he/she must also write the flow identifier and attach dependencies, and eventually click on the button \textit{push}, which calls another endpoint on the same flow \verb|localhost:1880/push|, it receives the data, fetches the flow details and publish it to the Maestro which handles the rest.
+In order to deliver flows which expresses computations for all devices or selected ones according to available resources,  sensors, actuators and also attach dependencies, we developed a node-RED flow shown in Figure \ref{fig:flow-publish-computation}. The flow responds to the endpoint \verb|GET localhost:1880/publish| and returns the HTML page in Figure \ref{fig:html-publish}. Afterwards, the user can adjust the computation power needed by the flow, necessary free Random Access Memory(RAM), sensors and actuators. Then he/she must also write the flow identifier, attach dependencies and eventually click on the button \textit{push} which calls another endpoint on the same flow \verb|localhost:1880/push| with the form data. The endpoint receives the data, fetches the flow details and publish it to  Maestro which handles the rest.
  \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-publish-computation.png}
@@ -75,18 +75,18 @@ In order to deliver flows which expresses computations for all devices or select
 
 
 \subsection{Temperature Sensor Alert}\label{susbec:temp}
-This flow was developed to make sure that the  framework works against the basic IoT usage of sensors, actuators and time-series databases. As presented in Figure \ref{fig:flow-temp}, the flow runs once it is deployed to any device. Note that, it would not have been deployed by Maestro without checking that it has the required resources and dependencies. Once the flow is deployed, it starts a script for sensing temperature  which is sent as a dependency while sending the flow to other devices. It then checks if the temperature is a valid number, then it gets stored in a database. Further, if the temperature is above 30 degree Celsius it runs a script, which is also sent as a dependency, to light up a red led lamp. On top of that, the flow responds to the endpoint \verb|localhost:1880/temp| and returns all the collected temperature data in the last two minutes.
+This flow was developed to make sure that the  framework works against the basic IoT usage of sensors, actuators and time-series databases. As presented in Figure \ref{fig:flow-temp}, the flow runs once it is deployed to any device. Take into account that, it would not have been deployed by Maestro without checking that it has the required resources and dependencies. Once the flow is deployed, it starts a script for sensing temperature  which is sent as a dependency while sending the flow to other devices. It then checks if the temperature is a valid number, then it gets stored in a database. Further, if the temperature is above 30 degree Celsius it runs a script, which is also sent as a dependency, to light up a red LED lamp. On top of that, the flow responds to the endpoint \verb|localhost:1880/temp| and returns all the collected temperature data in the last two minutes.
  \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-temp.png}
-	\caption{A flow that reads temperature and stores it, also start a red lamp if temperature is above 30 degree Celsius.}
+	\caption{A flow that reads temperature and stores it, also start a red LED if temperature is above 30 degree Celsius.}
 	\label{fig:flow-temp}
 \end{figure}
 
 
 
 \subsection{Detect Movement and Store Image Responses} \label{subsec:detect-move}
-As part of the implementation evaluation, we developed this flow to take part in a bigger use case. The flow is designed to detect movement through the infrared sensor and then take a picture, which is then published on the topic \textit{NUC} for image recognition. However, in the push payload along with the picture, there is a field stating that the response should come back to this exact device, therefore, Maestro creates a mapping between the device global identifier and the endpoint before publishing. Also, as demonstrated in Figure \ref{fig:flow-motion}, the flow awaits messages on its endpoint and executes a script which starts a red led, it also stores the recognized image in a database along with its accompanying data. 
+As part of the implementation evaluation, we developed this flow to take part in a bigger use case. The flow is designed to detect movement through the infrared sensor and then take a picture, which is then published on the topic \textit{NUC} for image recognition. However, in the push payload along with the picture, there is a field stating that the response should come back to this exact device, therefore, Maestro creates a mapping between the device global identifier and the endpoint before publishing. Also, as demonstrated in Figure \ref{fig:flow-motion}, the flow awaits messages on its endpoint and executes a script which starts a red LED, it also stores the recognized image in a database along with its accompanying data. 
 
 \begin{figure}[H]
 	\centering
@@ -107,7 +107,7 @@ Since composability is an important part to validate in our framework. We create
 \end{figure}
 
 \subsection{TensorFlow Water Bottle Recognition} \label{subsec:tensor}
-To prove that we can send flows to machines with heavy computation power and lots of free RAM. We developed an image recognition flow using \textit{TensorFlow} which is an open-source software library for machine intelligence. \textit{TensorFlow} needs a 54MB image recognition model that recognizes 1000 object classes, one of them is a water bottle. It also needs the code to run the recognition algorithm which is a Java jar file of 29MB size. Therefore, the flow  needs to carry all the mentioned dependencies. As shown in Figure \ref{fig:flow-tensor}, the flow subscribes to the topic \textit{NUC} once it is deployed. Then, when Maestro instance that runs on the same machine receives a message on the topic \textit{NUC} carrying an image, it sends it to the corresponding endpoint  from the topic-endpoint mapping, it also puts the dependencies ("image in this case") in node-RED directory. Thereafter, the flow runs tensorflow jar that reads the image from the default node-RED directory. If it results in a water bottle as a best match, the flow responds to the sender with the result and a confidence percentage.
+To prove that we can send flows to machines with heavy computation power and lots of free RAM. We developed an image recognition flow using \textit{TensorFlow} which is an open-source software library for machine intelligence. \textit{TensorFlow} needs a 54MB image recognition model that recognizes 1000 object classes, one of them is a water bottle. It also needs the code to run the recognition algorithm which is a Java jar file of 29MB size. Therefore, the flow  needs to carry all the mentioned dependencies. As shown in Figure \ref{fig:flow-tensor}, the flow subscribes to the topic \textit{NUC} once it is deployed. Then, when Maestro instance that runs on the same machine receives a message on the topic \textit{NUC} carrying an image, Maestro sends it to the corresponding endpoint  from the topic-endpoint mapping, it also puts the dependencies ("an image in this case") in node-RED directory. Thereafter, the flow runs tensorflow jar that reads the image from  node-RED directory. If it results in a water bottle as a best match, the flow responds to the sender with the result and a confidence percentage.
  \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-tensor.png}
@@ -117,12 +117,12 @@ To prove that we can send flows to machines with heavy computation power and lot
 
 \section{Starting the framework}\label{subsec:starting-framework}
 
-The framework stack is run in the following order; SCAMPI, Maestro and then node-red. The script used for starting the stack is as follows:
+The framework stack runs in the following order; SCAMPI, Maestro and then node-red. The script used for starting the stack is as follows:
 \begin{verbatim}
 #!/bin/bash
 java -jar SCAMPI.jar default_settings.txt > scampi-log.txt 2>&1 & disown
 sleep 10
-java -jar maestro-1.0-SNAPSHOT.jar > interface-log.txt 2>&1 & disown
+java -jar interface-1.0-SNAPSHOT.jar > interface-log.txt 2>&1 & disown
 sleep 5
 node-red > node-red-log.txt 2>&1 & disown
 echo "All Set Up"
