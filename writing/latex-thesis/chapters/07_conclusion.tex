@@ -21,7 +21,9 @@ The evaluation results of our  proof-of-concept implementation and architecture 
 \section{Future Work}
 The framework can be extended an enhanced on several aspects:
 \begin{itemize}
-\item \textit{Streaming}: a possible extension to the framework is to allow live feed or footage to be streamed from one device to another, of course this could be done by composing flows in which one device shoots a video and sends the frames to other devices. However, this might experience some delay, it would be more efficient to have a streaming API in the messaging system which can be exposed to both the middleware and execution environment .
+\item \textit{Streaming}: a possible extension to the framework is to allow live feed or footage to be streamed from one device to another, of course this could be done by composing flows in which one device shoots a video and sends the frames to other devices. However, this might experience some delay, it would be more efficient to have a streaming API in the messaging system which can be exposed to both the middleware and execution environment.
+
+\item \textit{Request-Response Mapping}: In the middleware implementation there is no way at the moment to map a published message sent as a request  with another sent as a response. More specifically, in the challenged networks experiment, we could not be sure which requests for image recognition sent from the Raspberry Pi lead to the successful  replies  sent from the NUC back to the Raspberry Pi. This is not the case with recognizing water bottles experiment because we sent one request each run and waited for the response. Unlike the challenged networks experiment, we sent a lot of requests and received less replies. This could possibly be done by forwarding the unique message identifier from the request to the reply thus mapping between them.
 
 \item \textit{Security}: This thesis does  not focus on securing the communication between devices and ensuring that requests and deployments to the execution environment are authenticated. This could be enhanced by providing a layer of security in the messaging and deployment process.
 

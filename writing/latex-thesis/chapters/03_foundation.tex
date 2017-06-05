@@ -14,7 +14,7 @@ In this chapter we explain the framework model in theory, the key concepts behin
 	\label{fig:flow}
 \end{figure}
 
-\noindent After having defined flows, the next step is to execute them. To begin with, we must address the challenge that flows are distributed in the sense that each flow could reside on a different node. As previously mentioned,  since flows may interact, therefore they need a way to communicate. Moreover, since devices might be disconnected,  the communication mechanism must not require end-to-end paths. Furthermore, it  should handle sending the computations themselves from one node to another, at the end we are designing a pervasive framework that should manage sending computations everywhere.\\
+\noindent After having defined flows, the next step is to execute them. To begin with, we must address the challenge that flows are distributed in the sense that each flow could reside on a different device. As previously mentioned,  since flows may interact, therefore they need a way to communicate. Moreover, since devices might be disconnected,  the communication mechanism must not require end-to-end paths. Furthermore, it  should handle sending the computations themselves from one device to another, at the end we are designing a pervasive framework that should manage sending computations everywhere.\\
 
 \noindent Another challenge that faces the execution of  flows, are the dependencies and resources needed to carry out the execution.
  They might vary from one use case to another, thus need to be orchestrated across devices through the messaging system by  ensuring the delivery of relevant dependencies along with their respective computations.\\
@@ -24,7 +24,7 @@ In this chapter we explain the framework model in theory, the key concepts behin
 
 \noindent A flow should be modular having a specific functionality with defined interfaces that reduce the complexity, allowing re-use and re-assembly. Moreover, since flows should be composable, they need to interact and exchange data. Think of composability as LEGO parts that need to be assembled in their correct positions in order to create a figure, however in contrast to individual LEGO parts which do not have a meaning on their own, individual flow elements could serve a specific purpose besides their global one. \\
  
-\noindent  To establish flow composability in our context, we need to be able to match the output data of one flow to the input data of another, no matter whether the flows are on the same node or distributed; connected or disconnected. For instance in general terms, if we have a flow \(f_1\) that takes \(A\) as input and gives \(B\) as an output
+\noindent  To establish flow composability in our context, we need to be able to match the output data of one flow to the input data of another, no matter whether the flows are on the same device or distributed; connected or disconnected. For instance in general terms, if we have a flow \(f_1\) that takes \(A\) as input and gives \(B\) as an output
 \[ f_1 : A  \to B  \]
 and another flow \(f_2\) that takes \(B\) as an input and gives a new output \(C\)
 % the output of \(f_1\) and produce a new result and so on. 
@@ -37,7 +37,7 @@ we should be able to compose a new flow by merging  \(f_1\)'s output and giving 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{images/local-compose.png} 
- 	\caption{A node containing two composable flows.}
+ 	\caption{A device containing two composable flows.}
 	\label{fig:compose}
 \end{figure}
 \begin{figure}[H]
@@ -53,7 +53,7 @@ we should be able to compose a new flow by merging  \(f_1\)'s output and giving 
 
 Below we present the computational model as an abstraction for the framework design. It explains the components, challenges and the possible solutions that could be implemented to overcome these challenges. 	
 
-\subsection{Distributed Nodes \& Flows}
+\subsection{Distributed Devices \& Flows}
 In order to start with the framework explanation we must understand the idea behind pervasiveness. Pervasive computing relies on the idea of pushing flows to the edges "devices" and thus it is fundamentally distributed. A system is distributed if its components  are on networked computers which communicate only by sending and receiving of messages \cite{DSYS} which is the case here. Now in our model, each device should be capable of executing flows and producing results as long as it has the required dependencies and resources. Moreover, to ensure that flows are composable, devices should be able to communicate seamlessly even though they might be disconnected. Moreover, the model should be delay tolerant and subject to connection failures.\\
 
 
@@ -177,11 +177,11 @@ Parties can subscribe to the data topics on the  bus hence notified when a new m
 In this section we describe the data model which includes the structure of the data sent between devices through the messaging system, how the data travels from one device to another and the input/output specification used to combine and compose different flows.
 
 \subsection{Data Types}
-A computational flow can generate different types of data depending on the use case. This data could be intermediate processing data or a computational result. Also, we should not attempt restrict the data types in order to make sure the framework is as dynamic as possible. The challenge is to be able to represent these data types in a composable way. Therefore, if a developer wants to create a composable flow he/she should define an IO specification explained latter. However, the good thing is that, the developer dictates how the input or output data are structured while developing the computational flow. Hence, he/she is in complete control and can structure the data in any way as long as it can be used afterwards.  Different data types include: i) structured data that could be stored either in a relational or non-relational data base, ii) unstructured data, iii)  data streams.
+A computational flow can generate different types of data depending on the use case. This data could be intermediate processing data or a computational result. Also, we should not attempt to restrict the data types in order to make sure the framework is as dynamic as possible. The challenge is to be able to represent these data types in a composable way. Therefore, if a developer wants to create a composable flow he/she should define an IO specification explained later. However, the good thing is that, the developer dictates how the input or output data are structured while developing the computational flow. Hence, he/she is in complete control and can structure the data in any way as long as it can be used afterwards.  Different data types include: i) structured data that could be stored either in a relational or non-relational data base, ii) unstructured data, iii)  data streams.
 
 \subsection{Moving Data}
 
-Moving data is the idea  to send/receive raw or processed data to any flow. We should be to able use data from different remote or local sources in any computation. Some use cases for moving data are:
+Moving data is the idea  to send/receive raw or processed data to any flow. We should be  able to use data from different remote or local sources in any computation. Some use cases for moving data are:
 \begin{itemize}
 \item Composing flows is one of the main use cases, we would like to have inter-relationships between devices and  request input data for a computation from the output of another.
 
