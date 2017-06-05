@@ -40,7 +40,7 @@ What follows is an enlisting of  the requirements extracted from the real life u
 \begin{enumerate}
 \item \textit{Service discovery}: since we do not know the host names of the smart devices nor their addresses, the framework should have service discovery mechanism encapsulated in the messaging system as explained in Section \ref{subsec:pub-sub}  to discover peers and  allow any interaction between smart devices.
 		
-\item \textit{Send and deploy computations}: whatever the use case may be, one of the main requirements of this work, is to be able to send computations to smart devices. This includes sending to one, a set or all smart devices connected together in a network. However, to deploy a computations, the receiving side must have the required hardware resources, sensors and actuators to be qualified for deploying the computation.
+\item \textit{Send and deploy computations}: whatever the use case may be, one of the main requirements of this work, is to be able to send computations to smart devices. This includes sending to one, a set or all smart devices connected together in a network. However, to deploy a computation, the receiving side must have the required hardware resources, sensors and actuators to be qualified for deploying the computation.
  
  \item \textit{Computation dependencies}: complex computations which cannot be executed using the basic operating system and common libraries installed on the smart devices, should carry their  own custom dependencies in order to guarantee a successful run on the receiving smart devices. 
 
@@ -116,7 +116,7 @@ The following Figure \ref{fig:design} explains how the framework works and shows
 
 \begin{enumerate}[label=(\Alph*)]
  
- \item Flows are developed using node-RED UI, they can include publishing and subscribing REST calls to Maestro. If a flow subscribes to a certain topic, Maestro creates  a topic-endpoint mapping between the topic and an endpoint for this flow specifically. Then send a subscribe request to SCAMPI. If another flow on the same instance wants to subscribe to the same topic, Maestro extends the mapping to include it, hence, once a message is received it gets forwarded to all subscribed flow endpoints. 
+ \item Flows are developed using node-RED UI, they can include publishing and subscribing REST calls to Maestro. If a flow subscribes to a certain topic, Maestro creates  a topic-endpoint mapping between the topic and an endpoint for this flow specifically, then send a subscribe request to SCAMPI. If another flow on the same instance wants to subscribe to the same topic, Maestro extends the mapping to include it, hence, once a message is received it gets forwarded to all subscribed flow endpoints. 
 
  \item When Maestro receives a publish request from node-RED, it attaches the dependencies and an indicator that states if the response should be received by the sending device only. Then the message is forwarded to SCAMPI server.
 
@@ -128,4 +128,4 @@ The following Figure \ref{fig:design} explains how the framework works and shows
 
 \section{Summary}
 
-In this chapter we introduced real life use cases for our software framework that was utilized to elicit the requirements used to evaluate the implementation and design of this framework. Afterwards, we described the stack  to implement this framework starting by SCAMPI the  delay-tolerant information-centric messaging system, going through node-RED the platform used to implement, export and execute custom computations serving different use cases, finally we explained Maestro which is the middleware which orchestrates the communication between SCAMPI and node-RED.
+In this chapter we introduced real life use cases for our software framework that was utilized to elicit the requirements used to evaluate the implementation and design of this framework. Afterwards, we described the stack  to implement this framework starting by SCAMPI the  delay-tolerant information-centric messaging system, going through node-RED the platform used to implement, export and execute custom computations serving different use cases, finally we explained Maestro which is the middleware that orchestrates the communication between SCAMPI and node-RED.

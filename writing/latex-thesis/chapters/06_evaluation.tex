@@ -37,7 +37,7 @@ First, we wanted to evaluate that the software framework works with the basic Io
 	\label{fig:tb-temp}
 \end{figure} 
 
-\noindent The experiment was run 8 times and each time  we measured the delay between publishing the flow from the PC $ t_{PC}$ till it is received and deployed by  node-RED instances on the Raspberry Pis $t_{Pi}$, we also measured the delay between flow deployment and the first database temperature insert query on the device's instance $t_{db}$. 
+\noindent The experiment was tested 8 times and each time  we measured the delay between publishing the flow from the PC $ t_{PC}$ till it is received and deployed by  node-RED instances on the Raspberry Pis $t_{Pi}$, we also measured the delay between flow deployment and the first database temperature insert query on the device's instance $t_{db}$. 
 \begin{table}[H]
 	\centering
 	\begin{tabular}{c|c|c|c|c}\toprule
@@ -57,13 +57,13 @@ $ \sigma t $& 0.769	&0.0376&	1.003&	0.013\\
 	\label{table:temp}
 \end{table}
 
-\noindent Given these delays, the average time the temperature flow takes to reach the Raspberry Pi and gets deployed is 2.653 seconds, the average time till the first temperature measurement insert in the database    is 1.720 seconds. Which means that in our proof-of-concept implementation, it takes on average 4.373 seconds from the moment a
-the temperature flow till the first database  insertion is done. In this experiment we have satisfied some of the requirements mentioned in  Section \ref{sec:requirements}: i) service discovery, ii) send and deploy computations, iii) computation dependencies, iv) pervasiveness.
+\noindent Given these delays, the average time the temperature flow takes to reach the Raspberry Pi and gets deployed is 2.653 seconds, the average time till the first temperature measurement insert in the database    is 1.720 seconds. Which means that in our proof-of-concept implementation, it takes on average 4.373 seconds from the moment 
+the temperature flow is deployed till the first database  insertion is done. In this experiment we have satisfied some of the requirements mentioned in  Section \ref{sec:requirements}: i) service discovery, ii) send and deploy computations, iii) computation dependencies, iv) pervasiveness.
 
 \section{Recognizing Water Bottles } \label{sec:rwb}
 
 
-Moving on to more complex scenarios, this use case  is as follows, movements are detected around low computation devices portrayed as the Raspberry Pis. Once they detect movements around them, they take an image and send it to the topic \textit{NUC}. A high performance machine "an Intel NUC" should be waiting for input on the same topic. As soon as the NUC  receives an image, it runs an image recognition algorithm and responds back to the Raspberry Pi which sent the original message  only if the recognizer recognizes a water bottle. When a Raspberry Pi receives the recognition result on its endpoint, this means that the image was a watter bottle with a certain confidence, therefore, the Pi signals a red led to light up and stores the result in a database. \\ 
+Moving on to more complex scenarios, this use case  is as follows, movements are detected around low computation devices portrayed as the Raspberry Pis. Once they detect movements around them, they take an image and send it to the topic \textit{NUC}. A high performance machine "an Intel NUC" should be waiting for input on the same topic. As soon as the NUC  receives an image, it runs an image recognition algorithm and responds back to the Raspberry Pi which sent the original message  only if the recognizer recognizes a water bottle. When a Raspberry Pi receives the recognition result on its endpoint, this means that the image was a water bottle with a certain confidence, therefore, the Pi signals a red led to light up and stores the result in a database. \\ 
 
 \noindent The flows implementation used to create this use case can be found in Sections \ref{subsec:tensor} and \ref{subsec:detect-move}.  As part of this experiment when a flow requiring high amount of performance such as the image recognition flow is received by low performing devices they will not get deployed and  will log that requirements were not satisfied. The same case applies when a flow requiring low amount of computing power is received by a high performing device, of course, this could be optimized because clearly high performance devices can execute flows which are not needy. The computational requirements needed by each flow are decided before sending the flow over to other devices using the HTML page implemented in the publishing flow explained in \ref{subsec:send-comp}.\\ 
 
@@ -80,7 +80,7 @@ This scenario helps us validate several requirements for the framework evaluatio
 	\item Communication, by having publish-subscribe messages between the NUC and the Raspberry Pis.
 	
 	
-	\item Pervasiveness, through lighting a red led once an image bottle is successfully recognized and a message is sent back the the Raspberry Pi.
+	\item Pervasiveness, through lighting a red led once an image bottle is successfully recognized and a message is sent back to the Raspberry Pi.
 
 \end{enumerate}
 
@@ -94,7 +94,7 @@ This scenario helps us validate several requirements for the framework evaluatio
 
 
 
-\noindent We started by publishing the flow \ref{subsec:tensor} for  image recognition with all its dependencies in total 83MB, then we published the motion detection flow \ref{subsec:detect-move} with the sensor scripts. We measured the delay between publishing flows from the PC till it was received and deployed by node-RED on each instance. The use case was run 8 times, we also measured the delay when a motion was detected by Raspberry Pi and an image was sent to the NUC and the recognizer reply, this was also run 8 times for each Pi, a total of 16 runs. The sequence diagram shown in \ref{fig:sd-tensor},  illustrates the procedure in addition to the time initials for each part of the process.  \\
+\noindent We started by publishing the flow \ref{subsec:tensor} for  image recognition with all its dependencies in total 83MB, then we published the motion detection flow \ref{subsec:detect-move} with the sensor scripts. We measured the delay between publishing flows from the PC till it was received and deployed by node-RED on each instance. The use case was tested 8 times, we also measured the delay when a motion was detected by Raspberry Pi and an image was sent to the NUC and the recognizer reply, this was also tested 8 times for each Pi, a total of 16 tests. The sequence diagram shown in \ref{fig:sd-tensor},  illustrates the procedure in addition to the time initials for each part of the process.  \\
 
 
 
@@ -176,8 +176,8 @@ In order to prove that we can compose flows locally using our framework, we crea
 	\caption{Sequence diagram  extension for getting recognized water bottles.}
 	\label{fig:sd-images}
 \end{figure} 
-s
- \noindent Continuing on the same test bed setup as Section \ref{sec:rwb} and same scenario.  After the Raspberry Pis stored the recognized images of water bottles into their respective  databases, we sent a flow that retrieves these images from the database into a web endpoint along with their confidence percentages explained in \ref{subsec:images}. By doing this, we make sure that flows can be locally composed using the same database configuration. We also measured the delay between sending the images flow from the PC until it was deployed by node-RED on other devices. The flow required low computational effort, therefore, it will not get deployed on the NUC device. The experiment was also run 8 times.
+
+ \noindent Continuing on the same testbed setup as Section \ref{sec:rwb} and same scenario.  After the Raspberry Pis stored the recognized images of water bottles into their respective  databases, we sent a flow that retrieves these images from the database into a web endpoint along with their confidence percentages explained in \ref{subsec:images}. By doing this, we make sure that flows can be locally composed using the same database configuration. We also measured the delay between sending the images flow from the PC until it was deployed by node-RED on other devices. The flow required low computational effort, therefore, it will not get deployed on the NUC device. The experiment was also tested 8 times.
 
 \begin{table}[H]
 \centering
@@ -202,7 +202,7 @@ $ \sigma t $&	0.028&	0.060&	0.051\\
 
 
 \section{Challenged Networks}
-The section below shows our aim to evaluate that the framework works in challenged networks with no end-to-end path between  sender and receiver. We used the same setup as \ref{sec:rwb} but with two major changes. The first change is that we disconnected  a Raspberry PI from the network switch, therefore, it is no longer connected to the other devices or the publishing PC, we also set-upped the disconnected node as an access point in which other devices can connect to using Wi-Fi. The second change is that we introduced an android phone that can connect to both the Raspberry Pi's access point and the router's Wi-Fi connected to the switch. Additionally, the device switches it's Wi-Fi between the access point and router Wi-Fi each 80 seconds. The system setup is shown in Figure \ref{fig:tb-dtn}.
+The section below shows our aim to evaluate that the framework works in challenged networks with no end-to-end path between  sender and receiver. We used the same setup as \ref{sec:rwb} but with two major changes. The first change is that we disconnected  a Raspberry PI from the network switch, therefore, it is no longer connected to the other devices or the publishing PC, we also set up the disconnected node as an access point in which other devices can connect to using Wi-Fi. The second change is that we introduced an android phone that can connect to both the Raspberry Pi's access point and the router's Wi-Fi connected to the switch. Additionally, the device switches it's Wi-Fi between the access point and router Wi-Fi each 80 seconds. The system setup is shown in Figure \ref{fig:tb-dtn}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/tb-dtn.png}
@@ -210,9 +210,9 @@ The section below shows our aim to evaluate that the framework works in challeng
 	\label{fig:tb-dtn}
 \end{figure} 
 
-\noindent The experiment was run only one time for an extended amount of 50 minutes. First, we used the PC to publish the image recognition flow and the motion sensing flow. Second, we waited some time until we made sure that the flows have reached the disconnected Pi. Afterwards, we passed hands over the infrared sensor of the disconnected Pi and put a water bottle in front of the camera. We repeated this action multiple times.\\
+\noindent The experiment was tested only one time for an extended amount of 50 minutes. First, we used the PC to publish the image recognition flow and the motion sensing flow. Second, we waited some time until we made sure that the flows have reached the disconnected Pi. Afterwards, we passed hands over the infrared sensor of the disconnected Pi and put a water bottle in front of the camera. We repeated this action multiple times.\\
 
-\noindent This use case is evaluated differently, since in this experiment, we do not have a way to map image recognition requests sent from the disconnected Pi to the NUC with their respective responses. Also, there are some recognition requests that was not detected as a water bottle therefore there was no response from the NUC. Thats why we evaluate this use case on 3 different levels. First, the delay between publishing  flows from the PC and receiving them on all devices. Second, the delay between sending the images from the disconnected Pi to the NUC. Third, the delay between sending the result from NUC till it is deployed to the disconnected Pi.  Note that the number of messages sent from the Pi to the NUC and vice versa may not be equal due to the fact that some images were not recognized as water bottles. In addition, we have no means to map a message which was sent as a image recognition request to another one sent as a response which could be future work. \\
+\noindent This use case is evaluated differently, since in this experiment, we do not have a way to map image recognition requests sent from the disconnected Pi to the NUC with their respective responses. Also, there are some recognition requests that was not detected as a water bottle therefore there was no response from the NUC. Thats why we evaluate this use case on 3 different levels. First, the delay between publishing  flows from the PC and receiving them on all devices. Second, the delay between sending the images from the disconnected Pi to the NUC. Third, the delay between sending the result from NUC till it is deployed to the disconnected Pi.  Note that the number of messages sent from the Pi to the NUC and vice versa may not be equal due to the fact that some images were not recognized as water bottles. In addition, we have no means to map a message which was sent as an image recognition request to another one sent as a response which could be future work. \\
 
 \noindent The following table shows the first evaluation phase, $t_{NUC}$, $t_{Pi}$ and $t_{disconnected-pi}$ are the delays between publishing the flows from the PC till it reach each device.
 \begin{table}[H]
