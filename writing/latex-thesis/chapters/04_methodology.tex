@@ -1,7 +1,7 @@
 % !TeX root = ../main.tex
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
- \chapter{Approach}\label{chapter:Approach}
+ \chapter{System Design}\label{chapter:Approach}
  In this chapter we explain the use cases and requirements to design a context-aware pervasive software framework. Then, we illustrate the  proposed architecture and design following from the concepts introduced in the background chapter and taking into account the challenges and possible solutions shown in the foundation chapter. To recap,  our aim is to design a context-aware pervasive software framework to manage and distribute computations while considering resources, dependencies and networking even with an end-to-end path.
 
 \section{Use Cases}
@@ -12,7 +12,9 @@ One of the most researched areas in the field of IoT is making our cities more a
 
 \subsubsection{Smart lighting}
 
-Smart lighting is a use case for automatic control of outdoor lamp posts hence optimizing costs for the governments and enterprises in addition to helping the environment by saving energy \cite{6740844}. The outdoor lighting can be automatically started or closed according to certain circumstances. For example, by lighting up when motion is detected   around it and turning off when there is no further motion, or by detecting natural light  and weather circumstances. Moreover, the lamp posts can be monitored in order to see when a lamp needs replacement.  Further, lamp posts can detect what is the best lighting percentage in a certain situation according to a machine learning algorithm based on the history of decisions taken and feedback provided by users.  In order to implement this use case in our proposed software framework, we must be able to distribute a computational flow to all lamp posts using a messaging system.  Also, the flow should be able to access sensors and be capable of adjusting the light according to the input gathered from several sources including motion, light and humidity sensors.  The decisions taken  should  be   stored into a database so that the flow can access  previous decisions in order to asses the current situation. In addition, a flow with an endpoint that  allows users to send feedback on the lighting system can be locally composed to enhance the learning algorithm. Having sent the computational flow to all the lamp posts, the framework should ensure that it does not get deployed on lamp posts without the  required resources, sensors and actuators. 
+Smart lighting is a use case for automatic control of outdoor lamp posts hence optimizing costs for the governments and enterprises in addition to helping the environment by saving energy \cite{6740844}. The outdoor lighting can be automatically started or closed according to certain circumstances. For example, by lighting up when motion is detected   around it and turning off when there is no further motion, or by detecting natural light  and weather circumstances. Moreover, the lamp posts can be monitored in order to see when a lamp needs replacement.  Further, lamp posts can detect what is the best lighting percentage in a certain situation according to a machine learning algorithm based on the history of decisions taken and feedback provided by users.\\
+
+\noindent  In order to implement this use case in our proposed software framework, we must be able to distribute a computational flow to all lamp posts using a messaging system.  Also, the flow should be able to access sensors and be capable of adjusting the light according to the input gathered from several sources including motion, light and humidity sensors.  The decisions taken  should  be   stored into a database so that the flow can access  previous decisions in order to asses the current situation. In addition, a flow with an endpoint that  allows users to send feedback on the lighting system can be locally composed to enhance the learning algorithm. Having sent the computational flow to all the lamp posts, the framework should ensure that it does not get deployed on lamp posts without the  required resources, sensors and actuators. 
 
 \subsubsection{Smart Parking}
 Automatically detecting empty parking spots in crowded streets is the main idea behind smart parking \cite{4543911}. Since the number of vehicles on the streets are in tremendous increase \cite{cars}, the urge for finding a parking spot in city centers and crowded places has also increased. Having a smart parking mechanism helps in wasting less time, decreasing energy consumption and maintaining a clean environment by reducing emissions.  Different information sources can be used to  detect empty parking spots, for instance, image and video footage of street cameras, crowd sourcing of information and APIs for parking services. Implementing this use case has almost similar requirements to smart lighting, however, it adds having  a camera integrated with smart devices which might produce the need for streaming the footage in real-time to other devices.
@@ -25,17 +27,17 @@ Automatically detecting empty parking spots in crowded streets is the main idea 
 
 \subsection{Mining Applications}
 
-In mining fields it is necessary to always monitor gas and temperature levels in order to prevent miners suffocation \cite{doi:10.1155/2013/159273}. At the same time, it is very hard to maintain a connection between sensors in the inside and  monitoring systems outside \cite{ginzboorg2010dtn}. Therefore, the devices incorporated with sensors inside the fields are expected to be pervasive and warn miners from unexpected increase of gas levels on their own. In addition to delivering the data to the outside world, the system must be able to gather data about the situation inside. This requires miners to act as middlemen who store delay-tolerant data into their mobile devices and carry it forward to the outside world. Of course the miners cannot do this process manually, therefore, there should be a messaging system on their mobile devices that carry the data and handle the synchronization with other device. Also, carrying the data in and out is not the only issue, importing and visualizing  data in the monitoring system should be also done automatically.\\
+In underground mines it is necessary to always monitor gas and temperature levels in order to prevent miners suffocation \cite{doi:10.1155/2013/159273}. At the same time, it is very hard to maintain a connection between sensors in the inside and  monitoring systems outside \cite{ginzboorg2010dtn}. Therefore, the devices incorporated with sensors inside the fields are expected to be pervasive and warn miners from unexpected increase of gas levels on their own. In addition to delivering the data to the outside world, the system must be able to gather data about the situation inside. This requires miners to act as middlemen who store delay-tolerant data into their mobile devices and carry it forward to the outside world. Of course the miners cannot do this process manually, therefore, there should be a messaging system on their mobile devices that carry the data and handle the synchronization with other device. Also, carrying the data in and out is not the only issue, importing and visualizing  data in the monitoring system should be also done automatically.\\
 
-\noindent The mining use case is a delay-tolerant application because there is a big chance there are no wiring going in and out of the mine where new tunnels are constructed thus a delay-tolerant messaging system should be used. But also, it is an information-centric  application because data should be sent  from  devices in the mine to be imported in  the monitoring system without knowing their host names. Having smart devices installed in the mine means its very hard to target them as endpoints without a valid connection, even if there was one, knowing the host names of these devices might still be an issue. Same applies to the monitoring system outside,  data cannot be sent to a specific host name, rather sent to whoever is interested in  these data.
+\noindent The mining use case is a delay-tolerant application because there is a big chance there are no wiring going in and out of the mine where new tunnels are constructed thus a delay-tolerant messaging system should be used. But also, it is an information-centric  application because data should be sent  from  devices in the mine to be imported in  the monitoring system without knowing their host names. Having smart devices installed in the mine means it is very hard to target them as endpoints without a valid connection, even if there was one, knowing the host names of these devices might still be an issue. Same applies to the monitoring system outside,  data cannot be sent to a specific host name, rather sent to whoever is interested in  these data.
 
 \subsection{Privacy and Security}
-The surveillance systems used at the moment upload  tapes, images and footage of people using public transportation to the cloud and then apply facial recognition algorithms in order to  detect faces of wanted criminals. Despite this being of  significant importance to the national security, this puts everyones privacy in jeopardy. Therefore, we thought of replacing this model by a pervasive one, where  the facial detection algorithm and faces of  wanted criminals are pushed to the smart devices in public transportation means and whenever a match is found the national security is notified. This helps greatly in increasing privacy, decreasing  latency between the footage and detection in addition to minimizing network bandwidth since the streaming footage  will not be uploaded to the cloud unless there is a match. Similar approaches were introduced in \cite{4653063} and \cite{winkler2010trustcam} where the footage is analyzed on spot to protect privacy. Nevertheless, this is not trivial, facial recognition algorithms are complex and depends on other libraries and  detection models. Therefore, the computation which includes the recognition algorithm  must be able to carry dependencies otherwise the computation will not run. Moreover, the national security should be able to update the list of criminal faces thus messages sent to the smart devices should allow also attachments and dependencies as well. 
+The surveillance systems used at the moment uses closed-circuit television cameras to send  tapes, images and footage of people using public transportation to  storage systems \cite{Ashby2017} . The police could acquire  these tapes in case of incidents  to  observe, monitor and  apply facial recognition algorithms in order to  detect faces of wanted criminals  to prevent crimes and anti-social behavior \cite{cctv}. Despite this being of  significant importance to the national security, this puts everyones privacy in jeopardy. Therefore, we thought of replacing this model by a pervasive one, where  the facial detection algorithm and faces of  wanted criminals are pushed to the smart devices in public transportation means and whenever a match is found the national security is notified. This could also be  triggered only whenever there is an incident using computer vision, which helps greatly in increasing privacy, decreasing  latency between the footage and detection in addition to minimizing network bandwidth since the streaming footage  will not be uploaded to the cloud unless there is a match. Similar approaches were introduced in \cite{4653063} and \cite{winkler2010trustcam} where the footage is analyzed on spot to protect privacy. Nevertheless, this is not trivial, facial recognition algorithms are complex and depends on other libraries and  detection models. Therefore, the computation which includes the recognition algorithm  must be able to carry dependencies otherwise the computation will not run. Moreover, the national security should be able to update the list of criminal faces thus messages sent to the smart devices should allow also attachments and dependencies as well. 
 
 
 \section{Requirements} \label{sec:requirements}
 
-What follows is an enlisting of  the requirements extracted from the real life use cases mentioned in the previous section. We then  evaluate the design and implementation of the framework according to the derived requirements which are  classified  in the following points:
+What follows is a listing of  the requirements extracted from the real life use cases mentioned in the previous section. We then  evaluate the design and implementation of the framework according to the derived requirements which are  classified  in the following points:
 %The framework should
 \begin{enumerate}
 \item \textit{Service discovery}: since we do not know the host names of the smart devices nor their addresses, the framework should have service discovery mechanism encapsulated in the messaging system as explained in Section \ref{subsec:pub-sub}  to discover peers and  allow any interaction between smart devices.
@@ -57,7 +59,7 @@ What follows is an enlisting of  the requirements extracted from the real life u
 \item \textit{Pervasiveness}: each computation should be able to act on its own, trigger actuators, persist data and access resources such as cameras and sensors if required by the use case.
 \end{enumerate}
 
-\section{Framework Architecture}\label{sec:design}
+\section{Framework Stack}\label{sec:design}
 This section explains the software framework architecture designed for pervasive environments and challenged networks to distribute and manage computations with their respective resources and dependencies.  The main idea behind this design is to harness the features of node-RED to create, deploy and share computations of any kind. In addition to having SCAMPI as an information-centric, publish-subscribe and delay tolerant messaging system that gives the framework the ability to deliver messages even without an end-to-end path. However, node-RED and SCAMPI are two different environments that cannot manage computations, resources and dependencies on their own. They need a middleware to orchestrate the communication between them.\\
 
 
@@ -98,15 +100,111 @@ Maestro  is this framework's middleware and the main contribution of this work, 
 \begin{itemize}
 \item It reads the machine specifications to initialize the machine's resources, sensors and actuators 	.
 \item It includes the SCAMPI Java API and has a REST API over it which allows any other script from any other language ("including node-RED") to use the publish-subscribe feature of SCAMPI.
-\item It analyzes  flows by checking the meta-data  attached to the message thus if Maestro finds out that a flow does not have the necessary hardware requirements, sensors or actuators, it will not deploy the flow. 
+\item Maestro subscribes by default to the computation topic in order to  send and receive computations.
+\item Maestro subscribes to the unique global identifier of SCAMPI at the framework initialization to act as an identifier for the whole stack.
+
+\item It analyzes  flows by checking the meta-data  attached to the message thus if Maestro finds out that a device does not have the necessary hardware requirements, sensors or actuators, it will not deploy the flow. 
 \item It is responsible for attaching dependencies of  node-RED flows when one is published, also for putting them into the correct directory when receiving them.
 \item It provides a message caching mechanism in order to make sure messages are not handled more than once.
 \item it provides a mapping between the topics and node-RED flows meaning if one or more flows are interested in the same topic, all of them should get the data exchanged on this topic.
  \end{itemize}
 
-\subsection{Architecture Usage} \label{subsec:usage}
-The following Figure \ref{fig:design} explains how the framework works and shows how data is exchanged between the stack components. In this section, we explain the basic usage of the architecture.
+\section{Framework Architecture} \label{sec:arhcitecture}
+What follows is an explanation of the framework design and architecture and how it an be used to achieve the goals of this thesis. We describe a step by step guide to implement and distribute a flow describing a pervasive use case using our architecture
 
+
+\subsection{Physical Components}
+Before we get into the software components and the how we use the framework stack to implement a pervasive use cases, we first show the physical components that are used by our framework. There are three main devices used in this architecture:
+\begin{itemize}
+\item \textit{Raspberry Pi}: we use the Pi as a low-cost single board computer that contains gpio pins which can be connected to sensors and actuators.  However, the Pi can be replaced by any single-board computer that runs an operating system supporting the JVM and can host node-RED as an execution environment. Each Pi in this framework has our stack installed in addition to a camera,  an RGB LED, a temperature and a motion sensor as shown in Figure \ref{fig:node}. All the Raspberry Pis in our design have the sensors connected to the same gpio pins, for instance, all the temperature sensors are connected to gpio pin 11 on each  Raspberry Pi. This is important because when we send the computation script for sensing temperatures to all the Raspberry Pis, the script will be accessing the same pin to get a hold of the sensor data. \\
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/node.png}
+	\caption{A Raspberry Pi in our architecture connected to sensors and running our stack. }
+	\label{fig:node}
+\end{figure}
+
+\noindent Now recalling the issue described in Section \ref{subsec:sensors-and-actuators}, which explained that multiple flows might attempt to access a resource at the same time (temperature sensor for example). If we sent another computation which also tries to access the same resource, it will fail with a high probability. Since a resource can only be accessed by one computation at a time. Therefore, we have only flow that access the resource and stores data into a database and then other computations can query the data from the database.
+
+\item \textit{Intel NUC}: we use the NUC as computer with high performance capabilities compared  to the Raspberry Pi. NUC devices in the architecture also runs our stack and  are used to prove that we can delegate the computations requiring high performance from the Raspberry Pis to high performing devices. It is not connected to any sensors or actuators. The NUC can be replaced as well with any high computing device with an operating system supporting the JVM an and capable of hosting node-RED. 
+
+\item\textit{Android Phone:} in order to confirm that we can deliver computations and data to challenged networks, we used an android phone running SCAMPI so that we can carry data from one network to another. The phone runs only SCAMPI and not whole stack, however, node-RED supports android devices and Maestro also only relies on the JVM therefore we can deploy the whole stack if we have a use case for executing computations on android phones.
+
+\end{itemize}
+
+\noindent Figure \ref{fig:components} shows one possibility to connect the devices in our architecture, in which we have two Raspberry Pi's connected together with an Intel NUC in a network, and another Raspberry Pi in a separate one and communicates with the other devices using the Android device which switches between both networks.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{images/components.png}
+	\caption{Physical components of the architecture. }
+	\label{fig:components}
+\end{figure}
+
+
+\subsection{Designing a Flow}
+The first step to distribute a pervasive use case in a network is to design the computation which implements the use case, and since we use node-RED to design and execute flows, therefore the first step is to use node-RED to create a flow by wiring and connecting nodes. Each existing node in node-RED has a different functionality, also additional nodes developed by other contributers can be installed into the local instance. If a specific functionality can not be found  in the existing nodes or the ones available from the contributors, the functionality can be implemented using any programming language and then  the \verb|exec| node available in node-RED can be used to access the scripts in node-RED directory and run it. Moreover, the  existing \verb|function| node can be used to implement the functionality using  JavaScript. \\
+
+\noindent There are multiple options to trigger the flows explained in \ref{sec:foundation}. The first one is using the \verb|inject| node which allows flow triggering in multiple ways such as every time interval, once a flow is deployed, between time intervals or at specific time. The \verb|inject| node can also send data to the connected nodes as well when it starts a flow. The second way to trigger computations is via receiving a request using a \verb|http request| node on a specific endpoint that is wired to the flow just as Maestro does to deliver data to node-RED flows.\\
+ 
+
+\noindent Accessing sensors and actuators can be done in several ways using node-RED. The first way is to use the existing gpio nodes which can access the Raspberry Pi pins to read  and give digital signals to the sensors and actuators. However, we found out that the existing gpio nodes are not stable, therefore, we used the second option to access sensors and actuators which is using python scripts that are executed using the \verb|exec| nodes.\\
+
+\noindent There are also different  database nodes that can be installed on the local node-RED instance, for example, \textit{InfluxDB} the time-series database and \textit{MongoDB}. Each supports writing and querying data from the local database instance. When a flow is configured to have a database configuration, the user can specify whether it should live across all node-RED flows or can  only be used by a specific flow.  Yet when we choose to have the database configuration across all node-RED flows, the configuration was not serialized along with each flow. Thus, it is advised to configure the flows in a way that each has its own configuration so that it can be serialized along with the flow and can reach other devices in the network.\\
+
+
+\subsection{Sending the Flow to Heterogeneous Devices}
+
+Having designed a flow representing a use case, we can send the flow along with its dependencies to devices in the network while accounting for their available sensors, actuators  and hardware resources. To achieve this, we developed a node-RED flow with  a user interface that can be used by the framework to send other flows to the devices running our stack. As shown in Figure \ref{fig:html-publish}, once we have designed a flow and have the flow identifier, we can adjust the computation power and the required free random access memory for each specific flow we publish. In addition to selecting the required sensors and actuators to cater for the heterogeneous devices and their sensors availability. Further, the scripts used by the \verb|exec| nodes inside the flow can be selected in the HTML page as dependencies. Once we set everything regarding the flow meta-data and we click on the \verb|push| button, a request is sent to Maestro in order to handle sending the computations and meta-data to SCAMPI and other devices.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{images/html-publish.png}
+\caption{The HTML page used to publish computations.}
+\label{fig:html-publish}
+\end{figure}
+
+\noindent When Maestro receives the computational flow  together with the meta-data and dependencies from the node-RED flow. It creates a new SCAMPIMessage with  a global unique identifier, then it puts  file references to the dependencies used by the computation as a binary parameters in the message. Finally, it publishes the message on a specific topic to SCAMPI and returns a success response to node-RED. After SCAMPI receives the message from Maestro, it publishes the message to all discovered peers. It also keeps a copy in the cache in case it discovers a new device. 
+
+
+\subsection{Receiving the Flow}
+Since Maestro subscribes  by default  to the topic of exchanging computational flows, once SCAMPI on the receiving devices gets a new message on the computation topic, SCAMPI forwards the message to Maestro. Afterwards, Maestro checks the hardware resources, sensors and actuators of the computation and compares it with the machine specification. Then Maestro puts the dependencies carried by the SCAMPI message to node-RED directory before deploying the computation to node-RED.  \\
+
+
+\noindent As described in \ref{subsec:ddf}, $S(t)$ is a set which contains all devices in a system. From this set, we can have a subset $S_c(t)$ which satisfies the requirements for a certain computation.  Applying this to our design and as shown in Figure \ref{fig:sets}, if we publish a computation that needs low computing  power, motion and temperature sensors to a network of devices. The flow should only be deployed by those which fulfill requirements only. In the figure, neither the Intel NUC nor the Raspberry Pi without the required sensors were able to deploy the computation.\\
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{images/sets.png}
+	\caption{Deploying computations to heterogeneous devices.}
+	\label{fig:sets}
+\end{figure}
+
+\noindent In the current Maestro implementation, if it receives a computational message and  the requirements of the computation are not met, the computations are discarded completely. There is a possibility to queue the  messages which failed the hardware requirements in order to be deployed again when the resources are freed. However, as explained in Section \ref{subsec:resources}, this introduces a scheduling problem.
+
+
+
+
+
+\section{Sending and Receiving Data}
+
+\noindent As discussed in Section \ref{subsec:io-spec}, the flows should receive and send data using the messaging system described in Section \ref{subsec:pub-sub}. By using our framework, we can communicate data on a any topic except the computation topic. This is done  by using a \verb|http request| node that uses Maestro REST API to publish and subscribe to data on a specific topic, then Maestro creates a new SCAMPIMessage with a unique global identifier and publishes it to SCAMPI which handles the rest. \\
+
+\noindent For each flow that subscribes to a specific data topic, Maestro  adds an entry in the topic-endpoint mapping which maps between a topic and endpoint identifying the flow. This enables the flexibility of having multiple flows subscribing to the same data. Thus, when a new data message is a received,  Maestro forwards the data to all endpoints which had previously subscribed to this topic.
+
+
+
+\noindent Since Maestro subscribes to the global identifier of SCAMPI and thus the framework, it is possible to publish flows or data to specific nodes or set of nodes as discussed in \ref{subsec:ddf} by  publishing the message once for each device. However if the set is too big, this might flood the network with the same message published to different topics for various devices. More optimized solutions could be achieved by exposing the information to the routing algorithm of SCAMPI thus being able to publish the message only once as explained in \ref{subsec:resources}. \\
+
+\noindent When  publishing a data message, the publisher can attach a parameter which indicates whether the response of this message should be sent to the publisher only, or sent to specific topic that might have multiple subscribers. This helps publishers in sending data to be processed on other devices and controlling who should receive the processing results .
+
+
+
+\subsection{Architecture Summary}
+
+As a recap, the following Figure \ref{fig:design} summarizes how the framework works and shows how flows are distributed and data is exchanged between the stack components. 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{images/design.png}
