@@ -1,61 +1,21 @@
 # Master-Thesis: 
 ![alt text](https://travis-ci.org/SalehAly/master-thesis.svg?branch=develop)
 
-M.Sc. Topic: Context-Sensitive Pervasive Computing for Smart Cities
+M.Sc. Topic: A Pervasive Computing Framework for Distributed Computational Flow Composition and Execution
+ 
+A delay-tolerant and information-centric framework architecture for pervasive computing  that distributes, composes and executes flows which are representations of computations describing pervasive use cases. The framework uses  service discovery, allows sending and receiving of flows while accounting for their dependencies, required hardware resources, sensors and actuators even without an end-to-end path between senders and receivers. Moreover, it provides the execution environment for the flows and a user interface for publishing and designing flows. Further, the framework allows devices to communicate with each other and exchange data in a publish-subscribe manner which enables them to compose and have inter-relationships in addition to  being able to locally exchange data through databases hosted on the same device. 
 
-Introduction to IoT
-===================
+<p align="center">
+<img align="center" src="https://raw.githubusercontent.com/SalehAly/master-thesis/develop/writing/latex-thesis/images/design.png" width="50%"> 
+</p>
 
-Internet of Things **IoT** is one of the most trending topics in the
-technology industry. It is a term that denotes a network with different
-sensors like a camera, motion or light sensors and many others,
-connecting several of our daily life components allowing them to
-collect, exchange and share Information. Moreover, it allows the network
-to control them, for instance, imagine being able to control the lights,
-oven, heater or any other domestic device from your phone or laptop that
-connects to the IoT network.
 
-Autonomous Sensor Platform
-==========================
+A. Flows are developed using node-RED UI, they can include publishing and subscribing REST calls to Maestro. If a flow subscribes to a certain topic, Maestro creates  a topic-endpoint mapping between the topic and an endpoint for this flow specifically, then send a subscribe request to SCAMPI. If another flow on the same instance wants to subscribe to the same topic, Maestro extends the mapping to include it, hence, once a message is received it gets forwarded to all subscribed flow endpoints. 
 
-Given that an IoT network connects to a lot of sensors with different
-nature and input information and thus different data models, it has
-become very hard to deal with all this data models. Also, gathering data
-on an IoT network has its weak points, where are all this data going to
-be stored ?, IoT networks are fairly known to be of small capacity and
-computation capabilities.
+B. When Maestro receives a publish request from node-RED, it attaches the dependencies and an indicator that states if the response should be received by the sending device only. Then the message is forwarded to SCAMPI server.
 
-In this topic we wish to explore and try to answer some of the research
-questions that remains unanswered.
+C. SCAMPI keeps synchronizing messages and discovering new peers continuously as long as its running. Also, storing some message for the store-carry-forward routing functionality.
 
-Data Modeling
--------------
+D. When a SCAMPI instance receives a message it is forwarded to Maestro, which then verifies the topic. If it was a computation message then Maestro checks meta-data, resources, dependencies and then either deploy the computation to node-RED or discard it. Otherwise, if the message was not a computation, Maestro forwards it to the subscribing flows from the topic-endpoint mapping. 
 
-Can we come up with data model that best suits all the types of input
-information which are gathered from the sensors and connected devices ?
 
-Data Storage, Distribution & Consistency
-----------------------------------------
-
-What is the best database engine to use in order to facilitate data
-storage and to be able to query this data in an efficient way.
-Furthermore, can we distribute the data among other IoT networks and
-devices, so that we can overcome the problem of data capacity on these
-IoT networks ?, and if we can distribute the data, how can we handle
-data consistency ?.
-
-Computation & Limitations
--------------------------
-
-How can we generically and dynamically ask the network to compute
-expressions for our needs?\
-What are the limitations of the current IoT networks in terms of
-computation power, what could be computed on the network itself and what
-must be delegated to other servers with higher computation power
-
-Security & Privacy
-------------------
-
-How can we keep this information secure? and does doing computation on
-IoT network provides more privacy by not storing private information on
-the cloud ?.
