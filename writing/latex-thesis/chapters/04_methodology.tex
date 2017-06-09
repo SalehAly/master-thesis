@@ -110,13 +110,13 @@ Maestro  is this framework's middleware and the main contribution of this work, 
  \end{itemize}
 
 \section{Framework Architecture} \label{sec:arhcitecture}
-What follows is an explanation of the framework design and architecture and how it an be used to achieve the goals of this thesis. We describe a step by step guide to implement and distribute a flow describing a pervasive use case using our architecture
+What follows is an explanation of the framework design and architecture and how it can be used to achieve the goals of this thesis. We describe a step by step guide to design and distribute a flow that portrays a pervasive use case.
 
 
 \subsection{Physical Components}
-Before we get into the software components and the how we use the framework stack to implement a pervasive use cases, we first show the physical components that are used by our framework. There are three main devices used in this architecture:
+Before we get into the software components and how we can use the framework stack to implement a pervasive use case, we first show the physical components that are used by our framework. There are three main devices used in this architecture:
 \begin{itemize}
-\item \textit{Raspberry Pi}: we use the Pi as a low-cost single board computer that contains gpio pins which can be connected to sensors and actuators.  However, the Pi can be replaced by any single-board computer that runs an operating system supporting the JVM and can host node-RED as an execution environment. Each Pi in this framework has our stack installed in addition to a camera,  an RGB LED, a temperature and a motion sensor as shown in Figure \ref{fig:node}. All the Raspberry Pis in our design have the sensors connected to the same gpio pins, for instance, all the temperature sensors are connected to gpio pin 11 on each  Raspberry Pi. This is important because when we send the computation script for sensing temperatures to all the Raspberry Pis, the script will be accessing the same pin to get a hold of the sensor data. \\
+\item \textit{Raspberry Pi}: we use the Pi as a low-cost single board computer that contains gpio pins which can be connected to sensors and actuators.  However, the Pi can be replaced by any single board computer that runs an operating system supporting the JVM and can host node-RED as an execution environment. Each Pi in this framework has our stack installed in addition to a camera,  an RGB LED, a temperature and a motion sensor as shown in Figure \ref{fig:node}. All the Raspberry Pis in our design have the sensors connected to the same gpio pins, for instance, all the temperature sensors are connected to gpio pin 11 on each  Raspberry Pi. This is important because when we send the computation script for sensing temperatures to all the Raspberry Pis, the script will be accessing the same pin to get a hold of the sensor data. \\
 
 
 
@@ -129,7 +129,7 @@ Before we get into the software components and the how we use the framework stac
 
 \noindent Now recalling the issue described in Section \ref{subsec:sensors-and-actuators}, which explained that multiple flows might attempt to access a resource at the same time (temperature sensor for example). If we sent another computation which also tries to access the same resource, it will fail with a high probability. Since a resource can only be accessed by one computation at a time. Therefore, we have only flow that access the resource and stores data into a database and then other computations can query the data from the database.
 
-\item \textit{Intel NUC}: we use the NUC as computer with high performance capabilities compared  to the Raspberry Pi. NUC devices in the architecture also runs our stack and  are used to prove that we can delegate the computations requiring high performance from the Raspberry Pis to high performing devices. It is not connected to any sensors or actuators. The NUC can be replaced as well with any high computing device with an operating system supporting the JVM an and capable of hosting node-RED. 
+\item \textit{Intel NUC}: we use the NUC as computer with high performance capabilities compared  to the Raspberry Pi. NUC devices in the architecture also runs our stack and  are used to prove that we can delegate the computations requiring high performance from the Raspberry Pis to high performing devices. It is not connected to any sensors or actuators. The NUC can be replaced as well with any high computing device with an operating system supporting the JVM  and capable of hosting node-RED. 
 
 \item\textit{Android Phone:} in order to confirm that we can deliver computations and data to challenged networks, we used an android phone running SCAMPI so that we can carry data from one network to another. The phone runs only SCAMPI and not whole stack, however, node-RED supports android devices and Maestro also only relies on the JVM therefore we can deploy the whole stack if we have a use case for executing computations on android phones.
 
@@ -147,12 +147,12 @@ Before we get into the software components and the how we use the framework stac
 \subsection{Designing a Flow}
 The first step to distribute a pervasive use case in a network is to design the computation which implements the use case, and since we use node-RED to design and execute flows, therefore the first step is to use node-RED to create a flow by wiring and connecting nodes. Each existing node in node-RED has a different functionality, also additional nodes developed by other contributers can be installed into the local instance. If a specific functionality can not be found  in the existing nodes or the ones available from the contributors, the functionality can be implemented using any programming language and then  the \verb|exec| node available in node-RED can be used to access the scripts in node-RED directory and run it. Moreover, the  existing \verb|function| node can be used to implement the functionality using  JavaScript. \\
 
-\noindent There are multiple options to trigger the flows explained in \ref{sec:foundation}. The first one is using the \verb|inject| node which allows flow triggering in multiple ways such as every time interval, once a flow is deployed, between time intervals or at specific time. The \verb|inject| node can also send data to the connected nodes as well when it starts a flow. The second way to trigger computations is via receiving a request using a \verb|http request| node on a specific endpoint that is wired to the flow just as Maestro does to deliver data to node-RED flows.\\
+\noindent Triggering flows is very important as explained in \ref{sec:foundation}, there are multiple options to trigger flows. The first one is using the \verb|inject| node which allows  triggering the flows in multiple ways such as every time interval, once a flow is deployed, between time intervals or at specific time. The \verb|inject| node can also send data to the connected nodes as well when it starts a flow. The second way to trigger computations is via receiving a request using a \verb|http request| node on a specific endpoint that is wired to the flow just as Maestro does to deliver data to node-RED flows. There are also other ways that could be devised according to the desired use case.\\
  
 
-\noindent Accessing sensors and actuators can be done in several ways using node-RED. The first way is to use the existing gpio nodes which can access the Raspberry Pi pins to read  and give digital signals to the sensors and actuators. However, we found out that the existing gpio nodes are not stable, therefore, we used the second option to access sensors and actuators which is using python scripts that are executed using the \verb|exec| nodes.\\
+\noindent Accessing sensors and actuators can be done in several ways using node-RED. The first way is to use the existing gpio nodes which can access the Raspberry Pi pins to read  and give digital signals to the sensors and actuators. However, we found out that the existing gpio nodes are not stable, therefore, we used the second option to access sensors and actuators using python scripts that are executed using the \verb|exec| nodes. The python scripts are then transfered with the computation as  dependencies.\\
 
-\noindent There are also different  database nodes that can be installed on the local node-RED instance, for example, \textit{InfluxDB} the time-series database and \textit{MongoDB}. Each supports writing and querying data from the local database instance. When a flow is configured to have a database configuration, the user can specify whether it should live across all node-RED flows or can  only be used by a specific flow.  Yet when we choose to have the database configuration across all node-RED flows, the configuration was not serialized along with each flow. Thus, it is advised to configure the flows in a way that each has its own configuration so that it can be serialized along with the flow and can reach other devices in the network.\\
+\noindent There are also different  database nodes that can be installed on the local node-RED instance, for example, \textit{InfluxDB} the time-series database and \textit{MongoDB}. Each supports writing and querying data from the local database instance. When a flow is configured to have a database configuration, the user can specify whether it should live across all node-RED flows or can  only be used by a specific flow.  Yet when we chose to have the database configuration across all node-RED flows, the configuration was not serialized along with each flow. Thus, it is advised to configure the flows in a way that each has its own configuration so that it can be serialized along with the flow and can reach other devices in the network.\\
 
 
 \subsection{Sending the Flow to Heterogeneous Devices}
@@ -165,14 +165,18 @@ Having designed a flow representing a use case, we can send the flow along with 
 \label{fig:html-publish}
 \end{figure}
 
-\noindent When Maestro receives the computational flow  together with the meta-data and dependencies from the node-RED flow. It creates a new SCAMPIMessage with  a global unique identifier, then it puts  file references to the dependencies used by the computation as a binary parameters in the message. Finally, it publishes the message on a specific topic to SCAMPI and returns a success response to node-RED. After SCAMPI receives the message from Maestro, it publishes the message to all discovered peers. It also keeps a copy in the cache in case it discovers a new device. 
+\noindent When Maestro receives the computational flow  together with the meta-data and dependencies from  node-RED. It creates a new SCAMPIMessage with  a global unique identifier, then it puts the  file references for the dependencies used by the computation as a binary parameters in the message. Finally, it publishes the message on a specific topic to SCAMPI and returns a success response to node-RED. After SCAMPI receives the message from Maestro, it publishes the message to all discovered peers. It also keeps a copy in the cache in case it discovers new devices. 
 
 
 \subsection{Receiving the Flow}
-Since Maestro subscribes  by default  to the topic of exchanging computational flows, once SCAMPI on the receiving devices gets a new message on the computation topic, SCAMPI forwards the message to Maestro. Afterwards, Maestro checks the hardware resources, sensors and actuators of the computation and compares it with the machine specification. Then Maestro puts the dependencies carried by the SCAMPI message to node-RED directory before deploying the computation to node-RED.  \\
+Since Maestro subscribes  by default  to the topic of exchanging computational flows, whenever SCAMPI on the receiving devices gets a new message it  is forwarded to Maestro. Afterwards, Maestro checks the hardware resources, sensors and actuators of the computation and compares it with the machine specification. Then Maestro puts the dependencies carried by the SCAMPI message to node-RED directory before deploying the computation to node-RED.  \\
 
 
-\noindent As described in \ref{subsec:ddf}, $S(t)$ is a set which contains all devices in a system. From this set, we can have a subset $S_c(t)$ which satisfies the requirements for a certain computation.  Applying this to our design and as shown in Figure \ref{fig:sets}, if we publish a computation that needs low computing  power, motion and temperature sensors to a network of devices. The flow should only be deployed by those which fulfill requirements only. In the figure, neither the Intel NUC nor the Raspberry Pi without the required sensors were able to deploy the computation.\\
+\noindent As described in \ref{subsec:ddf}, $S(t)$ is a set which contains all devices in a system. From this set, we can have a subset $S_c(t)$ which is the candidate set that satisfies the requirements for a certain computation.  Applying this to our design and as shown in Figure \ref{fig:sets}, if we publish a computation that needs low computing  power, motion and temperature sensors to a network of devices. The flow should only be deployed by those who fulfill requirements only. In the figure, neither the Intel NUC nor the Raspberry Pi without the required sensors were able to deploy the computation. Further, in the current Maestro implementation, if it receives a computation and  the requirements  are not met, then the computations are discarded completely. There is a possibility to queue the  messages which failed the hardware requirements, such as low random access memory or high CPU usage of the current device, in order to be deployed again when the resources are freed.  However, as explained in Section \ref{subsec:resources}, this introduces a scheduling problem, after the resources are freed, queued computations will compete for the free resources.
+
+
+
+
 
 
 \begin{figure}[H]
@@ -182,23 +186,21 @@ Since Maestro subscribes  by default  to the topic of exchanging computational f
 	\label{fig:sets}
 \end{figure}
 
-\noindent In the current Maestro implementation, if it receives a computational message and  the requirements of the computation are not met, the computations are discarded completely. There is a possibility to queue the  messages which failed the hardware requirements in order to be deployed again when the resources are freed. However, as explained in Section \ref{subsec:resources}, this introduces a scheduling problem.
-
-
-
 
 
 \section{Sending and Receiving Data}
 
-\noindent As discussed in Section \ref{subsec:io-spec}, the flows should receive and send data using the messaging system described in Section \ref{subsec:pub-sub}. By using our framework, we can communicate data on a any topic except the computation topic. This is done  by using a \verb|http request| node that uses Maestro REST API to publish and subscribe to data on a specific topic, then Maestro creates a new SCAMPIMessage with a unique global identifier and publishes it to SCAMPI which handles the rest. \\
+\noindent As discussed in Section \ref{subsec:io-spec}, the flows should send and receive data using the messaging system described in Section \ref{subsec:pub-sub}. By using our framework, we can communicate data on a any topic except the computation topic. This is done  by using a \verb|http request| node that uses Maestro REST API to publish and subscribe to data on a specific topic.\\
 
-\noindent For each flow that subscribes to a specific data topic, Maestro  adds an entry in the topic-endpoint mapping which maps between a topic and endpoint identifying the flow. This enables the flexibility of having multiple flows subscribing to the same data. Thus, when a new data message is a received,  Maestro forwards the data to all endpoints which had previously subscribed to this topic.
+\noindent On the sender side, on the one hand, when Maestro receives a new publish request, it creates a new SCAMPIMessage with a unique global identifier and publishes it to SCAMPI which handles delivering the message to other devices. On the other hand, for each flow that subscribes to a specific data topic to Maestro, it  adds an entry in the topic-endpoint mapping which maps between a topic and an endpoint identifying the flow. On the receiving side, when Maestro gets a message from SCAMPI because it had subscribed for a specific topic. Maestro forwards the data to all endpoints on node-RED which had previously subscribed to this topic which  enables the flexibility of having multiple flows subscribing to the same data.\\
 
+
+\noindent When  publishing a data message, the publisher can attach a parameter which indicates whether the response of this message should be sent to the publisher only, or sent to specific topic that might have multiple subscribers. This helps publishers in sending data to be processed on other devices and controlling who should receive the processing results.\\
 
 
 \noindent Since Maestro subscribes to the global identifier of SCAMPI and thus the framework, it is possible to publish flows or data to specific nodes or set of nodes as discussed in \ref{subsec:ddf} by  publishing the message once for each device. However if the set is too big, this might flood the network with the same message published to different topics for various devices. More optimized solutions could be achieved by exposing the information to the routing algorithm of SCAMPI thus being able to publish the message only once as explained in \ref{subsec:resources}. \\
 
-\noindent When  publishing a data message, the publisher can attach a parameter which indicates whether the response of this message should be sent to the publisher only, or sent to specific topic that might have multiple subscribers. This helps publishers in sending data to be processed on other devices and controlling who should receive the processing results .
+
 
 
 
