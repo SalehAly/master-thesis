@@ -190,20 +190,23 @@ Since Maestro subscribes  by default  to the topic of exchanging computational f
 
 \section{Sending and Receiving Data}
 
-\noindent As discussed in Section \ref{subsec:io-spec}, the flows should send and receive data using the messaging system described in Section \ref{subsec:pub-sub}. By using our framework, we can communicate data on a any topic except the computation topic. This is done  by using a \verb|http request| node that uses Maestro REST API to publish and subscribe to data on a specific topic.\\
+We explain how we can send and receive data using our framework architecture in the following points:
+\begin{itemize}
+\item As discussed in Section \ref{subsec:io-spec}, the flows should send and receive data using the messaging system described in Section \ref{subsec:pub-sub}. By using our framework, we can communicate data on a any topic except the computation topic. This is done  by using a \verb|http request| node that uses Maestro REST API to publish and subscribe to data on a specific topic.\\
 
-\noindent On the sender side, on the one hand, when Maestro receives a new publish request, it creates a new SCAMPIMessage with a unique global identifier and publishes it to SCAMPI which handles delivering the message to other devices. On the other hand, for each flow that subscribes to a specific data topic to Maestro, it  adds an entry in the topic-endpoint mapping which maps between a topic and an endpoint identifying the flow. On the receiving side, when Maestro gets a message from SCAMPI because it had subscribed for a specific topic. Maestro forwards the data to all endpoints on node-RED which had previously subscribed to this topic which  enables the flexibility of having multiple flows subscribing to the same data.\\
-
-
-\noindent When  publishing a data message, the publisher can attach a parameter which indicates whether the response of this message should be sent to the publisher only, or sent to specific topic that might have multiple subscribers. This helps publishers in sending data to be processed on other devices and controlling who should receive the processing results.\\
-
-
-\noindent Since Maestro subscribes to the global identifier of SCAMPI and thus the framework, it is possible to publish flows or data to specific nodes or set of nodes as discussed in \ref{subsec:ddf} by  publishing the message once for each device. However if the set is too big, this might flood the network with the same message published to different topics for various devices. More optimized solutions could be achieved by exposing the information to the routing algorithm of SCAMPI thus being able to publish the message only once as explained in \ref{subsec:resources}. \\
+\item On the sender side, on the one hand, when Maestro receives a new publish request, it creates a new SCAMPIMessage with a unique global identifier and publishes it to SCAMPI which handles delivering the message to other devices. On the other hand, for each flow that subscribes to a specific data topic to Maestro, it  adds an entry in the topic-endpoint mapping which maps between a topic and an endpoint identifying the flow. On the receiving side, when Maestro gets a message from SCAMPI because it had subscribed for a specific topic. Maestro forwards the data to all endpoints on node-RED which had previously subscribed to this topic, this enables the flexibility of having multiple flows subscribing to the same data.\\
 
 
+\item When  publishing a data message, the publisher can attach a parameter which indicates whether the response of this message should be sent to the publisher only, or sent to specific topic that might have multiple subscribers. This helps publishers in sending data to be processed on other devices and then control who should receive the processing results.\\
 
 
+\item Since Maestro subscribes to the global identifier of SCAMPI and thus the framework, it is possible to publish flows or data to specific nodes or set of nodes as discussed in \ref{subsec:ddf} by  publishing the message once for each device. However if the set is too big, this might flood the network with the same message published to different topics for various devices. More optimized solutions could be achieved by exposing the information to the routing algorithm of SCAMPI thus being able to publish the message only once as explained in \ref{subsec:resources}. \\
 
+
+\item Local composability discussed in  \ref{subsec:io-spec}, can also be achieved by sending two flows with the same database configuration which get serialized along with the computational flows to other devices. Each one of them can read or write to the same database instance. Moreover, since collections in time-series databases do not need a schema we can insert  data of any form immediately. 
+
+
+\end{itemize}
 \subsection{Architecture Summary}
 
 As a recap, the following Figure \ref{fig:design} summarizes how the framework works and shows how flows are distributed and data is exchanged between the stack components. 
