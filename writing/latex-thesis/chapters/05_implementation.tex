@@ -42,7 +42,7 @@ The class \verb|MiddlewareApi.java| contains REST API for Maestro's web applicat
 
 \item The fourth package \verb|com.middleware.exception| which contains the project's custom exceptions. Currently it only has a \verb|RESTFailedException.java| class which handles node-RED deployments and data requests failures.
 
-\item The fifth and last package is \verb|com.middleware.model|, it holds the models which are classes used to hold data and encapsulate them. Remark up on that, the Java classes do not contain any getters and setters or constructors. However, using \textit{Lombok} library they are generated in compile time and they can be picked up by the Integrated Development Environment (IDE) as shown in Figure \ref{fig:cd-models}. 
+\item The fifth and last package is \verb|com.middleware.model|, it holds the models which are classes used to hold data and encapsulate them. Remark up on that, the Java classes do not contain any getters and setters or constructors. However, using \textit{Lombok} library they are generated in compile time and they can be picked up by the Integrated Development Environment (IDE) as displayed in Figure \ref{fig:cd-models}. 
 
  \begin{figure}[H]
 	\centering
@@ -71,7 +71,7 @@ In order to deliver flows which expresses computations for all devices or select
 
 
 \subsection{Temperature Sensor Alert}\label{susbec:temp}
-This flow was developed to make sure that the  framework works against the basic IoT usage of sensors, actuators and time-series databases. As presented in Figure \ref{fig:flow-temp}, the flow runs once it is deployed to any device. Take into account that, it would not have been deployed by Maestro without checking that it has the required resources and dependencies. Once the flow is deployed, it starts a script for sensing temperature  which is sent as a dependency while sending the flow to other devices. It then checks if the temperature is a valid number, then it gets stored in a database. Further, if the temperature is above 30 degree Celsius it runs a script, which is also sent as a dependency, to light up a red LED lamp. On top of that, the flow responds to the endpoint \verb|localhost:1880/temp| and returns all the collected temperature data in the last two minutes.
+This flow was developed to make sure that the  framework works against the typical IoT usage of sensors, actuators and time-series databases. As presented in Figure \ref{fig:flow-temp}, the flow runs once it is deployed to any device. Take into account that, it would not have been deployed by Maestro without checking that it has the required resources and dependencies. Once the flow is deployed, it starts a script for sensing temperature  which is sent as a dependency while sending the flow to other devices. It then checks if the temperature is a valid number, then it gets stored in a database. Further, if the temperature is above 30 degree Celsius it runs a script, which is also sent as a dependency, to light up a red LED lamp. On top of that, the flow responds to the endpoint \verb|localhost:1880/temp| and returns all the collected temperature data in the last two minutes.
  \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-temp.png}
@@ -93,7 +93,7 @@ As part of the implementation evaluation, we developed this flow to take part in
 
 
 \subsection{Show Recognized images}\label{subsec:images}
-Since composability is an important part to validate in our framework. We created a simple flow to show local composable flows. It simply queries the database for recognized images from the previous flow \ref{subsec:detect-move} when requested on the endpoint \verb|GET localhost:1880/images|. It has an HTML page response showing all the images along with their image recognition confidence percentage data and time-stamp.
+Since composability is an important part to validate in our framework. We created a simple flow to show local composable flows. It simply queries the database for recognized images from the previous flow \ref{subsec:detect-move} when requested on the endpoint \verb|GET localhost:1880/images|. It has an HTML page response showing all the images along with their image recognition confidence percentage data and time-stamp. The flow is invoked once it is deployed by the receiving device.
 
 \begin{figure}[H]
 	\centering
