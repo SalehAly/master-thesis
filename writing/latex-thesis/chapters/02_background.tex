@@ -175,7 +175,7 @@ SCAMPI is a delay tolerant platform based on the DTNRG architecture that hides n
 
 
 \subsection{Raspberry Pi}
-Raspberry Pi  \cite{RaspberryPi} is a very small, low-cost and single-board computer that was originally developed to promote computer science education in schools by the Raspberry Pi Foundation. It has a rather low processing power and random access memory compared to todays computers and mobile devices. Nevertheless, its graphical processing units equals that of todays latest mobile devices, it can stream high definition videos and run 3D games. Raspberry Pi also has 40 General Purpose Input/Output (gpio) pins that act like switches in order to send signals to devices such as LED lamps, sensors and actuators which makes it suitable for the IoT applications. Further, there are lightweight operating systems designed especially to cope with the edge devices and the Raspberry Pi  such as \textit{Ubuntu MATE},  \textit{Windows 10 IoT Core} and \textit{Raspbian} which is officially supported by the foundation.
+Raspberry Pi  \cite{RaspberryPi} is a very small, low-cost and single-board computer that was originally developed to promote computer science education in schools by the Raspberry Pi Foundation. It has a rather low processing power and random access memory compared to todays computers and mobile devices. Nevertheless, its graphical processing units equals that of todays latest mobile devices, it can stream high definition videos and run 3D games. Raspberry Pi also has 40 General Purpose Input/Output (GPIO) pins that act like switches in order to send signals to devices such as LED lamps, sensors and actuators which makes it suitable for the IoT applications. Further, there are lightweight operating systems designed especially to cope with the edge devices and the Raspberry Pi  such as \textit{Ubuntu MATE},  \textit{Windows 10 IoT Core} and \textit{Raspbian} which is officially supported by the foundation.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{images/rpi.png}
@@ -188,7 +188,7 @@ Raspberry Pi  \cite{RaspberryPi} is a very small, low-cost and single-board comp
 	\item Ethernet port, wireless LAN, Bluetooth 4.1 and Bluetooth low energy to enable wide range of connectivity.
 	\item Micro-SD card slot for storage and hosting the operating system.
 	\item Audio jack, HDMI port and 4 USB ports.
-	\item Camera, display interface and 40 gpio pins.
+	\item Camera, display interface and 40 GPIO pins.
 \end{itemize}
 
 \noindent There are other models of the Raspberry Pi such as  Pi 2 Model B,  Pi Zero, and  Pi 1 Model B+ and A+, they differ in size and specification. However, they all share the same concept of being low-cost and single-board computers.
@@ -209,7 +209,7 @@ Node-RED \cite{NODE-RED} is a powerful, open-source and flow-based programming p
 \end{figure}
 
 
-\noindent Node-RED also allows global context, meaning, we can set custom variables that live across all nodes. This is really helpful when  an application should keep a certain shared state. The main programming language of node-RED is JavaScript, it is also possible to write a custom node which executes code or script of any language through the execute node and the result can be  wired inside the flow. Moreover, node-RED has a built-in node to control gpio pins of a Raspberry Pi, that can send low or high signals whenever desired to a certain pin. This is powerful because it hides the abstraction behind controlling the Raspberry Pi  pins.\\
+\noindent Node-RED also allows global context, meaning, we can set custom variables that live across all nodes. This is really helpful when  an application should keep a certain shared state. The main programming language of node-RED is JavaScript, it is also possible to write a custom node which executes code or script of any language through the execute node and the result can be  wired inside the flow. Moreover, node-RED has a built-in node to control GPIO pins of a Raspberry Pi, that can send low or high signals whenever desired to a certain pin. This is powerful because it hides the abstraction behind controlling the Raspberry Pi  pins.\\
 
 
 \noindent Given its features and specifications, our proposed framework uses node-RED as an environment for deploying computations, in other words, each smart device in our architecture must have a node-RED instance. Hence, we could use  flows and wired nodes to express computations and serialize it via the export feature. Thereafter, we could send serialized computations along with their dependencies, meta-data  to other nodes running node-RED instances and deploy the computation on them. 

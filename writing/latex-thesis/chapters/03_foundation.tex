@@ -67,7 +67,7 @@ In order to start with the framework explanation we must understand the idea beh
 
 \noindent Another main challenge is to actually find the connected devices. Distributed and pervasive environments are dynamic, their components are not known to be live or dead at compile-time. Thus the framework should be able to run service discovery at run-time in order to find the connected devices or it should be able to broadcast its message to all the other devices and receive them as well. Otherwise, the approach would not qualify to be a distributed system. \\
 
-\noindent There are possible ways to achieve that, one could set up a static DNS server to resolve the domain name of a device, however, this requires having static IP's for all the devices. Another solution is to use DDNS or MDNS to update the domain name whenever an IP address changes dynamically.
+\noindent There are possible ways to achieve that, one could set up a static DNS server to resolve the domain name of a device, however, this requires having static IP's for all the devices. Another solution is to use Dynamic  Domain Name System (DDNS) \cite{bound1997dynamic} or  multicast Domain Name System (mDNS) \cite{cheshire2013multicast} to update the domain name whenever an IP address changes dynamically.
 
 
 
@@ -113,7 +113,9 @@ Resources are physical dependencies such as sensors, actuators and devices capab
 
 The second type of resources is related to the device performance, its power and memory capabilities, it is heavily biased by the  device processor  and its random access memory type and size. Computations vary in terms of resource consumption and hence a heavy computation should not be deployed to a device which is already loaded. \\
 
-\noindent Queuing this type of dependencies should have a higher probability because it is highly possible that one of the computations will finish soon, thus decreasing the CPU usage and freeing more memory.
+\noindent Since we do not know what is the type or function of the computation being deployed, we must be careful of deploying computations which might result in abnormal CPU usage and memory leaks. Consequently, the framework should keep an eye on the running computations, monitor the CPU usage and memory for strange behavior specially that the framework knows exactly the computation requirements and meta-data. It could also have CPU and memory usage quotas to control  the hosting device resources.\\
+
+\noindent Queuing this type of dependencies should have a higher probability because it is highly possible that one of the computations will finish soon, thus decreasing the CPU usage and freeing more memory. \\
 
 
 
@@ -175,7 +177,7 @@ Parties can subscribe to the data topics on the  bus hence notified when a new m
 In this section we describe the data model which includes the structure of the data sent between devices through the messaging system, how the data travels from one device to another and the input/output specification used to combine and compose different flows.
 
 \subsection{Data Types}
-A computational flow can generate different types of data depending on the use case. This data could be intermediate processing data or a computational result. Also, we should not attempt to restrict the data types in order to make sure the framework is as dynamic as possible. The challenge is to be able to represent these data types in a composable way. Therefore, if a developer wants to create a composable flow he/she should define an IO specification explained later. However, the good thing is that, the developer dictates how the input or output data are structured while developing the computational flow. Hence, he/she is in complete control and can structure the data in any way as long as it can be used afterwards.  Different data types include: i) structured data that could be stored either in a relational or non-relational data base, ii) unstructured data, iii)  data streams.
+A computational flow can generate different types of data depending on the use case. This data could be intermediate processing data or a computational result. Also, the framework should not attempt to restrict the data types that are communicated between the devices in order to make sure the framework is as dynamic as possible. In other words, the flow developer can have a weakly typed input and output data, which will give more possibilities and flexibility to design the use case. Yet, he/she might need to enforce strongly typed input and output data to  make the flow behavior explicit. The challenge is to be able to represent these data types in a composable way. Therefore, if a developer wants to create a composable flow he/she should define an IO specification explained later. However, the good thing is that the developer dictates how the input or output data are structured while developing the computational flow. Hence, he/she is in complete control and can structure the data in any way as long as it can be used afterwards.  Different data types include: i) structured data that could be stored either in a relational or non-relational data base, ii) unstructured data, iii)  data streams.
 
 \subsection{Moving Data}
 
