@@ -23,7 +23,7 @@ In general terms, IoT refers to a highly dynamic and scalable distributed networ
 \end{itemize}
 
 \noindent IoT is very diverse, one way of applying it is to gather data from the smart devices, then process data in the cloud via \textit{Cloud Computing}. Afterwards, results could be sent back to smart devices in order to act somehow. Nevertheless, there are approaches for pushing computations to the smart devices "Edges"  such as 
-\textit{Edge Computing}, \textit{Pervasive Computing} and \textit{Fog Computing} emerged.
+\textit{Edge Computing}, \textit{Pervasive Computing} and \textit{Fog Computing}.
 
 
 
@@ -72,21 +72,21 @@ With the rise of IoT and the need for interoperability and seamless communicatio
 
 \noindent The broker architecture means that there is a server in the middle of all communication acting as a centralized intermediary. Every machine in this architecture is connected to this broker and every message whether a publish or subscribe goes through it. The advantages of this model is that; machines do not need service discovery for peers, the only thing they need to know is the broker's address. Further, if one machine published a message to the broker and died, it can still reach a receiver (even if not yet online) through the broker, it can also provide a delivery guarantee. However it has some disadvantages,  there is an extensive network communication that goes through the broker, thus it becomes a bottleneck, though there is a possibility to have multiple brokers in a single network.  Also, in a dynamic environment the broker or brokers addresses might not be known beforehand therefore it becomes very hard to set up broker architecture in this environment. MQTT \cite{mqtt} and AMQP \cite{amqp} are examples of this approach.\\
 
-\noindent The broker-less architecture means that machines communicate directly with each other or through multiple hops, thus it relies heavily on peer discovery. It tackles the bottleneck of broker network communication, since messages only have to go from publishing peers to interested ones.  Furthermore, since machines are not always available, the architecture needs to deal with unavailable machines which may not have started. In addition, it has to handle message delivery to machines with no end-to-end path or direct connectivity. ZeroMQ \cite{zeromq} is one implementation of broker-less architectures. \\
+\noindent The broker-less architecture means that machines communicate directly with each other or through multiple hops, thus it relies heavily on peer discovery. It tackles the bottleneck of broker network communication, since messages only have to go from publishing peers to interested ones.  Furthermore, since machines are not always available, the architecture needs to deal with unavailable machines that may not have started yet. In addition, it has to handle message delivery to machines with no end-to-end path or direct connectivity. ZeroMQ \cite{zeromq} is one implementation of broker-less architectures. \\
 
 
 \noindent There is yet another approach which is endpoint centric such as RESTful services, web sockets and protocols like Constrained Application Protocol CoAP \cite{coAP} that uses the REST architectural style and is built over UDP. It also supports service discovery, multicast and asynchronous messaging exchange. 
 
 \section{Networking}
 
-The following is a brief introduction of the main networking grounds that are used in this thesis. Since the  proposed software framework focuses on exchanging data and computation between nodes even without an end-to-end path, it is imperative that we shed light on Information-Centric Networking which proposes replacing current host-centric  Internet architecture  with a content-centric one. Additionally,  having no end-to-end paths between some  of our nodes, guides us to leverage the concept of Delay-Tolerant Networking that can store messages and carry it forward even without a connection between mobile devices.
+The following is a brief introduction of the main networking grounds that are used in this thesis. Since the  proposed software framework focuses on exchanging data and computation between devices even without an end-to-end path, it is imperative that we shed light on Information-Centric Networking which proposes replacing current host-centric  Internet architecture  with a content-centric one. Additionally,  having no end-to-end paths between some  of our devices, guides us to leverage the concept of Delay-Tolerant Networking that can store messages and carry it forward even without a connection through mobile devices.
 \subsection{Information Centric Networking}
 
 Information-Centric Networking (ICN) is an architecture that focuses on \textit{WHAT} information is being exchanged rather than \textit{WHO} are exchanging it. ICN was described by Dirk Trossen et al. as a networking architecture that aims to replace the current Internet inter-networking layer using publish-subscribe model as an underlying service \cite{Trossen:2010:AII:1764873.1764878}. Trossen introduced four main challenges that faces the architecture which are namely information-centrism of applications, supporting and exposing tussles, increasing accountability, and addressing attention scarcity.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{images/trossen.png}
-	\caption{ICN architecture by Dirk Trossen et al. \textit{Adapted from } \cite{Trossen:2010:AII:1764873.1764878}.}
+	\caption{ICN architecture by Dirk Trossen et al. \textit{Adopted from } \cite{Trossen:2010:AII:1764873.1764878}.}
 	\label{fig:trossen}
 \end{figure}
 
@@ -120,9 +120,9 @@ Content-centric networking (CCN) was first introduced by Van Jacobson et al., in
 	\label{fig:ccn-namespace}
 \end{figure}
 
-Each node in the network contains a \textit{Content Router} which includes three data structures \cite{6563278}\cite{6231276}. 
+Each node in the network contains a \textit{Content Router (CR)} which includes three data structures \cite{6563278}\cite{6231276}. 
 \begin{itemize}
-\item \textit{Pending Interest Table (PIT)}: which stores the subscriptions and interests of NDOs. The subscription does not have to originate  from the node itself, rather can be a forwarded from another node. Once an interest reaches a content source and the data is retrieved, the PIT entries serves as a trail to the original subscriber and is removed afterwards.
+\item \textit{Pending Interest Table (PIT)}: which stores the subscriptions and interests of NDOs. The subscription does not have to originate  from the node itself, rather can be forwarded from another node. Once an interest reaches a content source and the data is retrieved, the PIT entries serves as a trail to the original subscriber and is removed afterwards.
 
 \item \textit{Forwarding Information base (FIB)}:  stores a mapping that indicates which node should the request be forwarded to. The FIB uses longest common prefix in order to determine the next hop. Multiple entries are allowed and can be queried in parallel.
 
