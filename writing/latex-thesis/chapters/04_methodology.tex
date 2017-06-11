@@ -5,10 +5,10 @@
  In this chapter we explain the use cases and requirements to design a context-aware pervasive software framework. Then, we illustrate the  proposed architecture and design following from the concepts introduced in the background chapter and taking into account the challenges and possible solutions shown in the foundation chapter. To recap,  our aim is to design a context-aware pervasive software framework to manage and distribute computations while considering resources, dependencies and networking even with an end-to-end path.
 
 \section{Use Cases}
-This section provides real life scenarios targeted by our proposed framework. Requirements are then elicited from the use cases and then the framework implementation and design are evaluated against these requirements. Keep in mind that; the framework idea is not just to implement these use cases, but to provide the ability to distribute, compose and execute various use cases for context-aware pervasive computing. The use cases are mainly targeted to help human beings, increasing their life quality and preserve the environment. 
+This section provides real life scenarios targeted by our proposed framework. Requirements are then elicited from the use cases and then the framework implementation and design are evaluated against these requirements. Keep in mind that the framework idea is not just to implement these use cases, but to provide the ability to distribute, compose and execute various use cases for context-aware pervasive computing. The use cases are mainly targeted to help human beings, increasing their life quality and preserve the environment. 
 
 \subsection{Smart Cities}
-One of the most researched areas in the field of IoT is making our cities more advanced, connected and helpful to human beings and the environment. Researchers and professionals have had many ideas to make use of the context-aware sensor networks that can communicate and act independently whenever the situation needs intervention. We take some examples of the smart cities application and show how they can be implemented using our software framework.
+One of the most researched areas in the field of IoT is making our cities more advanced, connected and helpful to human beings and the environment. Researchers and professionals have had many ideas to make use of the context-aware sensor networks that can communicate and act independently whenever the situation needs intervention. We take some examples of the smart cities applications and show how they can be implemented using our software framework.
 
 \subsubsection{Smart lighting}
 
@@ -88,7 +88,7 @@ As mentioned in Section \ref{sec:secampi} SCAMPI is an information-centric, publ
 \noindent Being information-centric, data-centric with publish-subscribe pattern and having peer discovery helps us in achieving our dynamic framework without knowing any host names. It  also supports adding and removing devices at will without any additional configuration. We can also use the general identifiers of the devices as topics in order to target each of them independently. As stated, SCAMPI does not have any dependencies other than the JVM so we just run it on each device and we are  good to go. \\
 
 
-\noindent The SCAMPI Java API allows the use of  services provided by a local SCAMPI instance granting us to publish or subscribe for any topic from the Java environment. The API also allows the client to get information about functions  SCAMPI status changes  for instance if it is disconnected, stopped or most importantly when a new message is received. Furthermore, there is a model called \textit{SCAMPIMessage} used to create messages, it assists in assigning attributes to the message whether strings, integers or even binaries. Also, one can assign meta-data and lifetime to the message.
+\noindent The SCAMPI Java API allows the use of  services provided by a local SCAMPI instance granting us to publish or subscribe for any topic from the Java environment. The API also allows the client to get information about  SCAMPI status changes  for instance if it is disconnected, stopped or most importantly when a new message is received. Furthermore, there is a model called \textit{SCAMPIMessage} used to create messages, it assists in assigning attributes to the message whether strings, integers or even binaries. Also, one can assign meta-data and lifetime to the message.
 
 
 \subsection{Node-RED}
@@ -102,7 +102,7 @@ Node-RED is a tool used for wiring IoT applications, its flows describe the inte
 \subsection{Maestro}
 Maestro  is this framework's middleware and the main contribution of this work. It is deployed along with node-RED and SCAMPI on each instance in this architecture. It runs a jar file containing a web application  server that allows other entities to fetch and post data to Maestro via an API. It has several duties in orchestrating  SCAMPI messages to node-RED instances.
 \begin{itemize}
-\item It reads the machine specifications to initialize the machine's resources, sensors and actuators 	.
+\item It reads the machine specifications to initialize the machine's resources, sensors and actuators.
 \item It includes the SCAMPI Java API and provides a REST API which allows any other script from any other language (including node-RED) to use the publish-subscribe feature of SCAMPI.
 \item Maestro subscribes by default to the computation topic in order to  send and receive computations.
 \item Maestro subscribes to the unique global identifier of SCAMPI at the framework initialization to act as an identifier for the whole stack.
@@ -139,7 +139,7 @@ Before we get into the software components and how we can use the framework stac
 
 \end{itemize}
 
-\noindent Figure \ref{fig:components} shows one possibility to connect the devices in our architecture where we have two Raspberry Pi's connected together with an Intel NUC in a network, and another Raspberry Pi in a separate one that communicates with the other devices using the Android device  switches between both networks.
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{images/components.png}
@@ -147,11 +147,12 @@ Before we get into the software components and how we can use the framework stac
 	\label{fig:components}
 \end{figure}
 
+\noindent Figure \ref{fig:components} shows one possibility to connect the devices in our architecture where we have two Raspberry Pi's connected together with an Intel NUC in a network, and another Raspberry Pi in a separate one that communicates with the other devices using the Android device  switches between both networks.
 
 \subsection{Designing a Flow}
 The first step to distribute a pervasive use case and send the computational flow to all devices in a network is to design the computation which implements the use case. Since we use node-RED to design and execute flows, therefore the first step is to use node-RED to create a flow by wiring and connecting nodes. Each existing node in node-RED has a different functionality, also additional nodes developed by other contributers can be installed into the local instance. If a specific functionality can not be found  in the existing nodes or the ones available from the contributors, the functionality can be implemented using any programming language and then  the \verb|exec| node available in node-RED can be used to access the scripts in node-RED directory and run it. Moreover, the  existing \verb|function| node can be used to implement the functionality using  JavaScript. \\
 
-\noindent Triggering flows is very important as explained in Section\ref{sec:foundation}, there are multiple options to trigger flows. The first one is using the \verb|inject| node which allows  triggering the flows in multiple ways such as every time interval, once a flow is deployed, between time intervals or at specific time. The second way to trigger computations is via receiving a request using a \verb|http request| node on a specific endpoint that is wired to the flow just as Maestro does to deliver data to node-RED flows. There are also other ways that could be devised according to the desired use case.\\
+\noindent Triggering flows is very important as explained in Section \ref{sec:foundation}, there are multiple options to trigger flows. The first one is using the \verb|inject| node which allows  triggering the flows in multiple ways such as every time interval, once a flow is deployed, between time intervals or at specific time. The second way to trigger computations is via receiving a request using a \verb|http request| node on a specific endpoint that is wired to the flow just as Maestro does to deliver data to node-RED flows. There are also other ways that could be devised according to the desired use case.\\
  
 
 \noindent Accessing sensors and actuators can be done in several ways using node-RED. The first way is to use the existing GPIO nodes which can access the Raspberry Pi pins to read  and give digital signals to the sensors and actuators. However, we found out that the existing GPIO nodes are not stable, therefore, we used the second option to access sensors and actuators using python scripts that are executed using the \verb|exec| nodes. The python scripts are then transferred with the computation as  dependencies.\\
@@ -186,7 +187,7 @@ Since Maestro subscribes  by default  to the topic of exchanging computational f
 	\label{fig:sets}
 \end{figure}
 
-\noindent As described in \ref{subsec:ddf}, $S(t)$ is a set that contains all devices in a system. From this set, we can have a subset $S_c(t)$ which is the candidate set that satisfies the requirements for a certain computation.  Applying this to our design and as shown in Figure \ref{fig:sets}, if we publish a computation that needs low computing  power, motion and temperature sensors to a network of devices. The flow should only be deployed by the nodes that fulfill the requirements only. In the figure, neither the Intel NUC nor the Raspberry Pi without the required sensors were able to deploy the computation. Further, in the current Maestro implementation, if it receives a computation and  the requirements  are not met, then the computations are discarded completely. There is a possibility to queue the  messages which failed the hardware requirements, such as low random access memory or high CPU usage of the current device, in order to be deployed again when the resources are freed.  As explained in Section \ref{subsec:resources}, this introduces a scheduling problem, after the resources are freed, queued computations will compete for the free resources.
+\noindent As described in Section \ref{subsec:ddf}, $S(t)$ is a set that contains all devices in a system. From this set, we can have a subset $S_c(t)$ which is the candidate set that satisfies the requirements for a certain computation.  Applying this to our design and as shown in Figure \ref{fig:sets}, if we publish a computation that needs low computing  power, motion and temperature sensors to a network of devices. The flow should only be deployed by the nodes that fulfill the requirements only. In the figure, neither the Intel NUC nor the Raspberry Pi without the required sensors were able to deploy the computation. Further, in the current Maestro implementation, if it receives a computation and  the requirements  are not met, then the computations are discarded completely. There is a possibility to queue the  messages which failed the hardware requirements, such as low random access memory or high CPU usage of the current device, in order to be deployed again when the resources are freed.  As explained in Section \ref{subsec:resources}, this introduces a scheduling problem, after the resources are freed, queued computations will compete for the free resources.
 
 
 
@@ -194,7 +195,7 @@ Since Maestro subscribes  by default  to the topic of exchanging computational f
 
 
 
-\section{Sending and Receiving Data}
+\section{Sending and Receiving Data}\label{subsec:send-receieve-data}
 
 We explain how the stack can send and receive data using our framework architecture in the following points:
 \begin{itemize}
