@@ -59,7 +59,7 @@ What follows is a listing of  the requirements extracted from the real life use 
 \item \textit{Pervasiveness}: each computation should be able to act on its own, trigger actuators, persist data and access resources such as cameras and sensors if required by the use case.
 \end{enumerate}
 
-\section{Framework Stack}\label{sec:design}
+\section{Framework Stack}\label{sec:stack}
 This section explains the software framework stack designed for pervasive environments and challenged networks to distribute and manage computations with their respective resources and dependencies.  The main idea behind this design is to harness the features of node-RED to create, deploy and share computations of any kind. In addition to having SCAMPI as an information-centric, publish-subscribe and delay tolerant messaging system that gives the framework the ability to deliver messages even without an end-to-end path. However, node-RED and SCAMPI are two different environments that cannot manage computations, resources and dependencies on their own. They need a middleware to orchestrate the communication between them.\\
 
 
