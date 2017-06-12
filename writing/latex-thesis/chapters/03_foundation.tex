@@ -168,7 +168,7 @@ Parties can subscribe to the data topics on the  bus hence notified when a new m
 \item Last but not least, in order to send data or computation messages to disconnected devices, either because there exists no end-to-end path or the devices are experiencing network connectivity issues. The pub-sub messaging system should be delay-tolerant and implements the store-carry-forward routing technique, this will allow the messaging system to store messages until connectivity is back or keep the message hopping from one device to another until it finds its end destination.
 \end{itemize}
 
-\noindent Having found a solution for our communication model challenges assists us to focus on the framework design and implementation. Knowing that the underlying network model will not fail us to connect the devices even without and end-to-end path. In addition, we can directly send and receive messages to the devices on data topics without the framework being aware of their host names or network addresses.  
+\noindent Having found a solution for our communication model challenges assists us to focus on the framework design and implementation. Knowing that the underlying network model will not fail us to connect the devices even without an end-to-end path. In addition, we can directly send and receive messages to the devices on data topics without the framework being aware of their host names or network addresses.  
 
 
 
