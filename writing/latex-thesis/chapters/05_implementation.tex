@@ -7,7 +7,7 @@ Building on the framework architecture explained in Chapter \ref{chapter:Approac
 \section{Maestro}
 
 
-Maestro is implemented as a Java project and web application that act as a middleman between node-RED and SCMAPI. It accepts publish and subscribe requests from node-RED flows through REST API and uses  SCAMPI Java API to propagate these requests to SCAMPI server. Further, whenever it receives a message that it had subscribed to from SCAMPI server, it forwards the message to  node-RED flows who issued the subscription requests. It is divided into several packages, we describe them in alphabetical order.
+Maestro is implemented as a Java project and web application that act as a middleman between node-RED and SCMAPI. It accepts publish and subscribe requests from node-RED flows through REST API and uses  SCAMPI Java API to propagate these requests to SCAMPI server. Further, whenever it receives a message that it had subscribed to from SCAMPI server, it forwards the message to  node-RED flows who issued the subscription requests. It is divided into several packages, we describe them in alphabetical order:
  \begin{itemize}
  
   \item First, the package \verb|com.middleware.api| which contains two classes, \verb|SCAMPApi.java|  and \verb|MiddlewareApi.java|. The class \verb|SCAMPIApi.java| has a field of type \verb|APP_LIB| from SCAMPI Java API which contains the core methods of SCAMPI server to connect, add status listeners, publish and subscribe to messages.  As shown in Figure \ref{fig:cd-api}, \verb|SCAMPIApi| implements two classes via the \verb|APP_LIB| for the SCAMPI server which includes functions like \verb|OnDisconnected()|, \verb|OnConnectFailed()|,\\  \verb|OnStopped()| and  \verb|OnConnected()|. It also implements \verb|messageReceived()| which handles the messages once they are received from SCAMPI. Further, It contains a cache for messages and a field indicating the machine specification which is read from a file on the device. Also, \verb|SCAMPIApi.java| subscribes to the global identifier of SCAMPI on service initialization which is used as a global identifier for the whole framework. 
@@ -54,7 +54,7 @@ The class \verb|MiddlewareApi.java| contains REST API for Maestro's web applicat
 
 \end{itemize}
 
-\noindent Maestro uses \textit{Maven} as a  software project dependency management which handles Maestro's build. \textit{Maven} projects contain a Project Object Model (POM) file which describes the dependencies and libraries used by the project. In addition, it has build configuration management that is used to build the project and create a runnable jar file. Maestro can be compiled and packaged to a jar using the command \verb|mvn clean package|. The project contains dependencies for \textit{Lombok} which is a library that generates getters, setters and constructors during compile time without the need to write them in the Java classes, \textit{Gson} dependency in order to be able to read and write in JSON format, \textit{SCAMPI API} which allows us to publish, subscribe and override  functions from SCAMPI and dependencies to create a web application via \textit{Spring Boot}. \\
+\noindent Maestro uses \textit{Maven} as a  software project dependency management which handles Maestro's build. \textit{Maven} projects contain a Project Object Model (POM) file which describes the dependencies and libraries used by the project. In addition, it has build configuration management that is used to build the project and create a runnable jar file. Maestro can be compiled and packaged to a jar using the command \verb|mvn clean| \verb|package|. The project contains dependencies for \textit{Lombok} which is a library that generates getters, setters and constructors during compile time without the need to write them in the Java classes, \textit{Gson} dependency in order to be able to read and write in JSON format, \textit{SCAMPI API} which allows us to publish, subscribe and override  functions from SCAMPI and dependencies to create a web application via \textit{Spring Boot}. \\
 
 \section{Flows}
 This section explains all the flows developed in this thesis. It shows how the flows can be implemented to achieve different use cases. It also shows how we use node-RED flows in order to send computations.
@@ -75,7 +75,7 @@ In order to deliver flows which expresses computations for all devices or select
  \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-temp.png}
-	\caption{A flow that reads temperature and stores it, also start a red LED if temperature is above 30 degree Celsius.}
+	\caption{A flow that reads temperature, stores it and starts a red LED if the temperature is above 30 degree Celsius.}
 	\label{fig:flow-temp}
 \end{figure}
 
@@ -89,7 +89,7 @@ This flow was developed to make sure that the  framework works against the typic
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-motion.png}
-	\caption{A flow that detects motion, take an image, publish message and store response.}
+	\caption{A flow that detects motion, takes an image then publishes a message and stores incoming responses.}
 	\label{fig:flow-motion}
 \end{figure}
 
@@ -101,7 +101,7 @@ As part of the implementation evaluation, we developed this flow to take part in
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{images/flow-images.png}
-	\caption{A flow that creates an endpoint for stored database images.}
+	\caption{A flow that creates an endpoint to retrieve stored database images.}
 	\label{fig:flow-image}
 \end{figure}
 
@@ -120,7 +120,7 @@ To prove that we can send flows to machines with heavy computation power and lot
 
 \section{Starting the framework}\label{subsec:starting-framework}
 
-The framework stack runs in the following order; SCAMPI, Maestro and then node-red. The script used for starting the stack is as follows:
+The framework stack runs in the following order; SCAMPI, Maestro and then node-RED. The script used for starting the stack is as follows:
 \begin{verbatim}
 #!/bin/bash
 java -jar SCAMPI.jar default_settings.txt > scampi-log.txt 2>&1 & disown
